@@ -1,0 +1,19 @@
+<script setup>
+
+</script>
+
+<template>
+    <div class="about-container">
+        about
+    </div>
+</template>
+
+<style>
+.about-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    position: absolute;
+}
+</style>
