@@ -22,5 +22,6 @@ const pageStore = usePageStore()
     overflow: hidden;
     margin: 0;
     position: absolute;
+    color: var(--primary-color);
 }
 </style>

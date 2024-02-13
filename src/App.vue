@@ -8,10 +8,14 @@ import Background from './components/Background.vue'
 import { usePageStore } from '@/stores/page'
 import { storeToRefs } from 'pinia'
 import { globalKeydown } from '@/utils/keyListener'
+import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
 
-const pageStore = usePageStore()
-const { name: pageName } = storeToRefs(pageStore)
+const pageStore = usePageStore();
+const { name: pageName } = storeToRefs(pageStore);
 
+checkUpdate();
+loadSetting();
+printWebsiteInfo();
 globalKeydown();
 
 </script>
