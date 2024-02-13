@@ -10,13 +10,13 @@ import { storeToRefs } from 'pinia'
 import { globalKeydown } from '@/utils/keyListener'
 import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
 
-const pageStore = usePageStore();
-const { name: pageName } = storeToRefs(pageStore);
+const pageStore = usePageStore()
+const { name: pageName } = storeToRefs(pageStore)
 
-checkUpdate();
-loadSetting();
-printWebsiteInfo();
-globalKeydown();
+checkUpdate()
+loadSetting()
+printWebsiteInfo()
+globalKeydown()
 
 </script>
 
@@ -34,7 +34,7 @@ globalKeydown();
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.1s ease;
 }
 
 .fade-enter-from,

@@ -1,5 +1,5 @@
-import { useSettingStore } from "@/stores/setting";
-
+import { useSettingStore } from '@/stores/setting'
+import { getLocalSetting, setLocalSetting } from './localStorage'
 
 export function checkUpdate() {
     // 检查版本更新
@@ -9,10 +9,11 @@ export function checkUpdate() {
 
 
 export function loadSetting() {
+    const settingStore = useSettingStore()
+    settingStore.$patch(getLocalSetting())
+
     // 载入主题
-    const settingStore = useSettingStore();
-    console.log(settingStore.$state.themeMode);
-    document.getElementById("app").setAttribute("class", settingStore.$state.themeMode);
+    document.getElementById("app").setAttribute("class", settingStore.$state.themeMode)
 }
 
 export function printWebsiteInfo() {
