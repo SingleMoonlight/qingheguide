@@ -11,10 +11,13 @@ const settingStore = useSettingStore()
 settingStore.$subscribe((mutation, state) => {
     // 每当状态发生变化时，将整个 state 持久化到本地存储
     setLocalSetting(state)
-}, { detached: true })
+}, {
+    // 组件卸载依旧生效订阅
+    detached: true
+})
 
 function changeTheme() {
-    settingStore.$state.themeMode = 'default'
+    settingStore.$state.themeMode = 'dark'
     document.getElementById("app").setAttribute("class", settingStore.$state.themeMode)
 }
 

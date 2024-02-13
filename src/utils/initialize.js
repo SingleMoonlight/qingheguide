@@ -1,16 +1,26 @@
+import config from '../../package.json'
 import { useSettingStore } from '@/stores/setting'
-import { getLocalSetting, setLocalSetting } from './localStorage'
+import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting } from './localStorage'
 
 export function checkUpdate() {
-    // 检查版本更新
+    const settingStore = useSettingStore()
 
-    // 合并新旧设置
+    // 检查版本更新
+    if (!getLocalVersion() || getLocalVersion() !== config.version) {
+        setLocalVersion(config.version)
+        // 合并新增设置
+        const newSetting = Object.assign(settingStore.$state, getLocalSetting())
+        setLocalSetting(newSetting)
+    }
 }
 
 
 export function loadSetting() {
     const settingStore = useSettingStore()
-    settingStore.$patch(getLocalSetting())
+
+    if (!getLocalSetting()) {
+        settingStore.$patch(getLocalSetting())
+    }
 
     // 载入主题
     document.getElementById("app").setAttribute("class", settingStore.$state.themeMode)
@@ -19,10 +29,9 @@ export function loadSetting() {
 export function printWebsiteInfo() {
     const year = new Date().getFullYear()
 
-    console.log(
-        "%c欢迎使用青何导航, 马上开始简单纯粹的搜索之旅吧! " +
-        "\n\n%cCopyRight © " + year + " smilingly",
-        "color: #0ebeff",
-        "color: white")
+    console.log("%c欢迎使用青何导航, 马上开始简单纯粹的搜索之旅吧! " +
+                "\n\n%cCopyRight © " + year + " smilingly",
+                "color: #0ebeff",
+                "color: white")
 }
 
