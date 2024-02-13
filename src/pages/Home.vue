@@ -1,10 +1,17 @@
 <script setup>
+import { usePageStore } from '@/stores/page'
+
+const pageStore = usePageStore()
+
 
 </script>
 
 <template>
     <div class="home-container">
         Home
+        <button @click="pageStore.pageForward('Search')">goto search</button>
+
+        <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
     </div>
 </template>
 

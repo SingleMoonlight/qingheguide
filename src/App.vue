@@ -7,9 +7,12 @@ import About from './pages/About.vue'
 import Background from './components/Background.vue'
 import { usePageStore } from '@/stores/page'
 import { storeToRefs } from 'pinia'
+import { globalKeydown } from '@/utils/keyListener'
 
 const pageStore = usePageStore()
-const { name:pageName } = storeToRefs(pageStore)
+const { name: pageName } = storeToRefs(pageStore)
+
+globalKeydown();
 
 </script>
 

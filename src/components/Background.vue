@@ -1,9 +1,14 @@
 <script setup>
+import { useSettingStore } from '@/stores/setting'
+import { storeToRefs } from 'pinia'
+
+const settingStore = useSettingStore()
+const { backgroundUrl } = storeToRefs(settingStore)
 
 </script>
 
 <template>
-    <img class="background" src="https://cdn.smilingly.cn/website/qhGuide/guide_default_bg.jpg">
+    <img class="background" :src="backgroundUrl">
 </template>
 
 <style>
