@@ -1,15 +1,21 @@
 <script setup>
+import Time from '@/components/Time.vue'
 import { usePageStore } from '@/stores/page'
+import { useSettingStore } from '@/stores/setting'
 
 const pageStore = usePageStore()
+const settingStore = useSettingStore()
 
 
 </script>
 
 <template>
     <div class="home-container">
-        Home
-        <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
+        <div class="time-container">
+            <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
+                :blink-semicolon="settingStore.$state.blinkSemicolon">
+            </Time>
+        </div>
     </div>
 </template>
 
@@ -20,6 +26,13 @@ const pageStore = usePageStore()
     overflow: hidden;
     margin: 0;
     position: absolute;
-    color: var(--primary-color);
+}
+
+.time-container {
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    transform: translateX(-50%);
+    color: var(--primary-font-color);
 }
 </style>

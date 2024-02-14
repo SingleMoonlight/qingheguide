@@ -4,6 +4,9 @@ export const useSettingStore = defineStore('setting', {
     state: () => ({
         backgroundUrl: 'https://cdn.smilingly.cn/website/qhGuide/guide_default_bg.jpg',
         backgroundBase64: '',
+        showTime: true,
+        showSecond: false,
+        blinkSemicolon: true,
         themeMode: 'default',
         searchEngine: 'Baidu',
     })

@@ -6,7 +6,7 @@ export function checkUpdate() {
     const settingStore = useSettingStore()
 
     // 检查版本更新
-    if (!getLocalVersion() || getLocalVersion() !== config.version) {
+    if (!import.meta.env.PROD || !getLocalVersion() || getLocalVersion() !== config.version) {
         setLocalVersion(config.version)
         // 合并新增设置
         const newSetting = Object.assign(settingStore.$state, getLocalSetting())
