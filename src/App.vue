@@ -1,6 +1,5 @@
 <script setup>
 import Home from './pages/Home.vue'
-import Search from './pages/Search.vue'
 import Navigate from './pages/Navigate.vue'
 import Setting from './pages/Setting.vue'
 import About from './pages/About.vue'
@@ -24,7 +23,6 @@ globalKeydown()
   <Background></Background>
   <Transition mode="out-in" name="fade">
     <Home v-if="pageName === 'Home'"></Home>
-    <Search v-else-if="pageName === 'Search'"></Search>
     <Navigate v-else-if="pageName === 'Navigate'"></Navigate>
     <Setting v-else-if="pageName === 'Setting'"></Setting>
     <About v-else-if="pageName === 'About'"></About>
