@@ -3,18 +3,17 @@ import { useSettingStore } from '@/stores/setting'
 import { MutationType } from 'pinia'
 import { usePageStore } from '@/stores/page'
 import { getLocalSetting, setLocalSetting } from '@/utils/localStorage'
+import { getBackgroundImg, setBackgroundImg } from '@/utils/indexedDB'
 
 
 const pageStore = usePageStore()
 const settingStore = useSettingStore()
 
-settingStore.$subscribe((mutation, state) => {
-    // 每当状态发生变化时，将整个 state 持久化到本地存储
-    setLocalSetting(state)
-}, {
-    // 组件卸载依旧生效订阅
-    detached: true
-})
+function setBackground(e) {
+    let imgFile = e.target.files[0];
+    // 将图片保存至indexedDB
+    setBackgroundImg(imgFile);
+}
 
 function changeTheme() {
     settingStore.$state.themeMode = 'dark'
@@ -27,6 +26,7 @@ function changeTheme() {
 <template>
     <div class="setting-container">
         Setting
+        <input type="file" accept="image/*" @change="setBackground" />
         <button @click="changeTheme">change theme</button>
         <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
     </div>

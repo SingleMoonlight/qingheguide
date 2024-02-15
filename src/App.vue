@@ -8,19 +8,30 @@ import { usePageStore } from '@/stores/page'
 import { storeToRefs } from 'pinia'
 import { globalKeydown } from '@/utils/keyListener'
 import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
+import { useSettingStore } from './stores/setting'
+import { defaultBackground } from '@/utils/constant'
+import { onMounted } from 'vue'
+import { initBackgroundDB } from '@/utils/indexedDB'
 
+const settingStore = useSettingStore()
 const pageStore = usePageStore()
 const { name: pageName } = storeToRefs(pageStore)
 
-checkUpdate()
-loadSetting()
-printWebsiteInfo()
-globalKeydown()
+onMounted(() => {
+  initBackgroundDB();
+  printWebsiteInfo();
+  globalKeydown();
+  checkUpdate();
+  loadSetting();
+})
 
 </script>
 
 <template>
-  <Background></Background>
+  <div class="background-container">
+    <Background :background-url="settingStore.$state.backgroundUrl" :default-background="defaultBackground">
+    </Background>
+  </div>
   <Transition mode="out-in" name="fade">
     <Home v-if="pageName === 'Home'"></Home>
     <Navigate v-else-if="pageName === 'Navigate'"></Navigate>
@@ -38,5 +49,12 @@ globalKeydown()
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.background-container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  position: absolute;
 }
 </style>

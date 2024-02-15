@@ -1,14 +1,22 @@
 <script setup>
-import { useSettingStore } from '@/stores/setting'
-import { storeToRefs } from 'pinia'
 
-const settingStore = useSettingStore()
-const { backgroundUrl } = storeToRefs(settingStore)
+const props = defineProps({
+    backgroundUrl: String,
+    defaultBackground: String
+})
+
+function loadBackgroundFail(target) {
+    // 防止onerror无限触发
+    target.srcElement.onerror = '';
+    // 加载失败使用默认背景
+    target.srcElement.src = props.defaultBackground;
+}
 
 </script>
 
 <template>
-    <img class="background" :src="backgroundUrl">
+    <img v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground" :onerror="loadBackgroundFail">
+    <img v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
 </template>
 
 <style>
@@ -16,8 +24,6 @@ const { backgroundUrl } = storeToRefs(settingStore)
     width: 100%;
     height: 100%;
     overflow: hidden;
-    margin: 0;
-    position: absolute;
     object-fit: cover;
 }
 </style>

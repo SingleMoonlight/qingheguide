@@ -6,11 +6,12 @@ import { useSettingStore } from '@/stores/setting'
 const pageStore = usePageStore()
 const settingStore = useSettingStore()
 
-
 </script>
 
 <template>
     <div class="home-container">
+        <button @click="pageStore.pageForward('Setting')">goto Setting</button>
+
         <div class="time-container">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
                 :blink-semicolon="settingStore.$state.blinkSemicolon">
