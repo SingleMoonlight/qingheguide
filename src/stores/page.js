@@ -6,7 +6,7 @@ export const usePageStore = defineStore('page', {
     }),
     actions: {
         pageForward(name) {
-            this.name = name
+            this.name = name;
         }
     }
 })

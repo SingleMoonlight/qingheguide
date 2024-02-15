@@ -47,7 +47,7 @@ function mouseleaveTime(el) {
     el.srcElement.style.transform = 'scale(0.95)';
     setTimeout(() => {
         el.srcElement.style.transform = '';
-    }, 250)
+    }, 250);
 }
 
 onMounted(() => {

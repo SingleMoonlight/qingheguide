@@ -15,19 +15,12 @@ function setBackground(e) {
     setBackgroundImg(imgFile);
 }
 
-function changeTheme() {
-    settingStore.$state.themeMode = 'dark'
-    document.getElementById("app").setAttribute("class", settingStore.$state.themeMode)
-}
-
-
 </script>
 
 <template>
     <div class="setting-container">
         Setting
         <input type="file" accept="image/*" @change="setBackground" />
-        <button @click="changeTheme">change theme</button>
         <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
     </div>
 </template>
