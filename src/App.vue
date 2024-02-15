@@ -23,6 +23,10 @@ onMounted(() => {
   globalKeydown();
   checkUpdate();
   loadSetting();
+
+  setTimeout(() => {
+    document.getElementById('splash').style.opacity = '0';
+  }, 250)
 })
 
 </script>
