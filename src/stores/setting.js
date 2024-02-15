@@ -6,6 +6,7 @@ export const useSettingStore = defineStore('setting', {
         showTime: true,
         showSecond: false,
         blinkSemicolon: true,
+        showDate: true,
         themeMode: 'default',
         searchEngine: 'Baidu',
     })

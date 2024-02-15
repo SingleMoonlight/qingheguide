@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
 import { ref } from 'vue'
+import { numLeftPadding } from '@/utils/common'
 
 const props = defineProps({
     showTime: Boolean,
@@ -15,14 +16,6 @@ const currentTime = ref({
 
 let currentTimeGetTimer = null
 let time = null
-
-function numLeftPadding(num, count, digit) {
-    let increase = "";
-    for (let i = 0; i < count; i++) {
-        increase += digit;
-    }
-    return (increase + num).slice(-count);
-}
 
 function getCurrentTime() {
     time = new Date();
