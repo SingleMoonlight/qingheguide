@@ -1,5 +1,6 @@
 <script setup>
 import Time from '@/components/Time.vue'
+import Date from '@/components/Date.vue'
 import { usePageStore } from '@/stores/page'
 import { useSettingStore } from '@/stores/setting'
 
@@ -17,6 +18,9 @@ const settingStore = useSettingStore()
                 :blink-semicolon="settingStore.$state.blinkSemicolon">
             </Time>
         </div>
+        <div class="date-container">
+            <Date :show-date="settingStore.$state.showDate"></Date>
+        </div>
     </div>
 </template>
 
@@ -28,11 +32,17 @@ const settingStore = useSettingStore()
     margin: 0;
     position: absolute;
 }
-
 .time-container {
     position: absolute;
     left: 50%;
     top: 100px;
+    transform: translateX(-50%);
+    color: var(--primary-font-color);
+}
+.date-container {
+    position: absolute;
+    left: 50%;
+    top: 160px;
     transform: translateX(-50%);
     color: var(--primary-font-color);
 }
