@@ -52,7 +52,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style>
+<style scpoed>
 .date {
     font-size: 14px;
     font-weight: lighter;

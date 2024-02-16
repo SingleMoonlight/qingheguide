@@ -2,20 +2,17 @@
 import Time from '@/components/Time.vue'
 import Date from '@/components/Date.vue'
 import Copyright from '@/components/Copyright.vue'
-import { usePageStore } from '@/stores/page'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo } from '@/utils/constant'
 
-const pageStore = usePageStore()
 const settingStore = useSettingStore()
+const emit = defineEmits(['openNavigate', 'openSearch'])
 
 </script>
 
 <template>
     <div class="home-container">
-        <button @click="pageStore.pageForward('Setting')">goto Setting</button>
-
-        <div class="time-container">
+        <div class="time-container" @click="emit('openNavigate')">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
                 :blink-semicolon="settingStore.$state.blinkSemicolon">
             </Time>
@@ -26,10 +23,11 @@ const settingStore = useSettingStore()
         <div class="copyright-container">
             <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>
         </div>
+        <button @click="emit('openSearch')">search</button>
     </div>
 </template>
 
-<style>
+<style scpoed>
 .home-container {
     width: 100%;
     height: 100%;

@@ -74,7 +74,7 @@ onUnmounted(() => {
     </div>
 </template>
 
-<style>
+<style scpoed>
 .time {
     font-size: 36px;
     font-weight: lighter;

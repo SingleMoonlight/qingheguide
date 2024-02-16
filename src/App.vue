@@ -10,12 +10,52 @@ import { globalKeydown } from '@/utils/keyListener'
 import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
 import { useSettingStore } from './stores/setting'
 import { defaultBackground } from '@/utils/constant'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { initBackgroundDB } from '@/utils/indexedDB'
 
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
 const { name: pageName } = storeToRefs(pageStore)
+const backgroundblur = ref(0)
+const backgroundScale = ref(1)
+
+function openHomePage(e) {
+  if (e.currentTarget !== e.target) {
+    // 不处理子元素的冒泡点击事件
+    return;
+  }
+  pageStore.pageForward('Home');
+  if (settingStore.$state.blurBackground) {
+    backgroundblur.value = 0;
+  }
+  backgroundScale.value = 1;
+}
+
+function openNavigatePage() {
+  pageStore.pageForward('Navigate');
+  backgroundScale.value = 1.1;
+  if (settingStore.$state.blurBackground) {
+    backgroundblur.value = 10;
+  }
+}
+
+function openSearch() {
+  backgroundScale.value = 1.1;
+  if (settingStore.$state.blurBackground) {
+    backgroundblur.value = 10;
+  }
+}
+
+function closeSearch(e) {
+  if (e.currentTarget !== e.target) {
+    // 不处理子元素的冒泡点击事件
+    return;
+  }
+  if (settingStore.$state.blurBackground) {
+    backgroundblur.value = 0;
+  }
+  backgroundScale.value = 1;
+}
 
 onMounted(() => {
   initBackgroundDB();
@@ -25,25 +65,36 @@ onMounted(() => {
   loadSetting();
 })
 
+watch(() => settingStore.$state.blurBackground, (newValue) => {
+  if (newValue) {
+    backgroundblur.value = 10;
+  } else {
+    backgroundblur.value = 0;
+  }
+})
+
 </script>
 
 <template>
   <div class="background-container">
-    <Background :background-url="settingStore.$state.backgroundUrl" :default-background="defaultBackground">
+    <Background :background-url="settingStore.$state.backgroundUrl" :default-background="defaultBackground"
+      :background-blur="backgroundblur" :background-scale="backgroundScale">
     </Background>
   </div>
   <Transition mode="out-in" name="fade">
-    <Home v-if="pageName === 'Home'"></Home>
-    <Navigate v-else-if="pageName === 'Navigate'"></Navigate>
+    <Home v-if="pageName === 'Home'" @click="closeSearch" @contextmenu="openNavigatePage" @open-navigate="openNavigatePage"
+      @open-search="openSearch">
+    </Home>
+    <Navigate v-else-if="pageName === 'Navigate'" @click="openHomePage"></Navigate>
     <Setting v-else-if="pageName === 'Setting'"></Setting>
     <About v-else-if="pageName === 'About'"></About>
   </Transition>
 </template>
 
-<style>
+<style scpoed>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.1s ease;
+  transition: opacity 0.15s ease;
 }
 
 .fade-enter-from,

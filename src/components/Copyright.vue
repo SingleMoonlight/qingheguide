@@ -29,7 +29,7 @@ onMounted(() => {
 </template>
 
 
-<style>
+<style scpoed>
 .copyright {
     font-size: 12px;
     font-weight: lighter;

@@ -1,14 +1,17 @@
 <script setup>
+import { usePageStore } from '@/stores/page'
 
+const pageStore = usePageStore()
 </script>
 
 <template>
     <div class="about-container">
-        about
+        About
+        <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
     </div>
 </template>
 
-<style>
+<style scpoed>
 .about-container {
     width: 100%;
     height: 100%;
