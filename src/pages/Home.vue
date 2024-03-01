@@ -4,6 +4,7 @@ import Date from '@/components/Date.vue'
 import Copyright from '@/components/Copyright.vue'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo } from '@/utils/constant'
+import SearchBar from '@/components/SearchBar.vue'
 
 const settingStore = useSettingStore()
 const emit = defineEmits(['openNavigate', 'openSearch'])
@@ -20,10 +21,12 @@ const emit = defineEmits(['openNavigate', 'openSearch'])
         <div class="date-container">
             <Date :show-date="settingStore.$state.showDate"></Date>
         </div>
+        <div class="search-bar-container">
+            <SearchBar @focus-input="emit('openSearch')"></SearchBar>
+        </div>
         <div class="copyright-container">
             <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>
         </div>
-        <button @click="emit('openSearch')">search</button>
     </div>
 </template>
 
@@ -46,6 +49,15 @@ const emit = defineEmits(['openNavigate', 'openSearch'])
     position: absolute;
     left: 50%;
     top: 160px;
+    transform: translateX(-50%);
+    color: var(--primary-font-color);
+}
+.search-bar-container {
+    position: absolute;
+    width: 530px;
+    max-width: 80%;
+    left: 50%;
+    top: 200px;
     transform: translateX(-50%);
     color: var(--primary-font-color);
 }
