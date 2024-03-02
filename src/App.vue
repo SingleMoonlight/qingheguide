@@ -6,15 +6,14 @@ import About from './pages/About.vue'
 import Background from './components/Background.vue'
 import { usePageStore } from '@/stores/page'
 import { storeToRefs } from 'pinia'
-import { globalKeydown } from '@/utils/keyListener'
-import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
 import { useSettingStore } from './stores/setting'
+import { useFlagStore } from '@/stores/flag'
 import { defaultBackground } from '@/utils/constant'
-import { onMounted, ref, watch } from 'vue'
-import { initBackgroundDB } from '@/utils/indexedDB'
+import { ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
+const flagStore = useFlagStore()
 const { name: pageName } = storeToRefs(pageStore)
 const backgroundblur = ref(0)
 const backgroundScale = ref(1)
@@ -57,14 +56,6 @@ function closeSearch(e) {
   backgroundScale.value = 1;
 }
 
-onMounted(() => {
-  initBackgroundDB();
-  printWebsiteInfo();
-  globalKeydown();
-  checkUpdate();
-  loadSetting();
-})
-
 watch(() => settingStore.$state.blurBackground, (newValue) => {
   if (newValue) {
     backgroundblur.value = 10;
@@ -73,17 +64,25 @@ watch(() => settingStore.$state.blurBackground, (newValue) => {
   }
 })
 
+watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
+  if (newValue) {
+      document.getElementsByClassName('background-mask')[0].style.opacity = 0;
+  }
+})
+
 </script>
 
 <template>
   <div class="background-container">
-    <Background :background-url="settingStore.$state.backgroundUrl" :default-background="defaultBackground"
-      :background-blur="backgroundblur" :background-scale="backgroundScale">
+    <div class="background-mask"></div>
+    <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
+      :default-background="defaultBackground" :background-blur="backgroundblur" :background-scale="backgroundScale">
     </Background>
   </div>
+
   <Transition mode="out-in" name="fade">
-    <Home v-if="pageName === 'Home'" @click="closeSearch" @contextmenu="openNavigatePage" @open-navigate="openNavigatePage"
-      @open-search="openSearch">
+    <Home v-if="pageName === 'Home'" @click="closeSearch" @contextmenu="openNavigatePage"
+      @open-navigate="openNavigatePage" @open-search="openSearch">
     </Home>
     <Navigate v-else-if="pageName === 'Navigate'" @click="openHomePage"></Navigate>
     <Setting v-else-if="pageName === 'Setting'"></Setting>
@@ -107,5 +106,14 @@ watch(() => settingStore.$state.blurBackground, (newValue) => {
   height: 100%;
   margin: 0;
   position: absolute;
+}
+
+.background-mask {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  position: absolute;
+  background-color: var(--loading-background-color);
+  transition: opacity 1s;
 }
 </style>

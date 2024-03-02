@@ -126,31 +126,32 @@ export class IndexedDB {
     }
 }
 
-// 目前仅有背景放在indexed数据库中，以下接口不在另分文件
+// 目前仅有图片放在indexed数据库中，以下接口不在另分文件
 import { useSettingStore } from '@/stores/setting'
-let backgroundDB = null
+import { useFlagStore } from '@/stores/flag'
 
-export function initBackgroundDB() {
-    backgroundDB = new IndexedDB('qingheguide', 'background', {
+let imageDB = null
+
+export function initImageDB() {
+    imageDB = new IndexedDB('qingheguide', 'image', {
         keyPath: 'name' // 设置图片名称为主键
     });
-    backgroundDB.initDB().then(res => {
-        // 在渲染完成前设置图片url
+    imageDB.initDB().then(res => {
         getBackgroundImg();
     }).catch((err) => {
     });
 }
 
-export function deleteBackgroundDB() {
-    backgroundDB.deleteDatabase().then(res => {
+export function deleteImageDB() {
+    imageDB.deleteDatabase().then(res => {
     }).catch((err) => {
     });
 }
 
 export function setBackgroundImg(imageData) {
-    let data = { 'name': 'customBackground', 'data': imageData };
+    let data = { 'name': 'background', 'data': imageData };
 
-    backgroundDB.updateData(data).then(res => {
+    imageDB.updateData(data).then(res => {
         const settingStore = useSettingStore();
 
         // 创建指向图片文件的url并保存
@@ -161,14 +162,15 @@ export function setBackgroundImg(imageData) {
 }
 
 export function getBackgroundImg() {
-    backgroundDB.getDataByKey('customBackground').then(res => {
+    imageDB.getDataByKey('background').then(res => {
         const settingStore = useSettingStore();
+        const flagStore = useFlagStore();
 
+        flagStore.$state.bgImgIsGet = true;
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(res.data);
         settingStore.$state.backgroundUrl = imgURL;
     }).catch((err) => {
     });
 }
-
 
