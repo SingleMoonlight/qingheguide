@@ -1,12 +1,13 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
-import { ref } from 'vue'
+import { watch, ref } from 'vue'
 import { numLeftPadding } from '@/utils/common'
 
 const props = defineProps({
     showTime: Boolean,
     showSecond: Boolean,
-    blinkSemicolon: Boolean
+    blinkSemicolon: Boolean,
+    fontWeight: String
 })
 const currentTime = ref({
     hour: '',
@@ -54,10 +55,25 @@ onMounted(() => {
                 element.style.animation = 'blink 1s infinite';
             });
     }
+
+    document.getElementsByClassName('time')[0].style.fontWeight = props.fontWeight;
 })
 
 onUnmounted(() => {
     clearTimeout(currentTimeGetTimer);
+})
+
+watch(() => props.blinkSemicolon, (newValue) => {
+    if (newValue) {
+        [...document.getElementsByClassName('time-semicolon')]
+            .forEach(element => {
+                element.style.animation = 'blink 1s infinite';
+            });
+    }
+})
+
+watch(() => props.fontWeight, (newValue) => {
+    document.getElementsByClassName('time')[0].style.fontWeight = newValue;
 })
 
 </script>

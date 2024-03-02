@@ -15,7 +15,7 @@ const emit = defineEmits(['openNavigate', 'openSearch'])
     <div class="home-container">
         <div class="time-container" @click="emit('openNavigate')">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
-                :blink-semicolon="settingStore.$state.blinkSemicolon">
+                :blink-semicolon="settingStore.$state.blinkSemicolon" :font-weight="settingStore.$state.timeFontWeight">
             </Time>
         </div>
         <div class="date-container">
