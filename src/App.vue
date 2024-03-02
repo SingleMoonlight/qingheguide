@@ -9,7 +9,7 @@ import { storeToRefs } from 'pinia'
 import { useSettingStore } from './stores/setting'
 import { useFlagStore } from '@/stores/flag'
 import { defaultBackground } from '@/utils/constant'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
@@ -55,6 +55,12 @@ function closeSearch(e) {
   }
   backgroundScale.value = 1;
 }
+
+onMounted(() => {
+  const splash = document.getElementById('splash');
+  splash.style.opacity = 0;
+  splash.remove();
+})
 
 watch(() => settingStore.$state.blurBackground, (newValue) => {
   if (newValue) {
@@ -113,7 +119,7 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   height: 100%;
   opacity: 1;
   position: absolute;
-  background-color: var(--loading-background-color);
+  background-color: rgb(50, 50, 50);
   transition: opacity 1s;
 }
 </style>
