@@ -32,3 +32,8 @@ a {
     text-decoration: none;
     color: var(--seconda-font-color);
 }
+
+svg {
+    fill: currentColor;
+    color: var(--icon-svg-color);
+}

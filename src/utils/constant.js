@@ -11,3 +11,5 @@ export const copyrightInfo = {
     icpBeianUrl: 'https://beian.miit.gov.cn/',
 }
 
+export const searchEngine = ['baidu', 'bing', 'google', 'custom']
+

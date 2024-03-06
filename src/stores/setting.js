@@ -11,6 +11,6 @@ export const useSettingStore = defineStore('setting', {
         showCopyright: true,
         blurBackground: true,
         themeMode: 'default',
-        searchEngine: 'Baidu',
+        searchEngine: 'baidu',
     })
 })

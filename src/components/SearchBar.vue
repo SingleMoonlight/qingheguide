@@ -1,13 +1,32 @@
 <script setup>
-const emit = defineEmits(['focusInput'])
+import SearchIcon from '@/components/icons/SearchIcon.vue'
+import SearchEngineIcon from '@/components/icons/SearchEngineIcon.vue'
+import { useSettingStore } from '@/stores/setting'
+
+const props = defineProps({
+    historyList: Object,
+    suggestList: Object,
+})
+
+const settingStore = useSettingStore()
+const emit = defineEmits(['focusInput', 'inputUpdate', 'doSearch'])
+
+function inputChange() {
+    const value = document.getElementsByClassName('search-bar-input')[0].value;
+    emit('inputUpdate', value);
+}
 
 </script>
 
 <template>
     <div class="search-bar-input-container">
-        <input type="text" class="search-bar-input" @focus="emit('focusInput')">
-        <button class="search-engine-btn" @click="emit('focusInput')">search engine</button>
-        <button class="search-action-btn">do search</button>
+        <input type="text" class="search-bar-input" @focus="emit('focusInput')" @input="inputChange">
+        <button class="search-engine-btn" @click="emit('focusInput')">
+            <SearchEngineIcon :engine-name="settingStore.$state.searchEngine"></SearchEngineIcon>
+        </button>
+        <button class="search-action-btn" @click="emit('doSearch')">
+            <SearchIcon></SearchIcon>
+        </button>
     </div>
 
     <div class="search-bar-suggest">
@@ -42,10 +61,40 @@ const emit = defineEmits(['focusInput'])
 }
 .search-engine-btn {
     position: absolute;
+    width: 33px;
+    height: 33px;
     left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 40px;
+    transition: .25s;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .search-action-btn{
     position: absolute;
+    width: 33px;
+    height: 33px;
     right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 40px;
+    transition: .25s;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-action-btn:hover {
+    background-color: var(--icon-hover-background-color);
+}
+.search-engine-btn:hover {
+    background-color: var(--icon-hover-background-color);
 }
 </style>

@@ -5,10 +5,19 @@ import Copyright from '@/components/Copyright.vue'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo } from '@/utils/constant'
 import SearchBar from '@/components/SearchBar.vue'
+import { ref } from 'vue'
 
 const settingStore = useSettingStore()
 const emit = defineEmits(['openNavigate', 'openSearch'])
+const suggest = ref([])
 
+function searchBarInputUpdate(value) {
+    console.log(value);
+}
+
+function doSearch() {
+    console.log('do search');
+}
 </script>
 
 <template>
@@ -22,7 +31,7 @@ const emit = defineEmits(['openNavigate', 'openSearch'])
             <Date :show-date="settingStore.$state.showDate"></Date>
         </div>
         <div class="search-bar-container">
-            <SearchBar @focus-input="emit('openSearch')"></SearchBar>
+            <SearchBar @focus-input="emit('openSearch')" @input-update="searchBarInputUpdate" @do-search="doSearch" :suggest-list="suggest"></SearchBar>
         </div>
         <div class="copyright-container">
             <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>
