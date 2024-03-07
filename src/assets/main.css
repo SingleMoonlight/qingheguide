@@ -37,3 +37,7 @@ svg {
     fill: currentColor;
     color: var(--icon-svg-color);
 }
+
+input::placeholder {
+    color: var(--input-placeholder-color);
+}

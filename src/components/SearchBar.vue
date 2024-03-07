@@ -12,15 +12,23 @@ const settingStore = useSettingStore()
 const emit = defineEmits(['focusInput', 'inputUpdate', 'doSearch'])
 
 function inputChange() {
-    const value = document.getElementsByClassName('search-bar-input')[0].value;
+    const value = document.getElementsByClassName('search-bar-input')[0].value.trim();
     emit('inputUpdate', value);
+}
+
+function selectSuggest(index) {
+    const searchInputDom = document.getElementsByClassName('search-bar-input')[0];
+    searchInputDom.value = props.suggestList[index];
+    searchInputDom.focus();
+    emit('inputUpdate', props.suggestList[index]);
 }
 
 </script>
 
 <template>
     <div class="search-bar-input-container">
-        <input type="text" class="search-bar-input" @focus="emit('focusInput')" @input="inputChange">
+        <input type="text" class="search-bar-input" placeholder="搜索" autocomplete="none" @focus="emit('focusInput')"
+            @input="inputChange" @keydown.enter="emit('doSearch')">
         <button class="search-engine-btn" @click="emit('focusInput')">
             <SearchEngineIcon :engine-name="settingStore.$state.searchEngine"></SearchEngineIcon>
         </button>
@@ -30,10 +38,14 @@ function inputChange() {
     </div>
 
     <div class="search-bar-suggest">
-        搜索建议
+        <div v-for="(item, index) in props.suggestList" @click="selectSuggest(index)">
+            {{ item }}
+        </div>
     </div>
     <div class="search-bar-history">
-        搜索历史
+        <div v-for="(item, index) in props.historyList">
+            {{ item }}
+        </div>
     </div>
 </template>
 
@@ -48,6 +60,7 @@ function inputChange() {
     backdrop-filter: var(--common-backdrop-filter);
     background-color: var(--commom-background-color);
 }
+
 .search-bar-input {
     width: 100%;
     height: 100%;
@@ -56,9 +69,10 @@ function inputChange() {
     box-sizing: border-box;
     outline: 0;
     font-size: 14px;
-    color: inherit; 
+    color: inherit;
     background-color: transparent;
 }
+
 .search-engine-btn {
     position: absolute;
     width: 33px;
@@ -75,7 +89,8 @@ function inputChange() {
     align-items: center;
     justify-content: center;
 }
-.search-action-btn{
+
+.search-action-btn {
     position: absolute;
     width: 33px;
     height: 33px;
@@ -91,9 +106,11 @@ function inputChange() {
     align-items: center;
     justify-content: center;
 }
+
 .search-action-btn:hover {
     background-color: var(--icon-hover-background-color);
 }
+
 .search-engine-btn:hover {
     background-color: var(--icon-hover-background-color);
 }
