@@ -17,6 +17,7 @@ const flagStore = useFlagStore()
 const { name: pageName } = storeToRefs(pageStore)
 const backgroundblur = ref(0)
 const backgroundScale = ref(1)
+const bgMaskRef = ref()
 
 function openHomePage(e) {
   if (e.currentTarget !== e.target) {
@@ -72,7 +73,7 @@ watch(() => settingStore.$state.blurBackground, (newValue) => {
 
 watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   if (newValue) {
-      document.getElementsByClassName('background-mask')[0].style.opacity = 0;
+    bgMaskRef.value.style.opacity = 0;
   }
 })
 
@@ -80,7 +81,7 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
 
 <template>
   <div class="background-container">
-    <div class="background-mask"></div>
+    <div ref="bgMaskRef" class="background-mask"></div>
     <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
       :default-background="defaultBackground" :background-blur="backgroundblur" :background-scale="backgroundScale">
     </Background>

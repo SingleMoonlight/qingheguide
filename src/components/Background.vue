@@ -1,5 +1,5 @@
 <script setup>
-import { getCurrentInstance, onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 
 const props = defineProps({
     backgroundUrl: String,
@@ -7,7 +7,7 @@ const props = defineProps({
     backgroundBlur: Number,
     backgroundScale: Number
 })
-let imgElem = null
+const bgImgRef = ref()
 
 function loadBackgroundFail(target) {
     // 防止onerror无限触发
@@ -16,31 +16,27 @@ function loadBackgroundFail(target) {
     target.srcElement.src = props.defaultBackground;
 }
 
-onMounted(() => {
-    imgElem = getCurrentInstance().refs.bgImg;
-})
-
 watch(() => props.backgroundBlur, (newValue) => {
     if (newValue === 0) {
-        imgElem.style.filter = '';
+        bgImgRef.value.style.filter = '';
     } else {
-        imgElem.style.filter = `blur(${newValue}px)`;
+        bgImgRef.value.style.filter = `blur(${newValue}px)`;
     }
 })
 
 watch(() => props.backgroundScale, (newValue) => {
     if (newValue === 1) {
-        imgElem.style.transform = '';
+        bgImgRef.value.style.transform = '';
     } else {
-        imgElem.style.transform = `scale(${newValue})`;
+        bgImgRef.value.style.transform = `scale(${newValue})`;
     }
 })
 
 </script>
 
 <template>
-    <img ref="bgImg" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground" :onerror="loadBackgroundFail">
-    <img ref="bgImg" v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
+    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground" :onerror="loadBackgroundFail">
+    <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
 </template>
 
 <style scpoed>

@@ -2,22 +2,25 @@
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 import SearchEngineIcon from '@/components/icons/SearchEngineIcon.vue'
 import { useSettingStore } from '@/stores/setting'
+import { ref } from 'vue'
 
 const props = defineProps({
     historyList: Object,
     suggestList: Object,
 })
+const searchBarInputRef = ref()
 
 const settingStore = useSettingStore()
 const emit = defineEmits(['focusInput', 'inputUpdate', 'doSearch'])
 
 function inputChange() {
-    const value = document.getElementsByClassName('search-bar-input')[0].value.trim();
+    const searchInputDom = searchBarInputRef.value;
+    const value = searchInputDom.value.trim();
     emit('inputUpdate', value);
 }
 
 function selectSuggest(index) {
-    const searchInputDom = document.getElementsByClassName('search-bar-input')[0];
+    const searchInputDom = searchBarInputRef.value;
     searchInputDom.value = props.suggestList[index];
     searchInputDom.focus();
     emit('inputUpdate', props.suggestList[index]);
@@ -27,7 +30,7 @@ function selectSuggest(index) {
 
 <template>
     <div class="search-bar-input-container">
-        <input type="text" class="search-bar-input" placeholder="搜索" autocomplete="none" @focus="emit('focusInput')"
+        <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none" @focus="emit('focusInput')"
             @input="inputChange" @keydown.enter="emit('doSearch')">
         <button class="search-engine-btn" @click="emit('focusInput')">
             <SearchEngineIcon :engine-name="settingStore.$state.searchEngine"></SearchEngineIcon>
