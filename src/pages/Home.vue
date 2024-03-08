@@ -7,24 +7,27 @@ import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo } from '@/utils/constant'
 import { ref } from 'vue'
 import { getSearchSuggest } from '@/api/search'
+import { useSearchHistoryStore } from '@/stores/searchHistory'
 
 const settingStore = useSettingStore()
+const searchHistoryStore = useSearchHistoryStore()
 const emit = defineEmits(['openNavigate', 'openSearch'])
 const suggest = ref([])
 
 function searchBarInputUpdate(value) {
-    if (value === null || value === '') {
-        suggest.value = [...[]];
-    } else {
-        getSearchSuggest(value).then(res => {
-            suggest.value = [...res];
-        }).catch(err => {
-        })
-    }
+    // 先删除，在获取，防止input change过快时suggest更新不及时，页面显示不正确
+    // 比如input输入后快速删除，suggest数据依旧存在
+    suggest.value.splice(0, suggest.value.length);
+
+    getSearchSuggest(value).then(res => {
+        suggest.value = [...res];
+    }).catch(err => {
+    })
 }
 
-function doSearch() {
-    console.log('do search');
+function doSearch(value) {
+    searchHistoryStore.historyAdd(value);
+    console.log("search" + value);
 }
 </script>
 
@@ -40,7 +43,9 @@ function doSearch() {
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @input-update="searchBarInputUpdate" @do-search="doSearch"
-                :suggest-list="suggest"></SearchBar>
+                :search-engine="settingStore.$state.searchEngine" :open-history="settingStore.$state.openHistory"
+                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest"
+                :history-list="searchHistoryStore.$state.history"></SearchBar>
         </div>
         <div class="copyright-container">
             <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>

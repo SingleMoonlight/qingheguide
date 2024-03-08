@@ -12,4 +12,4 @@ export const copyrightInfo = {
 }
 
 export const searchEngine = ['baidu', 'bing', 'google', 'custom']
-
+export const searchHistoryNum = 10

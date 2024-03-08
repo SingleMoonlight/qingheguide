@@ -13,3 +13,11 @@ export function getLocalSetting() {
 export function setLocalSetting(setting) {
     localStorage.setItem('setting', JSON.stringify(setting));
 }
+
+export function getLocalHistory() {
+    return JSON.parse(localStorage.getItem('searchHistory'));
+}
+
+export function setLocalHistory(searchHistory) {
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+}

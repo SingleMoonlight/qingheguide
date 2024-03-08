@@ -38,6 +38,21 @@ svg {
     color: var(--icon-svg-color);
 }
 
+input {
+    border: none;
+    outline: 0;
+}
+
 input::placeholder {
     color: var(--input-placeholder-color);
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+::selection {
+    background: var(--selection-background-color);
+    border-radius: 4px;
 }

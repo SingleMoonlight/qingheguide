@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { initImageDB } from '@/utils/indexedDB'
 import { globalKeydown } from '@/utils/keyListener'
-import { checkUpdate, loadSetting, printWebsiteInfo } from './utils/initialize'
+import { checkUpdate, loadConfig, printWebsiteInfo } from './utils/initialize'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -15,4 +15,4 @@ initImageDB()
 printWebsiteInfo()
 globalKeydown()
 checkUpdate()
-loadSetting()
+loadConfig()

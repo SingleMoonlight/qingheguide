@@ -1,6 +1,7 @@
 import config from '../../package.json'
 import { useSettingStore } from '@/stores/setting'
-import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting } from './localStorage'
+import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting, setLocalHistory, getLocalHistory } from './localStorage'
+import { useSearchHistoryStore } from '@/stores/searchHistory'
 
 export function checkUpdate() {
     const settingStore = useSettingStore();
@@ -21,8 +22,9 @@ export function checkUpdate() {
 }
 
 
-export function loadSetting() {
+export function loadConfig() {
     const settingStore = useSettingStore();
+    const searchHistoryStore = useSearchHistoryStore();
 
     settingStore.$subscribe((mutation, state) => {
         // 每当状态发生变化时，将整个 state 持久化到本地存储
@@ -36,6 +38,16 @@ export function loadSetting() {
     if (getLocalSetting()) {
         settingStore.$patch(getLocalSetting());
     }
+
+    searchHistoryStore.$subscribe((mutation, state) => {
+        setLocalHistory(state);
+    }, {
+        detached: true
+    });
+    if (getLocalHistory()) {
+        searchHistoryStore.$patch(getLocalHistory());
+    }
+
     // 设置主题
     document.getElementById("app").setAttribute("class", settingStore.$state.themeMode);
 }
