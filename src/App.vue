@@ -44,6 +44,8 @@ function openSearch() {
   if (settingStore.$state.blurBackground) {
     backgroundblur.value = 10;
   }
+
+  flagStore.$state.closeSearch = false;
 }
 
 function closeSearch(e) {
@@ -55,6 +57,8 @@ function closeSearch(e) {
     backgroundblur.value = 0;
   }
   backgroundScale.value = 1;
+
+  flagStore.$state.closeSearch = true;
 }
 
 onMounted(() => {

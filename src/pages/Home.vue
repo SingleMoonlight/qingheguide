@@ -4,14 +4,17 @@ import Date from '@/components/Date.vue'
 import Copyright from '@/components/Copyright.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { useSettingStore } from '@/stores/setting'
-import { copyrightInfo } from '@/utils/constant'
-import { ref } from 'vue'
+import { copyrightInfo, searchEngineList } from '@/utils/constant'
 import { getSearchSuggest } from '@/api/search'
 import { useSearchHistoryStore } from '@/stores/searchHistory'
+import { useFlagStore } from '@/stores/flag'
+import { ref } from 'vue'
+
+const emit = defineEmits(['openNavigate', 'openSearch'])
 
 const settingStore = useSettingStore()
 const searchHistoryStore = useSearchHistoryStore()
-const emit = defineEmits(['openNavigate', 'openSearch'])
+const flagStore = useFlagStore()
 const suggest = ref([])
 
 function searchBarInputUpdate(value) {
@@ -25,9 +28,27 @@ function searchBarInputUpdate(value) {
     })
 }
 
+function searchEngineUpdate(index) {
+    settingStore.$state.searchEngine = searchEngineList[index].name;
+}
+
 function doSearch(value) {
+    let searchUrl = '';
+    if (value === '') {
+        return;
+    }
     searchHistoryStore.historyAdd(value);
-    console.log("search" + value);
+    searchUrl = searchEngineList.filter(obj => obj.name === settingStore.$state.searchEngine)[0].url;
+
+    if (searchUrl === '') {
+        searchUrl = searchEngineList[0].url;
+    }
+
+    if (settingStore.$state.openSearchInNewPage) {
+        window.open(searchUrl + value, "_blank");
+    } else {
+        window.location.href = searchUrl + value;
+    }
 }
 </script>
 
@@ -43,9 +64,11 @@ function doSearch(value) {
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @input-update="searchBarInputUpdate" @do-search="doSearch"
-                :search-engine="settingStore.$state.searchEngine" :open-history="settingStore.$state.openHistory"
-                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest"
-                :history-list="searchHistoryStore.$state.history"></SearchBar>
+                @search-engine-update="searchEngineUpdate" :close-search="flagStore.$state.closeSearch"
+                :search-engine="settingStore.$state.searchEngine" :search-engine-list="searchEngineList"
+                :open-history="settingStore.$state.openHistory" :history-list="searchHistoryStore.$state.history"
+                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest">
+            </SearchBar>
         </div>
         <div class="copyright-container">
             <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>

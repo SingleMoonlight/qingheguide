@@ -11,5 +11,11 @@ export const copyrightInfo = {
     icpBeianUrl: 'https://beian.miit.gov.cn/',
 }
 
-export const searchEngine = ['baidu', 'bing', 'google', 'custom']
 export const searchHistoryNum = 10
+export const searchEngineList = [
+    { iconName: 'baidu', name: '百度', url: 'https://www.baidu.com/s?ie=utf-8&wd=' },
+    { iconName: 'bing', name: '必应', url: 'https://www.bing.com/search?q=' },
+    { iconName: 'google', name: '谷歌', url: 'https://www.google.com/search?q=' },
+    { iconName: 'custom', name: '自定义', url: '' }
+]
+

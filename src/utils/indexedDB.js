@@ -111,8 +111,7 @@ export class IndexedDB {
         });
     }
 
-    deleteDBAll(dbName) {
-        console.log(dbName);
+    deleteDBAll() {
         let request = window.indexedDB.deleteDatabase(this.dbName);
         return new Promise((resolve, reject) => {
             request.onsuccess = function (event) {
