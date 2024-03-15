@@ -1,18 +1,23 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
-import { ref } from 'vue'
+import { watch, ref } from 'vue'
 import { numLeftPadding } from '@/utils/common'
 
 const props = defineProps({
     showTime: Boolean,
     showSecond: Boolean,
-    blinkSemicolon: Boolean
+    blinkSemicolon: Boolean,
+    fontWeight: String
 })
 const currentTime = ref({
     hour: '',
     minute: '',
     second: ''
 })
+const timeRef = ref()
+const hmSemiclonRef = ref()
+const msSemiclonRef = ref()
+
 
 let currentTimeGetTimer = null
 let time = null
@@ -49,10 +54,12 @@ onMounted(() => {
 
     // 时间分隔符是否闪烁
     if (props.blinkSemicolon) {
-        [...document.getElementsByClassName('time-semicolon')]
-            .forEach(element => {
-                element.style.animation = 'blink 1s infinite';
-            });
+        hmSemiclonRef.value.style.animation = 'blink 1s infinite';
+        msSemiclonRef.value.style.animation = 'blink 1s infinite';
+    }
+
+    if (timeRef.value !== undefined) {
+        timeRef.value.style.fontWeight = props.fontWeight;;
     }
 })
 
@@ -60,21 +67,32 @@ onUnmounted(() => {
     clearTimeout(currentTimeGetTimer);
 })
 
+watch(() => props.blinkSemicolon, (newValue) => {
+    if (newValue) {
+        hmSemiclonRef.value.style.animation = 'blink 1s infinite';
+        msSemiclonRef.value.style.animation = 'blink 1s infinite';
+    }
+})
+
+watch(() => props.fontWeight, (newValue) => {
+    timeRef.value.style.fontWeight = newValue;
+})
+
 </script>
 
 <template>
-    <div class="time" v-show="props.showTime" @mouseenter="mouseenterTime" @mouseleave="mouseleaveTime">
+    <div ref="timeRef" class="time" v-show="props.showTime" @mouseenter="mouseenterTime" @mouseleave="mouseleaveTime">
         {{ currentTime.hour }}
-        <div class="time-semicolon">:</div>
+        <div ref="hmSemiclonRef" class="time-semicolon">:</div>
         {{ currentTime.minute }}
         <div class="time-second" v-show="props.showSecond">
-            <div class="time-semicolon">:</div>
+            <div ref="msSemiclonRef" class="time-semicolon">:</div>
             {{ currentTime.second }}
         </div>
     </div>
 </template>
 
-<style>
+<style scpoed>
 .time {
     font-size: 36px;
     font-weight: lighter;
