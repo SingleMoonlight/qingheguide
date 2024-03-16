@@ -18,9 +18,7 @@ const flagStore = useFlagStore()
 const suggest = ref([])
 
 function searchBarInputUpdate(value) {
-    // 先删除，在获取，防止input change过快时suggest更新不及时，页面显示不正确
-    // 比如input输入后快速删除，suggest数据依旧存在
-    suggest.value.splice(0, suggest.value.length);
+    // suggest.value.splice(0, suggest.value.length);
 
     getSearchSuggest(value).then(res => {
         suggest.value = [...res];
