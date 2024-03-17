@@ -86,7 +86,7 @@ function selectSearchEngine(index) {
 }
 
 function getSearchEngineIconName(searchEngine) {
-    return props.searchEngineList.filter(obj => obj.name === searchEngine)[0].iconName;
+    return searchEngine;
 }
 
 watch(() => props.closeSearch, (newValue) => {

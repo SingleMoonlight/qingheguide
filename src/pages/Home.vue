@@ -35,7 +35,7 @@ function searchBarInputUpdate(value) {
 }
 
 function searchEngineUpdate(index) {
-    settingStore.$state.searchEngine = searchEngineList[index].name;
+    settingStore.$state.searchEngine = searchEngineList[index].iconName;
 }
 
 function doSearch(value) {
