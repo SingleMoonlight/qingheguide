@@ -1,5 +1,5 @@
 .default {
-    --primary-font-color: white;
+    --primary-font-color: rgba(255, 255, 255, 1);
     --seconda-font-color: rgba(255, 255, 255, 0.7);
 
     --common-backdrop-filter: blur(10px);
@@ -8,7 +8,7 @@
     --common-box-shadow: 2px 2px 6px rgba(255, 255, 255, 0.05) inset,
         2px 2px 6px rgba(0, 0, 0, 0.1);
 
-    --icon-svg-color: white;
+    --icon-svg-color: rgba(255, 255, 255, 1);
     --icon-hover-background-color: rgba(255, 255, 255, 0.2);
 
     --input-placeholder-color: rgba(255, 255, 255, 0.6);
@@ -16,12 +16,16 @@
 
     --select-item-hover-background-color: rgba(255, 255, 255, 0.1);
     --select-item-active-background-color: rgba(255, 255, 255, 0.2);
+
+    --scrollbar-track-background-color: rgba(0, 0, 0, 0);
+    --scrollbar-thumb-background-color: rgba(255, 255, 255, 0.8);
+    --scrollbar-thumb-hover-background-color: rgba(255, 255, 255, 1);
 }
 
 .dark {
-    --primary-font-color: black;
+    --primary-font-color: rgba(0, 0, 0, 1);
 }
 
 .light {
-    --primary-font-color: white;
+    --primary-font-color: rgba(255, 255, 255, 1);
 }

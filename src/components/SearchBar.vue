@@ -144,7 +144,7 @@ watch(() => props.closeSearch, (newValue) => {
 <style scoped>
 .search-bar-input-container {
     width: 100%;
-    height: 43px;
+    height: 42px;
     border-radius: 30px;
     box-shadow: var(--common-box-shadow);
     backdrop-filter: var(--common-backdrop-filter);
@@ -165,8 +165,8 @@ watch(() => props.closeSearch, (newValue) => {
 
 .search-engine-btn {
     position: absolute;
-    width: 33px;
-    height: 33px;
+    width: 32px;
+    height: 32px;
     left: 5px;
     top: 50%;
     transform: translateY(-50%);
@@ -180,8 +180,8 @@ watch(() => props.closeSearch, (newValue) => {
 
 .search-action-btn {
     position: absolute;
-    width: 33px;
-    height: 33px;
+    width: 32px;
+    height: 32px;
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
@@ -204,7 +204,9 @@ watch(() => props.closeSearch, (newValue) => {
 .search-engine-container {
     width: 130px;
     margin-top: 10px;
+    border-radius: 10px;
     background-color: var(--commom-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .search-engine-item-icon {
@@ -224,12 +226,16 @@ watch(() => props.closeSearch, (newValue) => {
 .search-suggest-container {
     width: 100%;
     margin-top: 10px;
+    border-radius: 10px;
     background-color: var(--commom-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .search-history-container {
     width: 100%;
     margin-top: 10px;
+    border-radius: 10px;
     background-color: var(--commom-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
 }
 </style>

@@ -56,3 +56,17 @@ button {
     background: var(--selection-background-color);
     border-radius: 4px;
 }
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-background-color);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-background-color);
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover-background-color);
+}

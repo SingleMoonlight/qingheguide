@@ -1,4 +1,5 @@
 <script setup>
+import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg } from '@/utils/indexedDB'
 
@@ -16,11 +17,22 @@ function setBackground(e) {
 
 <template>
     <div class="setting-container">
-        设置
-        <input type="file" accept="image/*" @change="setBackground" />
-        <button @click="settingStore.blurBackground=!settingStore.blurBackground">背景模糊</button>
-        <button @click="emit('closeSeting')">导航</button>
+        <div class="setting-pane">
+            <div class="setting-pane-header">
+                <div class="setting-pane-title">
+                    设置
+                </div>
+                <div class="setting-pane-close-btn" @click="emit('closeSeting')">
+                    <CloseIcon></CloseIcon>
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <input type="file" accept="image/*" @change="setBackground" />
+                <button @click="settingStore.blurBackground = !settingStore.blurBackground">背景模糊</button>
+            </div>
+        </div>
     </div>
+
 </template>
 
 <style scpoed>
@@ -30,5 +42,60 @@ function setBackground(e) {
     overflow: hidden;
     margin: 0;
     position: absolute;
+}
+
+.setting-pane {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    width: 600px;
+    height: 500px;
+    max-width: 80%;
+    max-height: 80%;
+    color: var(--primary-font-color);
+    box-shadow: var(--common-box-shadow);
+    background-color: var(--commom-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
+    transition: .25s;
+    overflow: hidden;
+}
+
+.setting-pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.setting-pane-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.setting-pane-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 40px;
+    transition: .25s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting-pane-close-btn:hover {
+    background-color: var(--icon-hover-background-color);
+    transform: rotate(180deg);
+}
+
+.setting-pane-body {
+    position: absolute;
+    padding: 0 20px 0  20px;
+    width: 100%;
+    height: calc(100% - 72px - 20px);
+    box-sizing: border-box;
+    overflow: auto;
 }
 </style>

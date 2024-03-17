@@ -61,8 +61,8 @@ function selectOtherMenuItem(index) {
 .ohter-btn {
     position: absolute;
     cursor: pointer;
-    width: 33px;
-    height: 33px;
+    width: 32px;
+    height: 32px;
     top: 20px;
     right: 3%;
     border-radius: 40px;
@@ -82,7 +82,10 @@ function selectOtherMenuItem(index) {
     top: 60px;
     right: 3%;
     width: 130px;
+    border-radius: 10px;
     color: var(--primary-font-color);
+    background-color: var(--commom-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .menu-item-icon {
