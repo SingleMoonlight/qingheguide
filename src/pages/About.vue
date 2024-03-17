@@ -1,13 +1,13 @@
 <script setup>
-import { usePageStore } from '@/stores/page'
 
-const pageStore = usePageStore()
+const emit = defineEmits(['closeAbout'])
+
 </script>
 
 <template>
     <div class="about-container">
-        About
-        <button @click="pageStore.pageForward('Navigate')">goto navigate</button>
+        关于
+        <button @click="emit('closeAbout')">导航</button>
     </div>
 </template>
 

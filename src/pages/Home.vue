@@ -10,12 +10,20 @@ import { useSearchHistoryStore } from '@/stores/searchHistory'
 import { useFlagStore } from '@/stores/flag'
 import { ref } from 'vue'
 
-const emit = defineEmits(['openNavigate', 'openSearch'])
+const emit = defineEmits(['openSearch', 'closeSearch','openNavigate'])
 
 const settingStore = useSettingStore()
 const searchHistoryStore = useSearchHistoryStore()
 const flagStore = useFlagStore()
 const suggest = ref([])
+
+function closeSearch(e) {
+    if (e.currentTarget !== e.target) {
+        // 不处理子元素的冒泡点击事件
+        return;
+    }
+    emit('closeSearch');
+}
 
 function searchBarInputUpdate(value) {
     // suggest.value.splice(0, suggest.value.length);
@@ -51,7 +59,7 @@ function doSearch(value) {
 </script>
 
 <template>
-    <div class="home-container">
+    <div class="home-container" @click="closeSearch" @contextmenu="emit('openNavigate')">
         <div class="time-container" @click="emit('openNavigate')">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
                 :blink-semicolon="settingStore.$state.blinkSemicolon" :font-weight="settingStore.$state.timeFontWeight">

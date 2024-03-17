@@ -19,24 +19,20 @@ const backgroundblur = ref(0)
 const backgroundScale = ref(1)
 const bgMaskRef = ref()
 
-function openHomePage(e) {
-  if (e.currentTarget !== e.target) {
-    // 不处理子元素的冒泡点击事件
-    return;
-  }
-  pageStore.pageForward('Home');
-  if (settingStore.$state.blurBackground) {
-    backgroundblur.value = 0;
-  }
-  backgroundScale.value = 1;
-}
-
 function openNavigatePage() {
   pageStore.pageForward('Navigate');
   backgroundScale.value = 1.1;
   if (settingStore.$state.blurBackground) {
     backgroundblur.value = 10;
   }
+}
+
+function closeNavigatePage() {
+  pageStore.pageForward('Home');
+  if (settingStore.$state.blurBackground) {
+    backgroundblur.value = 0;
+  }
+  backgroundScale.value = 1;
 }
 
 function openSearch() {
@@ -48,17 +44,29 @@ function openSearch() {
   flagStore.$state.closeSearch = false;
 }
 
-function closeSearch(e) {
-  if (e.currentTarget !== e.target) {
-    // 不处理子元素的冒泡点击事件
-    return;
-  }
+function closeSearch() {
   if (settingStore.$state.blurBackground) {
     backgroundblur.value = 0;
   }
   backgroundScale.value = 1;
 
   flagStore.$state.closeSearch = true;
+}
+
+function openSettingPage() {
+  pageStore.pageForward('Setting');
+}
+
+function openAboutPage() {
+  pageStore.pageForward('About');
+}
+
+function closeSettingPage() {
+  pageStore.pageForward('Navigate');
+}
+
+function closeAboutPage() {
+  pageStore.pageForward('Navigate');
 }
 
 onMounted(() => {
@@ -92,12 +100,16 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   </div>
 
   <Transition mode="out-in" name="fade">
-    <Home v-if="pageName === 'Home'" @click="closeSearch" @contextmenu="openNavigatePage"
-      @open-navigate="openNavigatePage" @open-search="openSearch">
+    <Home v-if="pageName === 'Home'" @close-search="closeSearch" @open-search="openSearch"
+      @open-navigate="openNavigatePage">
     </Home>
-    <Navigate v-else-if="pageName === 'Navigate'" @click="openHomePage"></Navigate>
-    <Setting v-else-if="pageName === 'Setting'"></Setting>
-    <About v-else-if="pageName === 'About'"></About>
+    <Navigate v-else-if="pageName === 'Navigate'" @close-navigate="closeNavigatePage" @open-setting="openSettingPage"
+      @open-about="openAboutPage">
+    </Navigate>
+    <Setting v-else-if="pageName === 'Setting'" @close-seting="closeSettingPage">
+    </Setting>
+    <About v-else-if="pageName === 'About'" @close-about="closeAboutPage">
+    </About>
   </Transition>
 </template>
 

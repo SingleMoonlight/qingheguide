@@ -1,12 +1,9 @@
 <script setup>
 import { useSettingStore } from '@/stores/setting'
-import { MutationType } from 'pinia'
-import { usePageStore } from '@/stores/page'
-import { getLocalSetting, setLocalSetting } from '@/utils/localStorage'
-import { getBackgroundImg, setBackgroundImg } from '@/utils/indexedDB'
+import { setBackgroundImg } from '@/utils/indexedDB'
 
+const emit = defineEmits(['closeSeting'])
 
-const pageStore = usePageStore()
 const settingStore = useSettingStore()
 
 function setBackground(e) {
@@ -19,10 +16,10 @@ function setBackground(e) {
 
 <template>
     <div class="setting-container">
-        Setting
+        设置
         <input type="file" accept="image/*" @change="setBackground" />
-        <button @click="settingStore.blurBackground=!settingStore.blurBackground">blur</button>
-        <button @click="pageStore.pageForward('Navigate')">goto Navigate</button>
+        <button @click="settingStore.blurBackground=!settingStore.blurBackground">背景模糊</button>
+        <button @click="emit('closeSeting')">导航</button>
     </div>
 </template>
 
