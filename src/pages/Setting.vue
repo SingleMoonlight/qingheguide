@@ -16,7 +16,7 @@ function setBackground(e) {
     setBackgroundImg(imgFile);
 }
 
-function selectTheme() {
+function openNext() {
     
 }
 
@@ -38,22 +38,27 @@ function selectTheme() {
                     <input type="file" accept="image/*" @change="setBackground" />
                 </Card>
                 <Card :card-name="'外观'">
-                    <SettingItem :label="'显示背景遮罩'" :des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'"
+                    <SettingItem :label="'显示背景遮罩'"
                         :type="'switch'" :onoff="settingStore.blurBackground" @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
                     </SettingItem>
                 </Card>
                 <Card :card-name="'测试'">
                     <SettingItem :label="'测试'" :type="'switch'">
                     </SettingItem>
-                    <SettingItem :label="'测试'" :des="'按钮样式测试'" :type="'button'" :btn-value="'点击'">
+                    <SettingItem :label="'测试'" :type="'switch'">
                     </SettingItem>
-                    <SettingItem :label="'测试'" :type="'button'" :btn-value="'点击'">
+                    <SettingItem :label="'测试'" :type="'next'" :next-value="'默认'" @open-next="openNext">
                     </SettingItem>
-                    <SettingItem :label="'测试'" :type="'list'" :list-value="'默认'" :list="themeList" @select-item="selectTheme">
-                    </SettingItem>
-                    <SettingItem :label="'测试'" :type="'list'" :is-last="true">
+                    <SettingItem :label="'测试'" :type="'next'">
                     </SettingItem>
                 </Card>
+            </div>
+        </div>
+        <div class="setting-pane" v-show="false">
+            <div class="setting-pane-header">
+                <div class="setting-pane-title">
+                    主题
+                </div>
             </div>
         </div>
     </div>
