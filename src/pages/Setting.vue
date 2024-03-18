@@ -1,7 +1,10 @@
 <script setup>
+import Card from '@/components/Card.vue'
+import SettingItem from '@/components/SettingItem.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg } from '@/utils/indexedDB'
+import { themeList } from '@/utils/constant'
 
 const emit = defineEmits(['closeSeting'])
 
@@ -11,6 +14,10 @@ function setBackground(e) {
     let imgFile = e.target.files[0];
     // 将图片保存至indexedDB
     setBackgroundImg(imgFile);
+}
+
+function selectTheme() {
+    
 }
 
 </script>
@@ -27,12 +34,29 @@ function setBackground(e) {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <input type="file" accept="image/*" @change="setBackground" />
-                <button @click="settingStore.blurBackground = !settingStore.blurBackground">背景模糊</button>
+                <Card :card-name="'背景'">
+                    <input type="file" accept="image/*" @change="setBackground" />
+                </Card>
+                <Card :card-name="'外观'">
+                    <SettingItem :label="'显示背景遮罩'" :des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'"
+                        :type="'switch'" :onoff="settingStore.blurBackground" @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                    </SettingItem>
+                </Card>
+                <Card :card-name="'测试'">
+                    <SettingItem :label="'测试'" :type="'switch'">
+                    </SettingItem>
+                    <SettingItem :label="'测试'" :des="'按钮样式测试'" :type="'button'" :btn-value="'点击'">
+                    </SettingItem>
+                    <SettingItem :label="'测试'" :type="'button'" :btn-value="'点击'">
+                    </SettingItem>
+                    <SettingItem :label="'测试'" :type="'list'" :list-value="'默认'" :list="themeList" @select-item="selectTheme">
+                    </SettingItem>
+                    <SettingItem :label="'测试'" :type="'list'" :is-last="true">
+                    </SettingItem>
+                </Card>
             </div>
         </div>
     </div>
-
 </template>
 
 <style scpoed>
@@ -92,7 +116,7 @@ function setBackground(e) {
 
 .setting-pane-body {
     position: absolute;
-    padding: 0 20px 0  20px;
+    padding: 0 20px 0 20px;
     width: 100%;
     height: calc(100% - 72px - 20px);
     box-sizing: border-box;

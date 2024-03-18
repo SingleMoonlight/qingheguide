@@ -122,6 +122,6 @@ function doSearch(value) {
     left: 50%;
     bottom: 20px;
     transform: translateX(-50%);
-    color: var(--seconda-font-color);
+    color: var(--secondary-font-color);
 }
 </style>
