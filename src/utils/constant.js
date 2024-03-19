@@ -24,4 +24,8 @@ export const otherMenuList = [
     { iconName: 'about',  name: '关于', emit: 'openAbout'},
 ]
 
-export const themeList = ['default', 'dark', 'light']
+export const themeList = [
+    {mode: 'default', name: '默认'},
+    {mode: 'dark', name: '深色'},
+    {mode: 'light', name: '浅色'},
+]

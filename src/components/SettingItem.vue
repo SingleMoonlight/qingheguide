@@ -10,15 +10,22 @@ const props = defineProps({
     next: Object,
     nextValue: String,
 })
+
+function clickSettingItem() {
+    if (props.type === 'next') {
+        emit('openNext');
+    }
+}
+
 </script>
 
 <template>
-    <div class="setting-item">
+    <div class="setting-item" @click="clickSettingItem">
         <div class="setting-item-label">{{ props.label }}</div>
         <div v-if="props.type === 'switch'" class="setting-switch">
             <Switch :onoff="props.onoff" @change-onoff="emit('switchOnoff')"></Switch>
         </div>
-        <div v-else-if="props.type === 'next'" class="setting-next" @click="emit('openNext')">
+        <div v-else-if="props.type === 'next'" class="setting-next">
             <div class="setting-next-value">{{ props.nextValue }}</div>
             <MoreIcon></MoreIcon>
         </div>
