@@ -36,11 +36,11 @@ function select() {
 
 .select-item:hover {
     padding-left: 10px;
-    background: var(--select-item-hover-background-color);
+    background: var(--item-hover-background-color);
 }
 
 .select-item:active {
-    background: var(--select-item-active-background-color);
+    background: var(--item-active-background-color);
     transform: scale(0.99, 0.99);
     transition: .25s;
 }

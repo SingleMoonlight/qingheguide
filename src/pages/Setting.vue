@@ -2,13 +2,17 @@
 import Card from '@/components/Card.vue'
 import SettingItem from '@/components/SettingItem.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
+import BackIcon from '@/components/icons/BackIcon.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg } from '@/utils/indexedDB'
 import { themeList } from '@/utils/constant'
+import { ref } from 'vue'
 
 const emit = defineEmits(['closeSeting'])
-
 const settingStore = useSettingStore()
+const mainSettingPaneRef = ref()
+const themeSettingPaneRef = ref()
+
 
 function setBackground(e) {
     let imgFile = e.target.files[0];
@@ -16,15 +20,37 @@ function setBackground(e) {
     setBackgroundImg(imgFile);
 }
 
-function selectTheme() {
-    
+function getThemeName(mode) {
+    return themeList.filter(obj => obj.mode === mode)[0].name;
+}
+
+function goToNext(cur, next) {
+    if (cur === null || cur === undefined) return;
+    if (next === null || next === undefined) return;
+
+    cur.classList.remove("setting-pane-enter");
+    cur.classList.add("setting-pane-leave");
+
+    next.classList.remove("setting-pane-before-enter");
+    next.classList.add("setting-pane-enter");
+}
+
+function backToPrev(cur, prev) {
+    if (cur === null || cur === undefined) return;
+    if (prev === null || prev === undefined) return;
+
+    cur.classList.remove("setting-pane-enter");
+    cur.classList.add("setting-pane-before-enter");
+
+    prev.classList.remove("setting-pane-leave");
+    prev.classList.add("setting-pane-enter");
 }
 
 </script>
 
 <template>
     <div class="setting-container">
-        <div class="setting-pane">
+        <div ref="mainSettingPaneRef" class="setting-pane setting-pane-enter">
             <div class="setting-pane-header">
                 <div class="setting-pane-title">
                     设置
@@ -38,21 +64,27 @@ function selectTheme() {
                     <input type="file" accept="image/*" @change="setBackground" />
                 </Card>
                 <Card :card-name="'外观'">
-                    <SettingItem :label="'显示背景遮罩'" :des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'"
-                        :type="'switch'" :onoff="settingStore.blurBackground" @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                    <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.themeMode)"
+                        @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
+                    </SettingItem>
+                    <SettingItem :label="'显示背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
+                        @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
                     </SettingItem>
                 </Card>
-                <Card :card-name="'测试'">
-                    <SettingItem :label="'测试'" :type="'switch'">
-                    </SettingItem>
-                    <SettingItem :label="'测试'" :des="'按钮样式测试'" :type="'button'" :btn-value="'点击'">
-                    </SettingItem>
-                    <SettingItem :label="'测试'" :type="'button'" :btn-value="'点击'">
-                    </SettingItem>
-                    <SettingItem :label="'测试'" :type="'list'" :list-value="'默认'" :list="themeList" @select-item="selectTheme">
-                    </SettingItem>
-                    <SettingItem :label="'测试'" :type="'list'" :is-last="true">
-                    </SettingItem>
+            </div>
+        </div>
+        <div ref="themeSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(themeSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    主题
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card>
+                    
                 </Card>
             </div>
         </div>
@@ -82,8 +114,22 @@ function selectTheme() {
     box-shadow: var(--common-box-shadow);
     background-color: var(--commom-background-color);
     backdrop-filter: var(--common-backdrop-filter);
-    transition: .25s;
+    transition: .25s ease;
     overflow: hidden;
+}
+
+.setting-pane-before-enter {
+    opacity: 0;
+    transform: translate(50%, -50%);
+}
+
+.setting-pane-enter {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+.setting-pane-leave {
+    opacity: 0;
 }
 
 .setting-pane-header {
@@ -112,6 +158,21 @@ function selectTheme() {
 .setting-pane-close-btn:hover {
     background-color: var(--icon-hover-background-color);
     transform: rotate(180deg);
+}
+
+.setting-pane-child-header {
+    justify-content: left;
+}
+
+.setting-pane-back-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 40px;
+    transition: .25s;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .setting-pane-body {
