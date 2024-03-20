@@ -114,16 +114,6 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
 </template>
 
 <style scpoed>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.15s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .background-container {
   width: 100%;
   height: 100%;

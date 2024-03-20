@@ -24,6 +24,15 @@ function getThemeName(mode) {
     return themeList.filter(obj => obj.mode === mode)[0].name;
 }
 
+function getThemeIndex(mode) {
+    return themeList.findIndex(obj => obj.mode === mode);
+}
+
+function selectTheme(index) {
+    settingStore.$state.themeMode = themeList[index].mode;
+    document.getElementById("app").setAttribute("class", settingStore.$state.themeMode);
+}
+
 function goToNext(cur, next) {
     if (cur === null || cur === undefined) return;
     if (next === null || next === undefined) return;
@@ -84,7 +93,10 @@ function backToPrev(cur, prev) {
             </div>
             <div class="setting-pane-body">
                 <Card>
-                    
+                    <SettingItem v-for="(item, index) in themeList" :type="'list'" 
+                        :label="item.name"
+                        :checked="getThemeIndex(settingStore.themeMode) === index" @checked-list-item="selectTheme(index)">
+                    </SettingItem>
                 </Card>
             </div>
         </div>

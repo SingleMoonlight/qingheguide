@@ -1,19 +1,23 @@
 <script setup>
 import Switch from './Switch.vue'
 import MoreIcon from './icons/MoreIcon.vue'
+import CheckedIcon from './icons/CheckedIcon.vue'
 
-const emit = defineEmits(['switchOnoff', 'openNext'])
+const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem'])
 const props = defineProps({
     label: String,
     type: String,
     onoff: Boolean,
     next: Object,
     nextValue: String,
+    checked: Boolean,
 })
 
 function clickSettingItem() {
     if (props.type === 'next') {
         emit('openNext');
+    } else if (props.type === 'list') {
+        emit('checkedListItem');
     }
 }
 
@@ -28,6 +32,13 @@ function clickSettingItem() {
         <div v-else-if="props.type === 'next'" class="setting-next">
             <div class="setting-next-value">{{ props.nextValue }}</div>
             <MoreIcon></MoreIcon>
+        </div>
+        <div v-else-if="props.type === 'list'">
+            <Transition mode="out-in" name="fade">
+                <div v-show="props.checked" class="setting-list-item-checked-icon">
+                    <CheckedIcon></CheckedIcon>
+                </div>
+            </Transition>
         </div>
     </div>
 
@@ -78,4 +89,10 @@ function clickSettingItem() {
     color: var(--secondary-font-color);
 }
 
+
+.setting-list-item-checked-icon {
+    display: flex;
+    align-items: center;
+    transition: .25s;
+}
 </style>

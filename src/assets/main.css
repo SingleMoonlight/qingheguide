@@ -1,4 +1,5 @@
 @import './theme.less';
+@import './transition.css';
 
 body {
     width: 100vw;
