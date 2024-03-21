@@ -18,10 +18,12 @@ export function getSearchSuggest(keyword) {
                 searchRequestCancel = cancel;
             })
         }).then(res => {
-            suggestResult.splice(0, res.data.g.length);
-            res.data.g.forEach(element => {
-                suggestResult.push(element.q)
-            });
+            suggestResult.splice(0, suggestResult.length);
+            if (res.data.g !== undefined) {
+                res.data.g.forEach(element => {
+                    suggestResult.push(element.q)
+                });
+            }
             resolve(suggestResult);
         }).catch(err => {
             if (axios.isCancel(err)) {

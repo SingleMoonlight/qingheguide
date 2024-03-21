@@ -26,6 +26,7 @@ function closeSearch(e) {
 }
 
 function searchBarInputUpdate(value) {
+    // 注释掉可以解决拼音输入时无法选择建议的问题
     // suggest.value.splice(0, suggest.value.length);
 
     getSearchSuggest(value).then(res => {
