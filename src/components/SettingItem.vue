@@ -49,7 +49,7 @@ function clickSettingItem() {
     width: 100%;
     height: 40px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     box-sizing: border-box;
     position: relative;
     display: flex;

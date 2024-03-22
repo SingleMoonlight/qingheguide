@@ -26,7 +26,7 @@ function select() {
     height: 36px;
     line-height: 20px;
     padding: 8px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 14px;
     cursor: pointer;
     box-sizing: border-box;

@@ -31,7 +31,7 @@ const emit = defineEmits(['closeAbout'])
     position: absolute;
 }
 
-.about-pane-container {
+.about-pane {
     position: absolute;
     top: 50%;
     left: 50%;
