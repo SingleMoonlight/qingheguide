@@ -16,6 +16,7 @@ const timeFontWeightSettingPaneRef = ref()
 const blurBackgroundSettingPaneRef = ref()
 const copyrightSettingPaneRef = ref()
 const searchOpenModeSettingPaneRef = ref()
+const customSearchEngineSettingPaneRef = ref()
 const showSettingPane = ref(false)
 
 
@@ -64,6 +65,10 @@ function selectSearchOpenMode(index) {
 
 function getOnoffName(onoff) {
     return onoff ? '打开' : '关闭';
+}
+
+function updateCustomSearchEngineUrl(url) {
+    settingStore.$state.customSearchEngineUrl = url;
 }
 
 function goToNext(cur, next) {
@@ -133,6 +138,9 @@ onMounted(() => {
                         <SettingItem :label="'搜索打开方式'" :type="'next'"
                             :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
                             @open-next="goToNext(mainSettingPaneRef, searchOpenModeSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'自定义搜索引擎'" :type="'next'" :next-value="settingStore.customSearchEngineUrl"
+                            @open-next="goToNext(mainSettingPaneRef, customSearchEngineSettingPaneRef)">
                         </SettingItem>
                     </Card>
                     <Card :card-name="'时间日期'">
@@ -230,7 +238,8 @@ onMounted(() => {
         </div>
         <div ref="searchOpenModeSettingPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
-                <div class="setting-pane-back-btn" @click="backToPrev(searchOpenModeSettingPaneRef, mainSettingPaneRef)">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(searchOpenModeSettingPaneRef, mainSettingPaneRef)">
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
@@ -242,6 +251,23 @@ onMounted(() => {
                     <SettingItem v-for="(item, index) in searchOpenMode" :type="'list'" :label="item.name"
                         :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
                         @checked-list-item="selectSearchOpenMode(index)">
+                    </SettingItem>
+                </Card>
+            </div>
+        </div>
+        <div ref="customSearchEngineSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(customSearchEngineSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    自定义搜索引擎
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card>
+                    <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" @ensure-input="updateCustomSearchEngineUrl">
                     </SettingItem>
                 </Card>
             </div>
@@ -300,6 +326,9 @@ onMounted(() => {
 .setting-pane-title {
     font-size: 20px;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .setting-pane-close-btn {

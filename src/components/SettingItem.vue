@@ -2,8 +2,9 @@
 import Switch from './Switch.vue'
 import MoreIcon from './icons/MoreIcon.vue'
 import CheckedIcon from './icons/CheckedIcon.vue'
+import { ref } from 'vue'
 
-const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem'])
+const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem', 'ensureInput'])
 const props = defineProps({
     label: String,
     type: String,
@@ -11,7 +12,9 @@ const props = defineProps({
     next: Object,
     nextValue: String,
     checked: Boolean,
+    inputValue: String,
 })
+const settingInputRef = ref()
 
 function clickSettingItem() {
     if (props.type === 'next') {
@@ -19,6 +22,12 @@ function clickSettingItem() {
     } else if (props.type === 'list') {
         emit('checkedListItem');
     }
+}
+
+function settingInputEnsure() {
+    let settingInputDom = settingInputRef.value;
+
+    emit('ensureInput', settingInputDom.value.trim());
 }
 
 </script>
@@ -39,6 +48,12 @@ function clickSettingItem() {
                     <CheckedIcon></CheckedIcon>
                 </div>
             </Transition>
+        </div>
+        <div v-else-if="props.type === 'input'" class="setting-input-container">
+            <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" />
+            <div class="setting-input-checked-icon" @click="settingInputEnsure">
+                <CheckedIcon></CheckedIcon>
+            </div>
         </div>
     </div>
 
@@ -69,8 +84,12 @@ function clickSettingItem() {
 
 .setting-item-label {
     display: block;
+    max-width: 50%;
     line-height: 20px;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: var(--primary-font-color);
 }
 
@@ -79,6 +98,7 @@ function clickSettingItem() {
 }
 
 .setting-next {
+    max-width: 50%;
     display: flex;
     align-items: center;
 }
@@ -86,6 +106,9 @@ function clickSettingItem() {
 .setting-next-value {
     line-height: 20px;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: var(--secondary-font-color);
 }
 
@@ -94,5 +117,38 @@ function clickSettingItem() {
     display: flex;
     align-items: center;
     transition: .25s;
+}
+
+.setting-input-container {
+    display: flex;
+    align-items: center;
+    flex: 0.8;
+    min-width: 60px;
+}
+
+.setting-input {
+    width: 100%;
+    height: 100%;
+    min-width: 10px;
+    border: none;
+    box-sizing: border-box;
+    outline: 0;
+    font-size: 14px;
+    color: inherit;
+    background-color: transparent;
+}
+
+.setting-input-checked-icon {
+    min-width: 32px;
+    height: 32px;
+    border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .25s;
+}
+
+.setting-input-checked-icon:hover {
+    background-color: var(--icon-hover-background-color);
 }
 </style>
