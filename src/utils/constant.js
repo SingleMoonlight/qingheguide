@@ -29,3 +29,13 @@ export const themeList = [
     {mode: 'dark', name: '深色'},
     {mode: 'light', name: '浅色'},
 ]
+
+export const timeFontWeight = [
+    {weight: 'normal', name: '粗体'},
+    {weight: 'light', name: '细体'},
+]
+
+export const searchOpenMode = [
+    {mode: 'currentPage', name: '当前标签页'},
+    {mode: 'newPage', name: '新标签页'},
+]

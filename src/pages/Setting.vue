@@ -5,13 +5,17 @@ import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg } from '@/utils/indexedDB'
-import { themeList } from '@/utils/constant'
+import { themeList, timeFontWeight, searchOpenMode } from '@/utils/constant'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSeting'])
 const settingStore = useSettingStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
+const timeFontWeightSettingPaneRef = ref()
+const blurBackgroundSettingPaneRef = ref()
+const copyrightSettingPaneRef = ref()
+const searchOpenModeSettingPaneRef = ref()
 const showSettingPane = ref(false)
 
 
@@ -32,6 +36,34 @@ function getThemeIndex(mode) {
 function selectTheme(index) {
     settingStore.$state.themeMode = themeList[index].mode;
     document.getElementById("app").setAttribute("class", settingStore.$state.themeMode);
+}
+
+function getTimeFontWeightName(weight) {
+    return timeFontWeight.filter(obj => obj.weight === weight)[0].name;
+}
+
+function getTimeFontWeightIndex(weight) {
+    return timeFontWeight.findIndex(obj => obj.weight === weight);
+}
+
+function selectTimeFontWeight(index) {
+    settingStore.$state.timeFontWeight = timeFontWeight[index].weight;
+}
+
+function getSearchOpenModeName(mode) {
+    return searchOpenMode.filter(obj => obj.mode === mode)[0].name;
+}
+
+function getSearchOpenModeIndex(mode) {
+    return searchOpenMode.findIndex(obj => obj.mode === mode);
+}
+
+function selectSearchOpenMode(index) {
+    settingStore.$state.searchOpenMode = searchOpenMode[index].mode;
+}
+
+function getOnoffName(onoff) {
+    return onoff ? '打开' : '关闭';
 }
 
 function goToNext(cur, next) {
@@ -82,8 +114,43 @@ onMounted(() => {
                         <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.themeMode)"
                             @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
                         </SettingItem>
-                        <SettingItem :label="'显示背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
-                            @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                        <SettingItem :label="'背景遮罩'" :type="'next'"
+                            :next-value="getOnoffName(settingStore.blurBackground)"
+                            @open-next="goToNext(mainSettingPaneRef, blurBackgroundSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'备案信息'" :type="'next'"
+                            :next-value="getOnoffName(settingStore.showCopyright)"
+                            @open-next="goToNext(mainSettingPaneRef, copyrightSettingPaneRef)">
+                        </SettingItem>
+                    </Card>
+                    <Card :card-name="'搜索'">
+                        <SettingItem :label="'搜索历史'" :type="'switch'" :onoff="settingStore.openHistory"
+                            @switch-onoff="settingStore.openHistory = !settingStore.openHistory">
+                        </SettingItem>
+                        <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
+                            @switch-onoff="settingStore.openSuggest = !settingStore.openSuggest">
+                        </SettingItem>
+                        <SettingItem :label="'搜索打开方式'" :type="'next'"
+                            :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
+                            @open-next="goToNext(mainSettingPaneRef, searchOpenModeSettingPaneRef)">
+                        </SettingItem>
+                    </Card>
+                    <Card :card-name="'时间日期'">
+                        <SettingItem :label="'时间'" :type="'switch'" :onoff="settingStore.showTime"
+                            @switch-onoff="settingStore.showTime = !settingStore.showTime">
+                        </SettingItem>
+                        <SettingItem :label="'日期'" :type="'switch'" :onoff="settingStore.showDate"
+                            @switch-onoff="settingStore.showDate = !settingStore.showDate">
+                        </SettingItem>
+                        <SettingItem :label="'秒钟'" :type="'switch'" :onoff="settingStore.showSecond"
+                            @switch-onoff="settingStore.showSecond = !settingStore.showSecond">
+                        </SettingItem>
+                        <SettingItem :label="'时间分隔符闪烁'" :type="'switch'" :onoff="settingStore.blinkSemicolon"
+                            @switch-onoff="settingStore.blinkSemicolon = !settingStore.blinkSemicolon">
+                        </SettingItem>
+                        <SettingItem :label="'时间字体粗细'" :type="'next'"
+                            :next-value="getTimeFontWeightName(settingStore.timeFontWeight)"
+                            @open-next="goToNext(mainSettingPaneRef, timeFontWeightSettingPaneRef)">
                         </SettingItem>
                     </Card>
                 </div>
@@ -103,6 +170,78 @@ onMounted(() => {
                     <SettingItem v-for="(item, index) in themeList" :type="'list'" :label="item.name"
                         :checked="getThemeIndex(settingStore.themeMode) === index"
                         @checked-list-item="selectTheme(index)">
+                    </SettingItem>
+                </Card>
+            </div>
+        </div>
+        <div ref="timeFontWeightSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(timeFontWeightSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    时间字体粗细
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card>
+                    <SettingItem v-for="(item, index) in timeFontWeight" :type="'list'" :label="item.name"
+                        :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
+                        @checked-list-item="selectTimeFontWeight(index)">
+                    </SettingItem>
+                </Card>
+            </div>
+        </div>
+        <div ref="blurBackgroundSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(blurBackgroundSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    背景遮罩
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card :card-des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'">
+                    <SettingItem :label="'背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
+                        @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                    </SettingItem>
+                </Card>
+            </div>
+        </div>
+        <div ref="copyrightSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(copyrightSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    备案信息
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
+                    <SettingItem :label="'显示备案信息'" :type="'switch'" :onoff="settingStore.showCopyright"
+                        @switch-onoff="settingStore.showCopyright = !settingStore.showCopyright">
+                    </SettingItem>
+                </Card>
+            </div>
+        </div>
+        <div ref="searchOpenModeSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(searchOpenModeSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    搜索打开方式
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <Card>
+                    <SettingItem v-for="(item, index) in searchOpenMode" :type="'list'" :label="item.name"
+                        :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
+                        @checked-list-item="selectSearchOpenMode(index)">
                     </SettingItem>
                 </Card>
             </div>

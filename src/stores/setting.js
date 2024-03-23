@@ -12,8 +12,9 @@ export const useSettingStore = defineStore('setting', {
         showCopyright: true,
         blurBackground: true,
         searchEngine: 'baidu',
+        customSearchEngineUrl: '',
         openHistory: true,
         openSuggest: true,
-        openSearchInNewPage: true,
+        searchOpenMode: 'newPage',
     })
 })

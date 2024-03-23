@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
     cardName: String,
+    cardDes: String,
 })
 </script>
 
@@ -11,6 +12,9 @@ const props = defineProps({
         </div>
         <div class="card-body">
             <slot></slot>
+        </div>
+        <div class="card-des">
+            {{ props.cardDes }}
         </div>
     </div>
 </template>
@@ -31,5 +35,10 @@ const props = defineProps({
     background: var(--commom-background-color);
     box-shadow: var(--common-box-shadow);
     overflow: hidden;
+}
+.card-des {
+    padding: 10px;
+    color: var(--secondary-font-color);
+    font-size: 12px;
 }
 </style>

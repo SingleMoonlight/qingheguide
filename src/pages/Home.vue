@@ -10,7 +10,7 @@ import { useSearchHistoryStore } from '@/stores/searchHistory'
 import { useFlagStore } from '@/stores/flag'
 import { ref } from 'vue'
 
-const emit = defineEmits(['openSearch', 'closeSearch','openNavigate'])
+const emit = defineEmits(['openSearch', 'closeSearch', 'openNavigate'])
 
 const settingStore = useSettingStore()
 const searchHistoryStore = useSearchHistoryStore()
@@ -45,16 +45,21 @@ function doSearch(value) {
         return;
     }
     searchHistoryStore.historyAdd(value);
-    searchUrl = searchEngineList.filter(obj => obj.name === settingStore.$state.searchEngine)[0].url;
+    if (settingStore.$state.searchEngine === 'custom') {
+        searchUrl = settingStore.$state.customSearchEngineUrl;
+    } else {
+        searchUrl = searchEngineList.filter(obj => obj.iconName === settingStore.$state.searchEngine)[0].url;
+    }
 
     if (searchUrl === '') {
+        // 自定义搜索引擎为空，使用默认搜索引擎
         searchUrl = searchEngineList[0].url;
     }
 
-    if (settingStore.$state.openSearchInNewPage) {
-        window.open(searchUrl + value, "_blank");
-    } else {
+    if (settingStore.$state.searchOpenMode === 'currentPage') {
         window.location.href = searchUrl + value;
+    } else if (settingStore.$state.searchOpenMode === 'newPage') {
+        window.open(searchUrl + value, '_blank');
     }
 }
 </script>
