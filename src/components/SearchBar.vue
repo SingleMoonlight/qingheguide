@@ -41,7 +41,8 @@ function inputChange() {
     emit('inputUpdate', value);
 
     showHistory.value = value.trim() === '';
-    showSuggest.value = value.trim() !== '';
+    // 输入改变时，不显示建议，触发消失动画，当搜索建议获取成功后，触发出现动画
+    showSuggest.value = false;
 }
 
 function selectSuggest(index) {
@@ -50,6 +51,7 @@ function selectSuggest(index) {
     searchInputDom.focus();
 
     emit('inputUpdate', props.suggestList[index]);
+    showSuggest.value = false;
 }
 
 function selectHistory(index) {
@@ -89,6 +91,10 @@ function getSearchEngineIconName(searchEngine) {
     return searchEngine;
 }
 
+watch(() => props.suggestList, (newValue) => {
+    showSuggest.value = newValue.length > 0;
+})
+
 watch(() => props.closeSearch, (newValue) => {
     let searchInputDom = searchBarInputRef.value;
 
@@ -116,7 +122,7 @@ watch(() => props.closeSearch, (newValue) => {
         </button>
     </div>
     <div class="search-engine-container">
-        <Select v-show="showEngine">
+        <Select v-show="showEngine" :transition="'extension-from-left-top'">
             <SelectItem v-for="(item, index) in props.searchEngineList" :index="index" :label="item.name"
                 @select="selectSearchEngine">
                 <div class="search-engine-item-icon">
@@ -127,13 +133,13 @@ watch(() => props.closeSearch, (newValue) => {
         </Select>
     </div>
     <div ref="searchSuggestRef" class="search-suggest-container" v-show="props.openSuggest">
-        <Select v-show="showSuggest">
+        <Select v-show="showSuggest" :transition="'stretch'">
             <SelectItem v-for="(item, index) in props.suggestList" :index="index" :label="item" @select="selectSuggest">
             </SelectItem>
         </Select>
     </div>
     <div ref="searchHistoryRef" class="search-history-container" v-show="props.openHistory">
-        <Select v-show="showHistory">
+        <Select v-show="showHistory" :transition="'stretch'">
             <SelectItem v-for="(item, index) in props.historyList" :index="index" :label="item" @select="selectHistory">
             </SelectItem>
         </Select>
@@ -202,6 +208,7 @@ watch(() => props.closeSearch, (newValue) => {
 }
 
 .search-engine-container {
+    position: absolute;
     width: 130px;
     margin-top: 10px;
     border-radius: 10px;
@@ -224,6 +231,7 @@ watch(() => props.closeSearch, (newValue) => {
 }
 
 .search-suggest-container {
+    position: absolute;
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
@@ -232,6 +240,7 @@ watch(() => props.closeSearch, (newValue) => {
 }
 
 .search-history-container {
+    position: absolute;
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
