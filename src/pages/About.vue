@@ -1,24 +1,32 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue'
+import { onMounted, ref } from 'vue';
 
 const emit = defineEmits(['closeAbout'])
+const showAbtouPane = ref(false)
+
+onMounted(() => {
+    showAbtouPane.value = true
+})
 
 </script>
 
 <template>
     <div class="about-container">
-        <div class="about-pane">
-            <div class="about-pane-header">
-                <div class="about-pane-title">
-                    关于
+        <Transition name="extension-from-center">
+            <div class="about-pane" v-show="showAbtouPane">
+                <div class="about-pane-header">
+                    <div class="about-pane-title">
+                        关于
+                    </div>
+                    <div class="about-pane-close-btn" @click="emit('closeAbout')">
+                        <CloseIcon></CloseIcon>
+                    </div>
                 </div>
-                <div class="about-pane-close-btn" @click="emit('closeAbout')">
-                    <CloseIcon></CloseIcon>
+                <div class="about-pane-body">
                 </div>
             </div>
-            <div class="about-pane-body">
-            </div>
-        </div>
+        </Transition>
     </div>
 </template>
 
@@ -79,7 +87,7 @@ const emit = defineEmits(['closeAbout'])
 
 .about-pane-body {
     position: absolute;
-    padding: 0 20px 0  20px;
+    padding: 0 20px 0 20px;
     width: 100%;
     height: calc(100% - 72px - 20px);
     box-sizing: border-box;

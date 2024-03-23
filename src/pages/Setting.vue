@@ -6,12 +6,13 @@ import BackIcon from '@/components/icons/BackIcon.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg } from '@/utils/indexedDB'
 import { themeList } from '@/utils/constant'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSeting'])
 const settingStore = useSettingStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
+const showSettingPane = ref(false)
 
 
 function setBackground(e) {
@@ -55,33 +56,39 @@ function backToPrev(cur, prev) {
     prev.classList.add("setting-pane-enter");
 }
 
+onMounted(() => {
+    showSettingPane.value = true
+})
+
 </script>
 
 <template>
     <div class="setting-container">
-        <div ref="mainSettingPaneRef" class="setting-pane setting-pane-enter">
-            <div class="setting-pane-header">
-                <div class="setting-pane-title">
-                    设置
+        <Transition name="extension-from-center">
+            <div ref="mainSettingPaneRef" class="setting-pane setting-pane-enter" v-show="showSettingPane">
+                <div class="setting-pane-header">
+                    <div class="setting-pane-title">
+                        设置
+                    </div>
+                    <div class="setting-pane-close-btn" @click="emit('closeSeting')">
+                        <CloseIcon></CloseIcon>
+                    </div>
                 </div>
-                <div class="setting-pane-close-btn" @click="emit('closeSeting')">
-                    <CloseIcon></CloseIcon>
+                <div class="setting-pane-body">
+                    <Card :card-name="'背景'">
+                        <input type="file" accept="image/*" @change="setBackground" />
+                    </Card>
+                    <Card :card-name="'外观'">
+                        <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.themeMode)"
+                            @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'显示背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
+                            @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                        </SettingItem>
+                    </Card>
                 </div>
             </div>
-            <div class="setting-pane-body">
-                <Card :card-name="'背景'">
-                    <input type="file" accept="image/*" @change="setBackground" />
-                </Card>
-                <Card :card-name="'外观'">
-                    <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.themeMode)"
-                        @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
-                    </SettingItem>
-                    <SettingItem :label="'显示背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
-                        @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
-                    </SettingItem>
-                </Card>
-            </div>
-        </div>
+        </Transition>
         <div ref="themeSettingPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
                 <div class="setting-pane-back-btn" @click="backToPrev(themeSettingPaneRef, mainSettingPaneRef)">
@@ -93,9 +100,9 @@ function backToPrev(cur, prev) {
             </div>
             <div class="setting-pane-body">
                 <Card>
-                    <SettingItem v-for="(item, index) in themeList" :type="'list'" 
-                        :label="item.name"
-                        :checked="getThemeIndex(settingStore.themeMode) === index" @checked-list-item="selectTheme(index)">
+                    <SettingItem v-for="(item, index) in themeList" :type="'list'" :label="item.name"
+                        :checked="getThemeIndex(settingStore.themeMode) === index"
+                        @checked-list-item="selectTheme(index)">
                     </SettingItem>
                 </Card>
             </div>
