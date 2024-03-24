@@ -13,10 +13,10 @@ export const copyrightInfo = {
 
 export const searchHistoryNum = 10
 export const searchEngineList = [
-    { iconName: 'baidu', name: '百度', url: 'https://www.baidu.com/s?ie=utf-8&wd=' },
-    { iconName: 'bing', name: '必应', url: 'https://www.bing.com/search?q=' },
-    { iconName: 'google', name: '谷歌', url: 'https://www.google.com/search?q=' },
-    { iconName: 'custom', name: '自定义', url: '' }
+    { iconName: 'baidu', engine: 'baidu', name: '百度', url: 'https://www.baidu.com/s?ie=utf-8&wd=' },
+    { iconName: 'bing', engine: 'bing',name: '必应', url: 'https://www.bing.com/search?q=' },
+    { iconName: 'google', engine: 'google',name: '谷歌', url: 'https://www.google.com/search?q=' },
+    { iconName: 'custom', engine: 'custom',name: '自定义', url: '' }
 ]
 
 export const otherMenuList = [
@@ -25,9 +25,9 @@ export const otherMenuList = [
 ]
 
 export const themeList = [
-    {mode: 'default', name: '默认'},
-    {mode: 'dark', name: '深色'},
-    {mode: 'light', name: '浅色'},
+    {theme: 'default', name: '默认'},
+    {theme: 'dark', name: '深色'},
+    {theme: 'light', name: '浅色'},
 ]
 
 export const timeFontWeight = [

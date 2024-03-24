@@ -1,12 +1,12 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeAbout'])
-const showAbtouPane = ref(false)
+const showAboutPane = ref(false)
 
 onMounted(() => {
-    showAbtouPane.value = true
+    showAboutPane.value = true
 })
 
 </script>
@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
     <div class="about-container">
         <Transition name="extension-from-center">
-            <div class="about-pane" v-show="showAbtouPane">
+            <div class="about-pane" v-show="showAboutPane">
                 <div class="about-pane-header">
                     <div class="about-pane-title">
                         关于
@@ -51,7 +51,7 @@ onMounted(() => {
     max-height: 80%;
     color: var(--primary-font-color);
     box-shadow: var(--common-box-shadow);
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
     transition: .25s;
     overflow: hidden;

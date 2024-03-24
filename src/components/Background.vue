@@ -35,7 +35,8 @@ watch(() => props.backgroundScale, (newValue) => {
 </script>
 
 <template>
-    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground" :onerror="loadBackgroundFail">
+    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground"
+        :onerror="loadBackgroundFail">
     <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
 </template>
 

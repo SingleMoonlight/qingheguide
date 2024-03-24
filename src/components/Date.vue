@@ -1,6 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { numLeftPadding } from '@/utils/common'
 import { getLunar } from 'chinese-lunar-calendar'
 
@@ -14,7 +13,7 @@ const currentDate = ref({
     week: '',
     lunar: ''
 })
-const weekStrs = [
+const weekString = [
     "星期天",
     "星期一",
     "星期二",
@@ -47,7 +46,7 @@ onMounted(() => {
         月
         {{ currentDate.day }}
         日
-        {{ weekStrs[currentDate.week] }}
+        {{ weekString[currentDate.week] }}
         {{ currentDate.lunar }}
     </div>
 </template>

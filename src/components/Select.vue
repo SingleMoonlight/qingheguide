@@ -24,7 +24,7 @@ function handleEnter(el) {
 }
 
 function handleBeforeLeave(el) {
-
+    // do nothing
 }
 
 function handleLeave(el) {
@@ -48,7 +48,7 @@ function handleLeave(el) {
 .select {
     width: 100%;
     border-radius: 10px;
-    background: var(--commom-background-color);
+    background: var(--common-background-color);
     box-shadow: var(--common-box-shadow);
     overflow: hidden;
 }

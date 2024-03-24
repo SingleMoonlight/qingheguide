@@ -29,13 +29,15 @@ const props = defineProps({
     padding: 0 0 10px 0;
     font-size: 16px;
 }
+
 .card-body {
     width: 100%;
     border-radius: 10px;
-    background: var(--commom-background-color);
+    background: var(--common-background-color);
     box-shadow: var(--common-box-shadow);
     overflow: hidden;
 }
+
 .card-des {
     padding: 10px;
     color: var(--secondary-font-color);

@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 
 export const usePageStore = defineStore('page', {
     state: () => ({
-        name: 'Home'
+        pageName: 'Home'
     }),
     actions: {
-        pageForward(name) {
-            this.name = name;
+        pageForward(pageName) {
+            this.pageName = pageName;
         }
     }
 })

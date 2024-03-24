@@ -9,7 +9,7 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(pinia)
-app.mount('#app')
+app.mount('#qinghe-guide')
 
 initImageDB()
 printWebsiteInfo()

@@ -44,6 +44,7 @@ onMounted(() => {
     position: relative;
     cursor: pointer;
 }
+
 .switch-round {
     width: 16px;
     height: 16px;

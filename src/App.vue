@@ -5,7 +5,6 @@ import Setting from './pages/Setting.vue'
 import About from './pages/About.vue'
 import Background from './components/Background.vue'
 import { usePageStore } from '@/stores/page'
-import { storeToRefs } from 'pinia'
 import { useSettingStore } from './stores/setting'
 import { useFlagStore } from '@/stores/flag'
 import { defaultBackground } from '@/utils/constant'
@@ -14,8 +13,7 @@ import { onMounted, ref, watch } from 'vue'
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
 const flagStore = useFlagStore()
-const { name: pageName } = storeToRefs(pageStore)
-const backgroundblur = ref(0)
+const backgroundBlur = ref(0)
 const backgroundScale = ref(1)
 const bgMaskRef = ref()
 
@@ -23,14 +21,14 @@ function openNavigatePage() {
   pageStore.pageForward('Navigate');
   backgroundScale.value = 1.1;
   if (settingStore.$state.blurBackground) {
-    backgroundblur.value = 10;
+    backgroundBlur.value = 10;
   }
 }
 
 function closeNavigatePage() {
   pageStore.pageForward('Home');
   if (settingStore.$state.blurBackground) {
-    backgroundblur.value = 0;
+    backgroundBlur.value = 0;
   }
   backgroundScale.value = 1;
 }
@@ -38,7 +36,7 @@ function closeNavigatePage() {
 function openSearch() {
   backgroundScale.value = 1.1;
   if (settingStore.$state.blurBackground) {
-    backgroundblur.value = 10;
+    backgroundBlur.value = 10;
   }
 
   flagStore.$state.closeSearch = false;
@@ -46,7 +44,7 @@ function openSearch() {
 
 function closeSearch() {
   if (settingStore.$state.blurBackground) {
-    backgroundblur.value = 0;
+    backgroundBlur.value = 0;
   }
   backgroundScale.value = 1;
 
@@ -70,16 +68,16 @@ function closeAboutPage() {
 }
 
 onMounted(() => {
-  const splash = document.getElementById('splash');
-  splash.style.opacity = 0;
-  splash.remove();
+  const loading = document.getElementById('loading');
+  loading.style.opacity = 0;
+  loading.remove();
 })
 
 watch(() => settingStore.$state.blurBackground, (newValue) => {
   if (newValue) {
-    backgroundblur.value = 10;
+    backgroundBlur.value = 10;
   } else {
-    backgroundblur.value = 0;
+    backgroundBlur.value = 0;
   }
 })
 
@@ -95,20 +93,20 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   <div class="background-container">
     <div ref="bgMaskRef" class="background-mask"></div>
     <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
-      :default-background="defaultBackground" :background-blur="backgroundblur" :background-scale="backgroundScale">
+      :default-background="defaultBackground" :background-blur="backgroundBlur" :background-scale="backgroundScale">
     </Background>
   </div>
 
   <Transition mode="out-in" name="fade">
-    <Home v-if="pageName === 'Home'" @close-search="closeSearch" @open-search="openSearch"
+    <Home v-if="pageStore.pageName === 'Home'" @close-search="closeSearch" @open-search="openSearch"
       @open-navigate="openNavigatePage">
     </Home>
-    <Navigate v-else-if="pageName === 'Navigate'" @close-navigate="closeNavigatePage" @open-setting="openSettingPage"
+    <Navigate v-else-if="pageStore.pageName === 'Navigate'" @close-navigate="closeNavigatePage" @open-setting="openSettingPage"
       @open-about="openAboutPage">
     </Navigate>
-    <Setting v-else-if="pageName === 'Setting'" @close-seting="closeSettingPage">
+    <Setting v-else-if="pageStore.pageName === 'Setting'" @close-setting="closeSettingPage">
     </Setting>
-    <About v-else-if="pageName === 'About'" @close-about="closeAboutPage">
+    <About v-else-if="pageStore.pageName === 'About'" @close-about="closeAboutPage">
     </About>
   </Transition>
 </template>
