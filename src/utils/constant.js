@@ -1,5 +1,5 @@
 export const version = '3.0.0'
-export const defaultBackground = 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg'
+export const defaultBackgroundUrl = 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg'
 
 export const copyrightInfo = {
     ownerInfo: 'ifback.com',
@@ -28,6 +28,11 @@ export const themeList = [
     {theme: 'default', name: '默认'},
     {theme: 'dark', name: '深色'},
     {theme: 'light', name: '浅色'},
+]
+
+export const bgSourceList = [
+    {source: 'default', name: '默认'},
+    {source: 'custom', name: '自定义'},
 ]
 
 export const timeFontWeight = [
