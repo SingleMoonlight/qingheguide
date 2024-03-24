@@ -12,6 +12,7 @@
   transform-origin: left top;
   animation: bounce 0.5s ease;
 }
+
 .extension-from-left-top-leave-active {
   transition: .25s ease;
   opacity: 0;
@@ -21,48 +22,53 @@
   transform-origin: right top;
   animation: bounce 0.5s ease;
 }
+
 .extension-from-right-top-leave-active {
   transition: .25s ease;
   opacity: 0;
-}
-
-@keyframes bounce {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05, 1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .extension-from-center-enter-active {
   transform-origin: center;
   animation: bounce-center 0.5s ease;
 }
+
 .extension-from-center-leave-active {
   transition: .25s ease;
   opacity: 0;
 }
 
 
+@keyframes bounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.05, 1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 @keyframes bounce-center {
   0% {
     transform: translate(-50%, -50%) scale(0);
     opacity: 0;
   }
+
   50% {
     transform: translate(-50%, -50%) scale(1.05, 1.05);
     opacity: 1;
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
 }
-

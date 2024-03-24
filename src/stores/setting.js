@@ -3,10 +3,10 @@ import { defineStore } from 'pinia'
 export const useSettingStore = defineStore('setting', {
     state: () => ({
         backgroundUrl: 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg',
-        themeMode: 'default',
+        theme: 'default',
         showTime: true,
         showSecond: false,
-        blinkSemicolon: true,
+        blinkTimeSeparator: true,
         timeFontWeight: 'normal',
         showDate: true,
         showCopyright: true,

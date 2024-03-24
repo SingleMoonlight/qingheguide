@@ -84,7 +84,7 @@ function selectOtherMenuItem(index) {
     width: 130px;
     border-radius: 10px;
     color: var(--primary-font-color);
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
 }
 

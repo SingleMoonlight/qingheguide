@@ -36,7 +36,7 @@ function searchBarInputUpdate(value) {
 }
 
 function searchEngineUpdate(index) {
-    settingStore.$state.searchEngine = searchEngineList[index].iconName;
+    settingStore.$state.searchEngine = searchEngineList[index].engine;
 }
 
 function doSearch(value) {
@@ -48,7 +48,7 @@ function doSearch(value) {
     if (settingStore.$state.searchEngine === 'custom') {
         searchUrl = settingStore.$state.customSearchEngineUrl;
     } else {
-        searchUrl = searchEngineList.filter(obj => obj.iconName === settingStore.$state.searchEngine)[0].url;
+        searchUrl = searchEngineList.filter(obj => obj.engine === settingStore.$state.searchEngine)[0].url;
     }
 
     if (searchUrl === '') {
@@ -68,7 +68,7 @@ function doSearch(value) {
     <div class="home-container" @click="closeSearch" @contextmenu="emit('openNavigate')">
         <div class="time-container" @click="emit('openNavigate')">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
-                :blink-semicolon="settingStore.$state.blinkSemicolon" :font-weight="settingStore.$state.timeFontWeight">
+                :blink-time-separator="settingStore.$state.blinkTimeSeparator" :font-weight="settingStore.$state.timeFontWeight">
             </Time>
         </div>
         <div class="date-container">

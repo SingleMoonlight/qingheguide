@@ -49,7 +49,7 @@ export function loadConfig() {
     }
 
     // 设置主题
-    document.getElementById("app").setAttribute("class", settingStore.$state.themeMode);
+    document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
 }
 
 export function printWebsiteInfo() {

@@ -16,8 +16,6 @@ const props = defineProps({
     suggestList: Object,
 })
 const searchBarInputRef = ref()
-const searchSuggestRef = ref()
-const searchHistoryRef = ref()
 const showHistory = ref(false)
 const showSuggest = ref(false)
 const showEngine = ref(false)
@@ -34,7 +32,7 @@ function focusInput() {
     showEngine.value = false;
 }
 
-function inputChange() {
+function searchInputChange() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
 
@@ -45,7 +43,7 @@ function inputChange() {
     showSuggest.value = false;
 }
 
-function selectSuggest(index) {
+function selectSearchSuggest(index) {
     let searchInputDom = searchBarInputRef.value;
     searchInputDom.value = props.suggestList[index];
     searchInputDom.focus();
@@ -54,7 +52,7 @@ function selectSuggest(index) {
     showSuggest.value = false;
 }
 
-function selectHistory(index) {
+function selectSearchHistory(index) {
     let searchInputDom = searchBarInputRef.value;
     searchInputDom.value = props.historyList[index];
     searchInputDom.focus();
@@ -62,7 +60,7 @@ function selectHistory(index) {
     emit('inputUpdate', props.historyList[index]);
 }
 
-function doSearch() {
+function goToSearch() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
 
@@ -88,7 +86,7 @@ function selectSearchEngine(index) {
 }
 
 function getSearchEngineIconName(searchEngine) {
-    return searchEngine;
+    return props.searchEngineList.filter(obj => obj.engine === searchEngine)[0].iconName;;
 }
 
 watch(() => props.suggestList, (newValue) => {
@@ -113,11 +111,11 @@ watch(() => props.closeSearch, (newValue) => {
 <template>
     <div class="search-bar-input-container">
         <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none"
-            @focus="focusInput" @input="inputChange" @keydown.enter="doSearch">
+            @focus="focusInput" @input="searchInputChange" @keydown.enter="goToSearch">
         <button class="search-engine-btn" @click="openSearchEngineMenu">
             <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
         </button>
-        <button class="search-action-btn" @click="doSearch">
+        <button class="search-action-btn" @click="goToSearch">
             <SearchIcon></SearchIcon>
         </button>
     </div>
@@ -132,15 +130,17 @@ watch(() => props.closeSearch, (newValue) => {
             </SelectItem>
         </Select>
     </div>
-    <div ref="searchSuggestRef" class="search-suggest-container" v-show="props.openSuggest">
+    <div class="search-suggest-container" v-show="props.openSuggest">
         <Select v-show="showSuggest" :transition="'stretch'">
-            <SelectItem v-for="(item, index) in props.suggestList" :index="index" :label="item" @select="selectSuggest">
+            <SelectItem v-for="(item, index) in props.suggestList" :index="index" :label="item"
+                @select="selectSearchSuggest">
             </SelectItem>
         </Select>
     </div>
-    <div ref="searchHistoryRef" class="search-history-container" v-show="props.openHistory">
+    <div class="search-history-container" v-show="props.openHistory">
         <Select v-show="showHistory" :transition="'stretch'">
-            <SelectItem v-for="(item, index) in props.historyList" :index="index" :label="item" @select="selectHistory">
+            <SelectItem v-for="(item, index) in props.historyList" :index="index" :label="item"
+                @select="selectSearchHistory">
             </SelectItem>
         </Select>
     </div>
@@ -154,7 +154,7 @@ watch(() => props.closeSearch, (newValue) => {
     border-radius: 30px;
     box-shadow: var(--common-box-shadow);
     backdrop-filter: var(--common-backdrop-filter);
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
 }
 
 .search-bar-input {
@@ -212,7 +212,7 @@ watch(() => props.closeSearch, (newValue) => {
     width: 130px;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
 }
 
@@ -235,7 +235,7 @@ watch(() => props.closeSearch, (newValue) => {
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
 }
 
@@ -244,7 +244,7 @@ watch(() => props.closeSearch, (newValue) => {
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--commom-background-color);
+    background-color: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
 }
 </style>
