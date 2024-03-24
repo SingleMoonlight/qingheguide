@@ -173,3 +173,9 @@ export function getBackgroundImg() {
     });
 }
 
+export function deleteBackgroundImg() {
+    imageDB.deleteData('background').then(res => {
+    }).catch((err) => {
+    });
+}
+

@@ -3,15 +3,18 @@ import SettingCard from '@/components/SettingCard.vue'
 import SettingItem from '@/components/SettingItem.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
+import Background from '@/components/Background.vue'
 import { useSettingStore } from '@/stores/setting'
-import { setBackgroundImg } from '@/utils/indexedDB'
-import { themeList, timeFontWeight, searchOpenMode } from '@/utils/constant'
+import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
+import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
 const settingStore = useSettingStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
+const bgSettingPaneRef = ref()
+const settingBgInputRef = ref()
 const timeFontWeightSettingPaneRef = ref()
 const blurBackgroundSettingPaneRef = ref()
 const copyrightSettingPaneRef = ref()
@@ -22,8 +25,11 @@ const showSettingPane = ref(false)
 
 function setBackground(e) {
     let imgFile = e.target.files[0];
-    // 将图片保存至indexedDB
-    setBackgroundImg(imgFile);
+    if (imgFile) {
+        // 将图片保存至indexedDB
+        setBackgroundImg(imgFile);
+        settingStore.$state.backgroundSource = 'custom';
+    }
 }
 
 function getThemeName(theme) {
@@ -37,6 +43,26 @@ function getThemeIndex(theme) {
 function selectTheme(index) {
     settingStore.$state.theme = themeList[index].theme;
     document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
+}
+
+function getBgSourceName(source) {
+    return bgSourceList.filter(obj => obj.source === source)[0].name;
+}
+
+function getBgSourceIndex(source) {
+    return bgSourceList.findIndex(obj => obj.source === source);
+}
+
+function selectBgSource(index) {
+    if (bgSourceList[index].source === 'custom') {
+        let bgInputDom = settingBgInputRef.value;
+        bgInputDom.click();
+    } else if (bgSourceList[index].source === 'default') {
+        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
+        settingStore.$state.backgroundSource = 'default';
+
+        deleteBackgroundImg();
+    }
 }
 
 function getTimeFontWeightName(weight) {
@@ -112,12 +138,13 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="setting-pane-body">
-                    <SettingCard :card-name="'背景'">
-                        <input type="file" accept="image/*" @change="setBackground" />
-                    </SettingCard>
                     <SettingCard :card-name="'外观'">
                         <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.theme)"
                             @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'背景'" :type="'next'"
+                            :next-value="getBgSourceName(settingStore.backgroundSource)"
+                            @open-next="goToNext(mainSettingPaneRef, bgSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'背景遮罩'" :type="'next'"
                             :next-value="getOnoffName(settingStore.blurBackground)"
@@ -126,21 +153,6 @@ onMounted(() => {
                         <SettingItem :label="'备案信息'" :type="'next'"
                             :next-value="getOnoffName(settingStore.showCopyright)"
                             @open-next="goToNext(mainSettingPaneRef, copyrightSettingPaneRef)">
-                        </SettingItem>
-                    </SettingCard>
-                    <SettingCard :card-name="'搜索'">
-                        <SettingItem :label="'搜索历史'" :type="'switch'" :onoff="settingStore.openHistory"
-                            @switch-onoff="settingStore.openHistory = !settingStore.openHistory">
-                        </SettingItem>
-                        <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
-                            @switch-onoff="settingStore.openSuggest = !settingStore.openSuggest">
-                        </SettingItem>
-                        <SettingItem :label="'搜索打开方式'" :type="'next'"
-                            :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
-                            @open-next="goToNext(mainSettingPaneRef, searchOpenModeSettingPaneRef)">
-                        </SettingItem>
-                        <SettingItem :label="'自定义搜索引擎'" :type="'next'" :next-value="settingStore.customSearchEngineUrl"
-                            @open-next="goToNext(mainSettingPaneRef, customSearchEngineSettingPaneRef)">
                         </SettingItem>
                     </SettingCard>
                     <SettingCard :card-name="'时间日期'">
@@ -161,6 +173,21 @@ onMounted(() => {
                             @open-next="goToNext(mainSettingPaneRef, timeFontWeightSettingPaneRef)">
                         </SettingItem>
                     </SettingCard>
+                    <SettingCard :card-name="'搜索'">
+                        <SettingItem :label="'搜索历史'" :type="'switch'" :onoff="settingStore.openHistory"
+                            @switch-onoff="settingStore.openHistory = !settingStore.openHistory">
+                        </SettingItem>
+                        <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
+                            @switch-onoff="settingStore.openSuggest = !settingStore.openSuggest">
+                        </SettingItem>
+                        <SettingItem :label="'搜索打开方式'" :type="'next'"
+                            :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
+                            @open-next="goToNext(mainSettingPaneRef, searchOpenModeSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'自定义搜索引擎'" :type="'next'" :next-value="settingStore.customSearchEngineUrl"
+                            @open-next="goToNext(mainSettingPaneRef, customSearchEngineSettingPaneRef)">
+                        </SettingItem>
+                    </SettingCard>
                 </div>
             </div>
         </Transition>
@@ -179,6 +206,31 @@ onMounted(() => {
                         :checked="getThemeIndex(settingStore.theme) === index" @checked-list-item="selectTheme(index)">
                     </SettingItem>
                 </SettingCard>
+            </div>
+        </div>
+        <div ref="bgSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(bgSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    背景
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <SettingCard>
+                    <SettingItem v-for="(item, index) in bgSourceList" :type="'list'" :label="item.name"
+                        :checked="getBgSourceIndex(settingStore.backgroundSource) === index"
+                        @checked-list-item="selectBgSource(index)">
+                    </SettingItem>
+                </SettingCard>
+                <SettingCard :card-name="'预览'" style="">
+                    <Background :background-url="settingStore.$state.backgroundUrl">
+                    </Background>
+                </SettingCard>
+                <div v-show="false">
+                    <input ref="settingBgInputRef" type="file" accept="image/*" @change="setBackground" />
+                </div>
             </div>
         </div>
         <div ref="timeFontWeightSettingPaneRef" class="setting-pane setting-pane-before-enter">

@@ -7,7 +7,7 @@ import Background from './components/Background.vue'
 import { usePageStore } from '@/stores/page'
 import { useSettingStore } from './stores/setting'
 import { useFlagStore } from '@/stores/flag'
-import { defaultBackground } from '@/utils/constant'
+import { defaultBackgroundUrl } from '@/utils/constant'
 import { onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
@@ -93,7 +93,7 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   <div class="background-container">
     <div ref="bgMaskRef" class="background-mask"></div>
     <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
-      :default-background="defaultBackground" :background-blur="backgroundBlur" :background-scale="backgroundScale">
+      :default-background-url="defaultBackgroundUrl" :background-blur="backgroundBlur" :background-scale="backgroundScale">
     </Background>
   </div>
 

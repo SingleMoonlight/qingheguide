@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 
 const props = defineProps({
     backgroundUrl: String,
-    defaultBackground: String,
+    defaultBackgroundUrl: String,
     backgroundBlur: Number,
     backgroundScale: Number
 })
@@ -13,7 +13,7 @@ function loadBackgroundFail(target) {
     // 防止onerror无限触发
     target.srcElement.onerror = '';
     // 加载失败使用默认背景
-    target.srcElement.src = props.defaultBackground;
+    target.srcElement.src = props.defaultBackgroundUrl;
 }
 
 watch(() => props.backgroundBlur, (newValue) => {
@@ -35,13 +35,14 @@ watch(() => props.backgroundScale, (newValue) => {
 </script>
 
 <template>
-    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackground"
+    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackgroundUrl"
         :onerror="loadBackgroundFail">
     <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
 </template>
 
 <style scpoed>
 .background {
+    display: block;
     width: 100%;
     height: 100%;
     overflow: hidden;
