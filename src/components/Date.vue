@@ -46,8 +46,8 @@ onMounted(() => {
         月
         {{ currentDate.day }}
         日
-        {{ weekString[currentDate.week] }}
         {{ currentDate.lunar }}
+        {{ weekString[currentDate.week] }}
     </div>
 </template>
 
