@@ -24,12 +24,16 @@ function handleEnter(el) {
 }
 
 function handleBeforeLeave(el) {
-    // do nothing
+    if (props.transition === 'stretch') {
+        el.style.transition = '.25s ease';
+    }
 }
 
 function handleLeave(el) {
     if (props.transition === 'stretch') {
         el.style.opacity = 0;
+        // 防止select条目从非0到0变化过渡不自然
+        el.style.height = 0;
     }
 }
 
