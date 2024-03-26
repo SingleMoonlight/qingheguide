@@ -4,6 +4,7 @@ import SettingItem from '@/components/SettingItem.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
 import Background from '@/components/Background.vue'
+import Button from '@/components/Button.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
@@ -133,9 +134,9 @@ onMounted(() => {
                     <div class="setting-pane-title">
                         设置
                     </div>
-                    <div class="setting-pane-close-btn" @click="emit('closeSetting')">
+                    <Button :type="'icon'" @click="emit('closeSetting')">
                         <CloseIcon></CloseIcon>
-                    </div>
+                    </Button>
                 </div>
                 <div class="setting-pane-body">
                     <SettingCard :card-name="'外观'">
@@ -380,22 +381,6 @@ onMounted(() => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.setting-pane-close-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 40px;
-    transition: .25s;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.setting-pane-close-btn:hover {
-    background-color: var(--icon-hover-background-color);
-    transform: rotate(180deg);
 }
 
 .setting-pane-child-header {

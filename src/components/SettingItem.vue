@@ -2,6 +2,7 @@
 import Switch from './Switch.vue'
 import MoreIcon from './icons/MoreIcon.vue'
 import CheckedIcon from './icons/CheckedIcon.vue'
+import Button from './Button.vue'
 import { ref } from 'vue'
 
 const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem', 'ensureInput'])
@@ -51,9 +52,9 @@ function settingInputEnsure() {
         </div>
         <div v-else-if="props.type === 'input'" class="setting-input-container">
             <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" />
-            <div class="setting-input-checked-icon" @click="settingInputEnsure">
+            <Button :type="'icon'" @click="settingInputEnsure">
                 <CheckedIcon></CheckedIcon>
-            </div>
+            </Button>
         </div>
     </div>
 
@@ -130,25 +131,9 @@ function settingInputEnsure() {
     width: 100%;
     height: 100%;
     min-width: 10px;
-    border: none;
     box-sizing: border-box;
-    outline: 0;
     font-size: 14px;
     color: inherit;
     background-color: transparent;
-}
-
-.setting-input-checked-icon {
-    min-width: 32px;
-    height: 32px;
-    border-radius: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .25s;
-}
-
-.setting-input-checked-icon:hover {
-    background-color: var(--icon-hover-background-color);
 }
 </style>

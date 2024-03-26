@@ -3,6 +3,7 @@ import SearchIcon from '@/components/icons/SearchIcon.vue'
 import SearchEngineIcon from '@/components/icons/SearchEngineIcon.vue'
 import Select from './Select.vue'
 import SelectItem from './SelectItem.vue'
+import Button from './Button.vue'
 import { watch, ref } from 'vue'
 
 const emit = defineEmits(['focusInput', 'inputUpdate', 'doSearch', 'searchEngineUpdate'])
@@ -110,14 +111,14 @@ watch(() => props.closeSearch, (newValue) => {
 
 <template>
     <div class="search-bar-input-container">
+        <Button :type="'icon'" @click="openSearchEngineMenu">
+            <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
+        </Button>
         <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none"
             @focus="focusInput" @input="searchInputChange" @keydown.enter="goToSearch">
-        <button class="search-engine-btn" @click="openSearchEngineMenu">
-            <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
-        </button>
-        <button class="search-action-btn" @click="goToSearch">
+        <Button :type="'icon'" @click="goToSearch">
             <SearchIcon></SearchIcon>
-        </button>
+        </Button>
     </div>
     <div class="search-engine-container">
         <Select v-show="showEngine" :transition="'extension-from-left-top'">
@@ -152,6 +153,11 @@ watch(() => props.closeSearch, (newValue) => {
     width: 100%;
     height: 42px;
     border-radius: 30px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     box-shadow: var(--common-box-shadow);
     backdrop-filter: var(--common-backdrop-filter);
     background-color: var(--common-background-color);
@@ -160,51 +166,11 @@ watch(() => props.closeSearch, (newValue) => {
 .search-bar-input {
     width: 100%;
     height: 100%;
-    padding: 0 48px;
-    border: none;
+    padding: 0 5px;
     box-sizing: border-box;
-    outline: 0;
     font-size: 14px;
     color: inherit;
     background-color: transparent;
-}
-
-.search-engine-btn {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 40px;
-    transition: .25s;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.search-action-btn {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 40px;
-    transition: .25s;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.search-action-btn:hover {
-    background-color: var(--icon-hover-background-color);
-}
-
-.search-engine-btn:hover {
-    background-color: var(--icon-hover-background-color);
 }
 
 .search-engine-container {

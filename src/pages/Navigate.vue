@@ -3,6 +3,7 @@ import OtherIcon from '@/components/icons/OtherIcon.vue'
 import OtherMenuIcon from '@/components/icons/OtherMenuIcon.vue'
 import Select from '@/components/Select.vue'
 import SelectItem from '@/components/SelectItem.vue'
+import Button from '@/components/Button.vue'
 import { otherMenuList } from '@/utils/constant'
 import { ref } from 'vue'
 
@@ -32,8 +33,10 @@ function selectOtherMenuItem(index) {
 
 <template>
     <div class="navigate-container" @click="closeNavigate">
-        <div class="ohter-btn" @click="openOtherMenu" @click.stop>
-            <OtherIcon></OtherIcon>
+        <div class="other-btn-container">
+            <Button :type="'icon'" @click="openOtherMenu">
+                <OtherIcon></OtherIcon>
+            </Button>
         </div>
         <div class="other-menu-container">
             <Select v-show="showOtherMenu" :transition="'extension-from-right-top'">
@@ -58,23 +61,10 @@ function selectOtherMenuItem(index) {
     position: absolute;
 }
 
-.ohter-btn {
+.other-btn-container {
     position: absolute;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
     top: 20px;
     right: 3%;
-    border-radius: 40px;
-    transition: .25s;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ohter-btn:hover {
-    background-color: var(--icon-hover-background-color);
 }
 
 .other-menu-container {
@@ -95,7 +85,7 @@ function selectOtherMenuItem(index) {
     float: left;
 }
 
-.meun-item-label {
+.menu-item-label {
     line-height: 20px;
     white-space: nowrap;
     overflow: hidden;

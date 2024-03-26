@@ -1,5 +1,6 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue'
+import Button from '@/components/Button.vue'
 import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeAbout'])
@@ -19,9 +20,9 @@ onMounted(() => {
                     <div class="about-pane-title">
                         关于
                     </div>
-                    <div class="about-pane-close-btn" @click="emit('closeAbout')">
+                    <Button :type="'icon'" @click="emit('closeAbout')">
                         <CloseIcon></CloseIcon>
-                    </div>
+                    </Button>
                 </div>
                 <div class="about-pane-body">
                 </div>
@@ -67,22 +68,6 @@ onMounted(() => {
 .about-pane-title {
     font-size: 20px;
     font-weight: bold;
-}
-
-.about-pane-close-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 40px;
-    transition: .25s;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.about-pane-close-btn:hover {
-    background-color: var(--icon-hover-background-color);
-    transform: rotate(180deg);
 }
 
 .about-pane-body {
