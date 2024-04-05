@@ -1,7 +1,7 @@
 <script setup>
-import Time from '@/components/Time.vue'
-import Date from '@/components/Date.vue'
-import Copyright from '@/components/Copyright.vue'
+import CurrentTime from '@/components/CurrentTime.vue'
+import TodayDate from '@/components/TodayDate.vue'
+import CopyrightStatement from '@/components/CopyrightStatement.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo, searchEngineList } from '@/utils/constant'
@@ -67,13 +67,13 @@ function doSearch(value) {
 <template>
     <div class="home-container" @click="closeSearch" @contextmenu="emit('openNavigate')">
         <div class="time-container" @click="emit('openNavigate')">
-            <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
+            <CurrentTime :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
                 :blink-time-separator="settingStore.$state.blinkTimeSeparator"
                 :font-weight="settingStore.$state.timeFontWeight">
-            </Time>
+            </CurrentTime>
         </div>
         <div class="date-container">
-            <Date :show-date="settingStore.$state.showDate"></Date>
+            <TodayDate :show-date="settingStore.$state.showDate"></TodayDate>
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @blur-input="emit('closeSearch')"
@@ -86,7 +86,7 @@ function doSearch(value) {
             </SearchBar>
         </div>
         <div class="copyright-container">
-            <Copyright :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></Copyright>
+            <CopyrightStatement :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></CopyrightStatement>
         </div>
     </div>
 </template>

@@ -3,8 +3,8 @@ import SettingCard from '@/components/SettingCard.vue'
 import SettingItem from '@/components/SettingItem.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
-import Background from '@/components/Background.vue'
-import Button from '@/components/Button.vue'
+import BackgroundImage from '@/components/BackgroundImage.vue'
+import ButtonWrap from '@/components/ButtonWrap.vue'
 import { useSettingStore } from '@/stores/setting'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
@@ -135,9 +135,9 @@ onMounted(() => {
                     <div class="setting-pane-title">
                         设置
                     </div>
-                    <Button :type="'icon'" @click="emit('closeSetting')">
+                    <ButtonWrap :type="'icon'" @click="emit('closeSetting')">
                         <CloseIcon></CloseIcon>
-                    </Button>
+                    </ButtonWrap>
                 </div>
                 <div class="setting-pane-body">
                     <SettingCard :card-name="'外观'">
@@ -231,8 +231,8 @@ onMounted(() => {
                     </SettingItem>
                 </SettingCard>
                 <SettingCard :card-name="'预览'" style="">
-                    <Background :background-url="settingStore.$state.backgroundUrl">
-                    </Background>
+                    <BackgroundImage :background-url="settingStore.$state.backgroundUrl">
+                    </BackgroundImage>
                 </SettingCard>
                 <div v-show="false">
                     <input ref="settingBgInputRef" type="file" accept="image/*" @change="setBackground" />

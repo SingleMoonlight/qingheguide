@@ -1,6 +1,6 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import Button from '@/components/Button.vue'
+import ButtonWrap from '@/components/ButtonWrap.vue'
 import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeAbout'])
@@ -20,9 +20,9 @@ onMounted(() => {
                     <div class="about-pane-title">
                         关于
                     </div>
-                    <Button :type="'icon'" @click="emit('closeAbout')">
+                    <ButtonWrap :type="'icon'" @click="emit('closeAbout')">
                         <CloseIcon></CloseIcon>
-                    </Button>
+                    </ButtonWrap>
                 </div>
                 <div class="about-pane-body">
                 </div>

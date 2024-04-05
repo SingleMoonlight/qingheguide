@@ -1,8 +1,8 @@
 <script setup>
-import Switch from './Switch.vue'
+import SwitchOnoff from './SwitchOnoff.vue'
 import MoreIcon from './icons/MoreIcon.vue'
 import CheckedIcon from './icons/CheckedIcon.vue'
-import Button from './Button.vue'
+import ButtonWrap from './ButtonWrap.vue'
 import { ref } from 'vue'
 
 const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem', 'ensureInput'])
@@ -37,7 +37,7 @@ function settingInputEnsure() {
     <div class="setting-item" @click="clickSettingItem">
         <div class="setting-item-label">{{ props.label }}</div>
         <div v-if="props.type === 'switch'" class="setting-switch">
-            <Switch :onoff="props.onoff" @change-onoff="emit('switchOnoff')"></Switch>
+            <SwitchOnoff :onoff="props.onoff" @change-onoff="emit('switchOnoff')"></SwitchOnoff>
         </div>
         <div v-else-if="props.type === 'next'" class="setting-next">
             <div class="setting-next-value">{{ props.nextValue }}</div>
@@ -52,9 +52,9 @@ function settingInputEnsure() {
         </div>
         <div v-else-if="props.type === 'input'" class="setting-input-container">
             <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" />
-            <Button :type="'icon'" @click="settingInputEnsure">
+            <ButtonWrap :type="'icon'" @click="settingInputEnsure">
                 <CheckedIcon></CheckedIcon>
-            </Button>
+            </ButtonWrap>
         </div>
     </div>
 

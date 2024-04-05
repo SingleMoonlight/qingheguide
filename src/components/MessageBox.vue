@@ -1,5 +1,5 @@
 <script setup>
-import Button from '@/components/Button.vue'
+import ButtonWrap from '@/components/ButtonWrap.vue'
 import MessageBoxIcon from '@/components/icons/MessageBoxIcon.vue'
 
 const emit = defineEmits(['closeMessageBox'])
@@ -45,13 +45,13 @@ function handleOkBtnClick() {
                     </div>
                     <div class="message-box-content">{{ props.content }}</div>
                     <div class="message-box-btn">
-                        <Button v-if="props.cancelBtnText !== '' && props.cancelBtnText !== undefined" :type="'text'"
+                        <ButtonWrap v-if="props.cancelBtnText !== '' && props.cancelBtnText !== undefined" :type="'text'"
                             :text="props.cancelBtnText" @click="handleCancelBtnClick">
-                        </Button>
+                        </ButtonWrap>
                         <div style="width: 10px;"></div>
-                        <Button v-if="props.okBtnText !== '' && props.okBtnText !== undefined" :type="'text'"
+                        <ButtonWrap v-if="props.okBtnText !== '' && props.okBtnText !== undefined" :type="'text'"
                             :text="props.okBtnText" @click="handleOkBtnClick">
-                        </Button>
+                        </ButtonWrap>
                     </div>
                 </div>
             </Transition>

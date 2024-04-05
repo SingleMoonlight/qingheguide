@@ -1,9 +1,9 @@
 <script setup>
 import OtherIcon from '@/components/icons/OtherIcon.vue'
 import OtherMenuIcon from '@/components/icons/OtherMenuIcon.vue'
-import Select from '@/components/Select.vue'
+import SelectList from '@/components/SelectList.vue'
 import SelectItem from '@/components/SelectItem.vue'
-import Button from '@/components/Button.vue'
+import ButtonWrap from '@/components/ButtonWrap.vue'
 import { otherMenuList } from '@/utils/constant'
 import { ref } from 'vue'
 
@@ -34,12 +34,12 @@ function selectOtherMenuItem(index) {
 <template>
     <div class="navigate-container" @click="closeNavigate">
         <div class="other-btn-container">
-            <Button :type="'icon'" @click="openOtherMenu">
+            <ButtonWrap :type="'icon'" @click="openOtherMenu">
                 <OtherIcon></OtherIcon>
-            </Button>
+            </ButtonWrap>
         </div>
         <div class="other-menu-container">
-            <Select v-show="showOtherMenu" :transition="'extension-from-right-top'">
+            <SelectList v-show="showOtherMenu" :transition="'extension-from-right-top'">
                 <SelectItem v-for="(item, index) in otherMenuList" :index="index" :label="item.name"
                     @select="selectOtherMenuItem">
                     <div class="menu-item-icon">
@@ -47,7 +47,7 @@ function selectOtherMenuItem(index) {
                     </div>
                     <div class="menu-item-label">{{ item.name }}</div>
                 </SelectItem>
-            </Select>
+            </SelectList>
         </div>
     </div>
 </template>

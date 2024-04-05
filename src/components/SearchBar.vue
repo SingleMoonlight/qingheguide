@@ -2,9 +2,9 @@
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 import SearchEngineIcon from '@/components/icons/SearchEngineIcon.vue'
 import DeleteIcon from '@/components/icons/DeleteIcon.vue'
-import Select from './Select.vue'
+import SelectList from './SelectList.vue'
 import SelectItem from './SelectItem.vue'
-import Button from './Button.vue'
+import ButtonWrap from './ButtonWrap.vue'
 import { watch, ref, onMounted, onUnmounted } from 'vue'
 
 const emit = defineEmits(['focusInput', 'blurInput', 'inputUpdate', 'doSearch', 'searchEngineUpdate', 'clearSearchHistory'])
@@ -220,17 +220,17 @@ watch(() => props.closeSearch, (newValue) => {
 
 <template>
     <div class="search-bar-input-container">
-        <Button :type="'icon'" @click="openSearchEngineMenu">
+        <ButtonWrap :type="'icon'" @click="openSearchEngineMenu">
             <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
-        </Button>
+        </ButtonWrap>
         <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none"
             @focus="focusInput" @input="searchInputChange" @keydown.enter="goToSearch">
-        <Button :type="'icon'" @click="goToSearch">
+        <ButtonWrap :type="'icon'" @click="goToSearch">
             <SearchIcon></SearchIcon>
-        </Button>
+        </ButtonWrap>
     </div>
     <div class="search-engine-container">
-        <Select v-show="showEngine" :transition="'extension-from-left-top'">
+        <SelectList v-show="showEngine" :transition="'extension-from-left-top'">
             <SelectItem v-for="(item, index) in props.searchEngineList" :index="index" :label="item.name"
                 @select="selectSearchEngine">
                 <div class="search-engine-item-icon">
@@ -238,17 +238,17 @@ watch(() => props.closeSearch, (newValue) => {
                 </div>
                 <div class="search-engine-item-label">{{ item.name }}</div>
             </SelectItem>
-        </Select>
+        </SelectList>
     </div>
     <div class="search-suggest-container" v-show="props.openSuggest">
-        <Select v-show="showSuggest" :transition="'stretch'">
+        <SelectList v-show="showSuggest" :transition="'stretch'">
             <SelectItem v-for="(item, index) in props.suggestList" :index="index" :label="item"
                 :focus="index === searchSuggestIndex" @select="selectSearchSuggest">
             </SelectItem>
-        </Select>
+        </SelectList>
     </div>
     <div class="search-history-container" v-show="props.openHistory">
-        <Select v-show="showHistory" :transition="'stretch'">
+        <SelectList v-show="showHistory" :transition="'stretch'">
             <SelectItem v-for="(item, index) in props.historyList" :index="index" :label="item"
                 :focus="index === searchHistoryIndex" @select="selectSearchHistory">
             </SelectItem>
@@ -259,7 +259,7 @@ watch(() => props.closeSearch, (newValue) => {
                     <DeleteIcon></DeleteIcon>
                 </div>
             </SelectItem>
-        </Select>
+        </SelectList>
     </div>
 </template>
 

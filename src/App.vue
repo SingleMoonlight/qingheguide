@@ -1,9 +1,9 @@
 <script setup>
-import Home from './pages/Home.vue'
-import Navigate from './pages/Navigate.vue'
-import Setting from './pages/Setting.vue'
-import About from './pages/About.vue'
-import Background from './components/Background.vue'
+import HomePage from './pages/HomePage.vue'
+import NavigatePage from './pages/NavigatePage.vue'
+import SettingPage from './pages/SettingPage.vue'
+import AboutPage from './pages/AboutPage.vue'
+import BackgroundImage from './components/BackgroundImage.vue'
 import MessageBox from './components/MessageBox.vue'
 import { usePageStore } from '@/stores/page'
 import { useSettingStore } from './stores/setting'
@@ -21,7 +21,7 @@ const backgroundScale = ref(1)
 const bgMaskRef = ref()
 
 function openNavigatePage() {
-  pageStore.pageForward('Navigate');
+  pageStore.pageForward('NavigatePage');
   backgroundScale.value = 1.1;
   if (settingStore.$state.blurBackground) {
     backgroundBlur.value = 10;
@@ -29,7 +29,7 @@ function openNavigatePage() {
 }
 
 function closeNavigatePage() {
-  pageStore.pageForward('Home');
+  pageStore.pageForward('HomePage');
   if (settingStore.$state.blurBackground) {
     backgroundBlur.value = 0;
   }
@@ -55,19 +55,19 @@ function closeSearch() {
 }
 
 function openSettingPage() {
-  pageStore.pageForward('Setting');
+  pageStore.pageForward('SettingPage');
 }
 
 function openAboutPage() {
-  pageStore.pageForward('About');
+  pageStore.pageForward('AboutPage');
 }
 
 function closeSettingPage() {
-  pageStore.pageForward('Navigate');
+  pageStore.pageForward('NavigatePage');
 }
 
 function closeAboutPage() {
-  pageStore.pageForward('Navigate');
+  pageStore.pageForward('NavigatePage');
 }
 
 function closeMessageBox() {
@@ -119,24 +119,24 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 
 <template>
   <div class="background-container">
-    <Background v-if="flagStore.$state.bgImgIsGet" @loaded="handleBgLoaded"
+    <BackgroundImage v-if="flagStore.$state.bgImgIsGet" @loaded="handleBgLoaded"
       :background-url="settingStore.$state.backgroundUrl" :default-background-url="defaultBackgroundUrl"
       :background-blur="backgroundBlur" :background-scale="backgroundScale">
-    </Background>
+    </BackgroundImage>
     <div ref="bgMaskRef" class="background-mask"></div>
   </div>
 
   <Transition mode="out-in" name="fade">
-    <Home v-if="pageStore.pageName === 'Home'" @close-search="closeSearch" @open-search="openSearch"
+    <HomePage v-if="pageStore.pageName === 'HomePage'" @close-search="closeSearch" @open-search="openSearch"
       @open-navigate="openNavigatePage">
-    </Home>
-    <Navigate v-else-if="pageStore.pageName === 'Navigate'" @close-navigate="closeNavigatePage"
+    </HomePage>
+    <NavigatePage v-else-if="pageStore.pageName === 'NavigatePage'" @close-navigate="closeNavigatePage"
       @open-setting="openSettingPage" @open-about="openAboutPage">
-    </Navigate>
-    <Setting v-else-if="pageStore.pageName === 'Setting'" @close-setting="closeSettingPage">
-    </Setting>
-    <About v-else-if="pageStore.pageName === 'About'" @close-about="closeAboutPage">
-    </About>
+    </NavigatePage>
+    <SettingPage v-else-if="pageStore.pageName === 'SettingPage'" @close-setting="closeSettingPage">
+    </SettingPage>
+    <AboutPage v-else-if="pageStore.pageName === 'AboutPage'" @close-about="closeAboutPage">
+    </AboutPage>
   </Transition>
 
   <MessageBox :show="messageBoxStore.show" :type="messageBoxStore.type" :title="messageBoxStore.title"
