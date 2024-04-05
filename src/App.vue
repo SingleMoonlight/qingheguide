@@ -4,15 +4,18 @@ import Navigate from './pages/Navigate.vue'
 import Setting from './pages/Setting.vue'
 import About from './pages/About.vue'
 import Background from './components/Background.vue'
+import MessageBox from './components/MessageBox.vue'
 import { usePageStore } from '@/stores/page'
 import { useSettingStore } from './stores/setting'
 import { useFlagStore } from '@/stores/flag'
+import { useMessageBoxStore } from '@/stores/messageBox'
 import { defaultBackgroundUrl } from '@/utils/constant'
 import { onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
 const flagStore = useFlagStore()
+const messageBoxStore = useMessageBoxStore()
 const backgroundBlur = ref(0)
 const backgroundScale = ref(1)
 const bgMaskRef = ref()
@@ -67,6 +70,10 @@ function closeAboutPage() {
   pageStore.pageForward('Navigate');
 }
 
+function closeMessageBox() {
+  messageBoxStore.$state.show = false;
+}
+
 onMounted(() => {
   const loading = document.getElementById('loading');
   loading.style.opacity = 0;
@@ -93,7 +100,8 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   <div class="background-container">
     <div ref="bgMaskRef" class="background-mask"></div>
     <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
-      :default-background-url="defaultBackgroundUrl" :background-blur="backgroundBlur" :background-scale="backgroundScale">
+      :default-background-url="defaultBackgroundUrl" :background-blur="backgroundBlur"
+      :background-scale="backgroundScale">
     </Background>
   </div>
 
@@ -101,14 +109,20 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
     <Home v-if="pageStore.pageName === 'Home'" @close-search="closeSearch" @open-search="openSearch"
       @open-navigate="openNavigatePage">
     </Home>
-    <Navigate v-else-if="pageStore.pageName === 'Navigate'" @close-navigate="closeNavigatePage" @open-setting="openSettingPage"
-      @open-about="openAboutPage">
+    <Navigate v-else-if="pageStore.pageName === 'Navigate'" @close-navigate="closeNavigatePage"
+      @open-setting="openSettingPage" @open-about="openAboutPage">
     </Navigate>
     <Setting v-else-if="pageStore.pageName === 'Setting'" @close-setting="closeSettingPage">
     </Setting>
     <About v-else-if="pageStore.pageName === 'About'" @close-about="closeAboutPage">
     </About>
   </Transition>
+
+  <MessageBox :show="messageBoxStore.show" :type="messageBoxStore.type" :title="messageBoxStore.title"
+    :content="messageBoxStore.content" :cancel-btn-text="messageBoxStore.cancelBtnText"
+    :ok-btn-text="messageBoxStore.okBtnText" :cancel-handler="messageBoxStore.cancelHandler"
+    :ok-handler="messageBoxStore.okHandler" @close-message-box="closeMessageBox">
+  </MessageBox>
 </template>
 
 <style scpoed>

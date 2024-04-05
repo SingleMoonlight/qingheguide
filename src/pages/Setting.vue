@@ -318,7 +318,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <SettingCard>
+                <SettingCard :card-des="'搜索引擎URL 一般以https://开头，搜索关键字参数及连接符结尾。'">
                     <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" @ensure-input="updateCustomSearchEngineUrl">
                     </SettingItem>
                 </SettingCard>
