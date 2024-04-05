@@ -10,6 +10,7 @@ import { useSettingStore } from './stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { defaultBackgroundUrl } from '@/utils/constant'
+import { setClassForElement } from '@/utils/common'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
@@ -111,7 +112,7 @@ watch(() => flagStore.$state.bgImgIsGot, (newValue) => {
 
 watch(() => flagStore.$state.settingIsPatched, (newValue) => {
   if (newValue) {
-    document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
+    setClassForElement('qinghe-guide', settingStore.$state.theme);
   }
 })
 

@@ -8,6 +8,7 @@ import ButtonWrap from '@/components/ButtonWrap.vue'
 import { useSettingStore } from '@/stores/settingStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
+import { setClassForElement } from '@/utils/common'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
@@ -44,7 +45,7 @@ function getThemeIndex(theme) {
 
 function selectTheme(index) {
     settingStore.$state.theme = themeList[index].theme;
-    document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
+    setClassForElement('qinghe-guide', settingStore.$state.theme);
 }
 
 function getBgSourceName(source) {

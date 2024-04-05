@@ -11,3 +11,7 @@ export function printPromiseLog(type, func, data) {
         console.log(type + ": " + func + " (" + data + ")");
     }
 }
+
+export function setClassForElement(elementId, className) {
+    document.getElementById(elementId).setAttribute("class", className);
+}
