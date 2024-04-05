@@ -165,10 +165,11 @@ export function getBackgroundImg() {
         const settingStore = useSettingStore();
         const flagStore = useFlagStore();
 
-        flagStore.$state.bgImgIsGet = true;
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(res.data);
         settingStore.$state.backgroundUrl = imgURL;
+
+        flagStore.$state.bgImgIsGet = true;
     }).catch((err) => {
     });
 }

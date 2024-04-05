@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
+const emit = defineEmits(['loaded'])
 const props = defineProps({
     backgroundUrl: String,
     defaultBackgroundUrl: String,
@@ -30,6 +31,10 @@ watch(() => props.backgroundScale, (newValue) => {
     } else {
         bgImgRef.value.style.transform = `scale(${newValue})`;
     }
+})
+
+onMounted(() => {
+    emit('loaded');
 })
 
 </script>

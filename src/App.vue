@@ -10,7 +10,7 @@ import { useSettingStore } from './stores/setting'
 import { useFlagStore } from '@/stores/flag'
 import { useMessageBoxStore } from '@/stores/messageBox'
 import { defaultBackgroundUrl } from '@/utils/constant'
-import { onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
 const pageStore = usePageStore()
@@ -74,6 +74,21 @@ function closeMessageBox() {
   messageBoxStore.$state.show = false;
 }
 
+function handleBgLoaded() {
+  if (settingStore.$state.autoFocusSearchInput) {
+    if (settingStore.$state.blurBackground) {
+      backgroundBlur.value = 0;
+    }
+    backgroundScale.value = 1;
+    nextTick(() => {
+      backgroundScale.value = 1.1;
+      if (settingStore.$state.blurBackground) {
+        backgroundBlur.value = 10;
+      }
+    })
+  }
+}
+
 onMounted(() => {
   const loading = document.getElementById('loading');
   loading.style.opacity = 0;
@@ -104,9 +119,9 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 
 <template>
   <div class="background-container">
-    <Background v-show="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
-      :default-background-url="defaultBackgroundUrl" :background-blur="backgroundBlur"
-      :background-scale="backgroundScale">
+    <Background v-if="flagStore.$state.bgImgIsGet" @loaded="handleBgLoaded"
+      :background-url="settingStore.$state.backgroundUrl" :default-background-url="defaultBackgroundUrl"
+      :background-blur="backgroundBlur" :background-scale="backgroundScale">
     </Background>
     <div ref="bgMaskRef" class="background-mask"></div>
   </div>
