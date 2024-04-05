@@ -5,7 +5,7 @@ import Copyright from '@/components/Copyright.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo, searchEngineList } from '@/utils/constant'
-import { getSearchSuggest } from '@/api/search'
+import { getSearchSuggest, startSearch } from '@/api/search'
 import { useSearchHistoryStore } from '@/stores/searchHistory'
 import { useFlagStore } from '@/stores/flag'
 import { ref } from 'vue'
@@ -60,11 +60,7 @@ function doSearch(value) {
         searchUrl = searchEngineList[0].url;
     }
 
-    if (settingStore.$state.searchOpenMode === 'currentPage') {
-        window.location.href = searchUrl + value;
-    } else if (settingStore.$state.searchOpenMode === 'newPage') {
-        window.open(searchUrl + value, '_blank');
-    }
+    startSearch(searchUrl, value, settingStore.$state.searchOpenMode);
 }
 </script>
 

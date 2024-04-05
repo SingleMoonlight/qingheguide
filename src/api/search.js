@@ -28,7 +28,6 @@ export function getSearchSuggest(keyword) {
         }).catch(err => {
             if (axios.isCancel(err)) {
                 // 请求被取消
-                // console.log('Search request canceled', err.data);
             } else {
                 reject(err.data);
             }
@@ -36,6 +35,10 @@ export function getSearchSuggest(keyword) {
     })
 }
 
-export function startSearch() {
-
+export function startSearch(url, value, mode) {
+    if (mode === 'currentPage') {
+        window.location.href = url + value;
+    } else if (mode === 'newPage') {
+        window.open(url + value, '_blank');
+    }
 }
