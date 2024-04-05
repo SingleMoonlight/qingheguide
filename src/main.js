@@ -1,8 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { initImageDB } from '@/utils/indexedDB'
-import { globalKeydown } from '@/utils/keyListener'
-import { checkUpdate, loadConfig, printWebsiteInfo } from './utils/initialize'
+import { checkUpdate, loadConfig, printWebsiteInfo, globalKeyDown } from './utils/initialize'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -13,6 +12,6 @@ app.mount('#qinghe-guide')
 
 initImageDB()
 printWebsiteInfo()
-globalKeydown()
+globalKeyDown()
 checkUpdate()
 loadConfig()
