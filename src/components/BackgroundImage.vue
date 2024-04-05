@@ -10,7 +10,7 @@ const props = defineProps({
 })
 const bgImgRef = ref()
 
-function loadBackgroundFail(target) {
+function failLoadBackground(target) {
     // 防止onerror无限触发
     target.srcElement.onerror = '';
     // 加载失败使用默认背景
@@ -41,8 +41,8 @@ onMounted(() => {
 
 <template>
     <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackgroundUrl"
-        :onerror="loadBackgroundFail">
-    <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="loadBackgroundFail">
+        :onerror="failLoadBackground">
+    <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="failLoadBackground">
 </template>
 
 <style scpoed>

@@ -3,12 +3,12 @@ import CurrentTime from '@/components/CurrentTime.vue'
 import TodayDate from '@/components/TodayDate.vue'
 import CopyrightStatement from '@/components/CopyrightStatement.vue'
 import SearchBar from '@/components/SearchBar.vue'
-import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo, searchEngineList } from '@/utils/constant'
 import { printPromiseLog } from '@/utils/common'
-import { getSearchSuggest, startSearch } from '@/api/search'
-import { useSearchHistoryStore } from '@/stores/searchHistory'
-import { useFlagStore } from '@/stores/flag'
+import { getSearchSuggest, doSearch } from '@/api/search'
+import { useSettingStore } from '@/stores/settingStore'
+import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
+import { useFlagStore } from '@/stores/flagStore'
 import { ref } from 'vue'
 
 const emit = defineEmits(['openSearch', 'closeSearch', 'openNavigate'])
@@ -26,7 +26,7 @@ function closeSearch(e) {
     emit('closeSearch');
 }
 
-function searchBarInputUpdate(value) {
+function handleSearchBarInputUpdate(value) {
     // 注释掉可以解决拼音输入时无法选择建议的问题
     // suggest.value.splice(0, suggest.value.length);
 
@@ -37,7 +37,7 @@ function searchBarInputUpdate(value) {
     })
 }
 
-function searchEngineUpdate(index) {
+function handleSearchEngineUpdate(index) {
     settingStore.$state.searchEngine = searchEngineList[index].engine;
 }
 
@@ -45,7 +45,7 @@ function clearSearchHistory() {
     searchHistoryStore.$state.history = [...[]];
 }
 
-function doSearch(value) {
+function startSearch(value) {
     let searchUrl = '';
     if (value === '') {
         return;
@@ -62,7 +62,7 @@ function doSearch(value) {
         searchUrl = searchEngineList[0].url;
     }
 
-    startSearch(searchUrl, value, settingStore.$state.searchOpenMode);
+    doSearch(searchUrl, value, settingStore.$state.searchOpenMode);
 }
 </script>
 
@@ -79,16 +79,17 @@ function doSearch(value) {
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @blur-input="emit('closeSearch')"
-                @input-update="searchBarInputUpdate" @do-search="doSearch" @search-engine-update="searchEngineUpdate"
-                @clear-search-history="clearSearchHistory" :auto-focus="settingStore.$state.autoFocusSearchInput"
-                :close-search="flagStore.$state.closeSearch" :search-engine="settingStore.$state.searchEngine"
-                :search-engine-list="searchEngineList" :open-history="settingStore.$state.openHistory"
-                :history-list="searchHistoryStore.$state.history" :open-suggest="settingStore.$state.openSuggest"
-                :suggest-list="suggest">
+                @update-input="handleSearchBarInputUpdate" @start-search="startSearch"
+                @update-search-engine="handleSearchEngineUpdate" @clear-search-history="clearSearchHistory"
+                :auto-focus="settingStore.$state.autoFocusSearchInput" :close-search="flagStore.$state.closeSearch"
+                :search-engine="settingStore.$state.searchEngine" :search-engine-list="searchEngineList"
+                :open-history="settingStore.$state.openHistory" :history-list="searchHistoryStore.$state.history"
+                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest">
             </SearchBar>
         </div>
         <div class="copyright-container">
-            <CopyrightStatement :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo"></CopyrightStatement>
+            <CopyrightStatement :show-copyright="settingStore.$state.showCopyright" :copyright-info="copyrightInfo">
+            </CopyrightStatement>
         </div>
     </div>
 </template>

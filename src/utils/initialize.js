@@ -1,8 +1,8 @@
 import config from '../../package.json'
-import { useSettingStore } from '@/stores/setting'
-import { useFlagStore } from '@/stores/flag'
+import { useSettingStore } from '@/stores/settingStore'
+import { useFlagStore } from '@/stores/flagStore'
 import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting, setLocalHistory, getLocalHistory } from './localStorage'
-import { useSearchHistoryStore } from '@/stores/searchHistory'
+import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
 
 export function checkUpdate() {
     const settingStore = useSettingStore();

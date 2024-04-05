@@ -5,10 +5,10 @@ import SettingPage from './pages/SettingPage.vue'
 import AboutPage from './pages/AboutPage.vue'
 import BackgroundImage from './components/BackgroundImage.vue'
 import MessageBox from './components/MessageBox.vue'
-import { usePageStore } from '@/stores/page'
-import { useSettingStore } from './stores/setting'
-import { useFlagStore } from '@/stores/flag'
-import { useMessageBoxStore } from '@/stores/messageBox'
+import { usePageStore } from '@/stores/pageStore'
+import { useSettingStore } from './stores/settingStore'
+import { useFlagStore } from '@/stores/flagStore'
+import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { defaultBackgroundUrl } from '@/utils/constant'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
@@ -103,7 +103,7 @@ watch(() => settingStore.$state.blurBackground, (newValue) => {
   }
 })
 
-watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
+watch(() => flagStore.$state.bgImgIsGot, (newValue) => {
   if (newValue) {
     bgMaskRef.value.style.opacity = 0;
   }
@@ -119,7 +119,7 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 
 <template>
   <div class="background-container">
-    <BackgroundImage v-if="flagStore.$state.bgImgIsGet" @loaded="handleBgLoaded"
+    <BackgroundImage v-if="flagStore.$state.bgImgIsGot" @loaded="handleBgLoaded"
       :background-url="settingStore.$state.backgroundUrl" :default-background-url="defaultBackgroundUrl"
       :background-blur="backgroundBlur" :background-scale="backgroundScale">
     </BackgroundImage>
@@ -139,10 +139,10 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
     </AboutPage>
   </Transition>
 
-  <MessageBox :show="messageBoxStore.show" :type="messageBoxStore.type" :title="messageBoxStore.title"
-    :content="messageBoxStore.content" :cancel-btn-text="messageBoxStore.cancelBtnText"
+  <MessageBox @close="closeMessageBox" :show="messageBoxStore.show" :type="messageBoxStore.type"
+    :title="messageBoxStore.title" :content="messageBoxStore.content" :cancel-btn-text="messageBoxStore.cancelBtnText"
     :ok-btn-text="messageBoxStore.okBtnText" :cancel-handler="messageBoxStore.cancelHandler"
-    :ok-handler="messageBoxStore.okHandler" @close-message-box="closeMessageBox">
+    :ok-handler="messageBoxStore.okHandler">
   </MessageBox>
 </template>
 

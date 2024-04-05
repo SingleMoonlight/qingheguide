@@ -1,4 +1,3 @@
-export const version = '3.0.0'
 export const defaultBackgroundUrl = 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg'
 
 export const copyrightInfo = {

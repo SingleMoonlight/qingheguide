@@ -5,7 +5,7 @@ import CheckedIcon from './icons/CheckedIcon.vue'
 import ButtonWrap from './ButtonWrap.vue'
 import { ref } from 'vue'
 
-const emit = defineEmits(['switchOnoff', 'openNext', 'checkedListItem', 'ensureInput'])
+const emit = defineEmits(['turnSwitch', 'openNext', 'checkedListItem', 'ensureInput'])
 const props = defineProps({
     label: String,
     type: String,
@@ -25,7 +25,7 @@ function clickSettingItem() {
     }
 }
 
-function settingInputEnsure() {
+function ensureSettingInput() {
     let settingInputDom = settingInputRef.value;
 
     emit('ensureInput', settingInputDom.value.trim());
@@ -37,7 +37,7 @@ function settingInputEnsure() {
     <div class="setting-item" @click="clickSettingItem">
         <div class="setting-item-label">{{ props.label }}</div>
         <div v-if="props.type === 'switch'" class="setting-switch">
-            <SwitchOnoff :onoff="props.onoff" @change-onoff="emit('switchOnoff')"></SwitchOnoff>
+            <SwitchOnoff :onoff="props.onoff" @change="emit('turnSwitch')"></SwitchOnoff>
         </div>
         <div v-else-if="props.type === 'next'" class="setting-next">
             <div class="setting-next-value">{{ props.nextValue }}</div>
@@ -52,7 +52,7 @@ function settingInputEnsure() {
         </div>
         <div v-else-if="props.type === 'input'" class="setting-input-container">
             <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" />
-            <ButtonWrap :type="'icon'" @click="settingInputEnsure">
+            <ButtonWrap :type="'icon'" @click="ensureSettingInput">
                 <CheckedIcon></CheckedIcon>
             </ButtonWrap>
         </div>

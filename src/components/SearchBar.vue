@@ -7,7 +7,7 @@ import SelectItem from './SelectItem.vue'
 import ButtonWrap from './ButtonWrap.vue'
 import { watch, ref, onMounted, onUnmounted } from 'vue'
 
-const emit = defineEmits(['focusInput', 'blurInput', 'inputUpdate', 'doSearch', 'searchEngineUpdate', 'clearSearchHistory'])
+const emit = defineEmits(['focusInput', 'blurInput', 'updateInput', 'startSearch', 'updateSearchEngine', 'clearSearchHistory'])
 const props = defineProps({
     autoFocus: Boolean,
     closeSearch: Boolean,
@@ -52,11 +52,11 @@ function blurInput() {
     searchHistoryIndex.value = -1;
 }
 
-function searchInputChange() {
+function handleSearchInputChange() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
 
-    emit('inputUpdate', value);
+    emit('updateInput', value);
 
     showHistory.value = value.trim() === '';
     searchHistoryIndex.value = -1;
@@ -70,7 +70,7 @@ function selectSearchSuggest(index) {
     searchInputDom.value = props.suggestList[index];
     searchInputDom.focus();
 
-    emit('inputUpdate', props.suggestList[index]);
+    emit('updateInput', props.suggestList[index]);
     showSuggest.value = false;
 }
 
@@ -79,7 +79,7 @@ function selectSearchHistory(index) {
     searchInputDom.value = props.historyList[index];
     searchInputDom.focus();
 
-    emit('inputUpdate', props.historyList[index]);
+    emit('updateInput', props.historyList[index]);
 }
 
 function clearSearchHistory() {
@@ -88,29 +88,26 @@ function clearSearchHistory() {
     showHistory.value = false;
 }
 
-function goToSearch() {
+function handleSearchBtnClick() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
 
-    emit('doSearch', value);
+    emit('startSearch', value);
 }
 
 function openSearchEngineMenu() {
-    let searchInputDom = searchBarInputRef.value;
-
-    emit('focusInput');
-
     showHistory.value = false;
     showSuggest.value = false;
     showEngine.value = !showEngine.value;
     if (!showEngine.value) {
-        searchInputDom.focus();
+        focusInput();
     }
 }
 
 function selectSearchEngine(index) {
-    emit('searchEngineUpdate', index);
+    emit('updateSearchEngine', index);
     showEngine.value = false;
+    focusInput();
 }
 
 function getSearchEngineIconName(searchEngine) {
@@ -224,8 +221,8 @@ watch(() => props.closeSearch, (newValue) => {
             <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
         </ButtonWrap>
         <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none"
-            @focus="focusInput" @input="searchInputChange" @keydown.enter="goToSearch">
-        <ButtonWrap :type="'icon'" @click="goToSearch">
+            @focus="focusInput" @input="handleSearchInputChange" @keydown.enter="startSearch">
+        <ButtonWrap :type="'icon'" @click="handleSearchBtnClick">
             <SearchIcon></SearchIcon>
         </ButtonWrap>
     </div>

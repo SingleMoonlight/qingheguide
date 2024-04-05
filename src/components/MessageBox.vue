@@ -2,7 +2,7 @@
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import MessageBoxIcon from '@/components/icons/MessageBoxIcon.vue'
 
-const emit = defineEmits(['closeMessageBox'])
+const emit = defineEmits(['close'])
 const props = defineProps({
     show: Boolean,
     type: String,
@@ -18,14 +18,14 @@ function handleCancelBtnClick() {
     if (props.cancelHandler) {
         props.cancelHandler();
     }
-    emit('closeMessageBox');
+    emit('close');
 }
 
 function handleOkBtnClick() {
     if (props.okHandler) {
         props.okHandler();
     }
-    emit('closeMessageBox');
+    emit('close');
 }
 
 </script>

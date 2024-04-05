@@ -35,7 +35,7 @@ export function getSearchSuggest(keyword) {
     })
 }
 
-export function startSearch(url, value, mode) {
+export function doSearch(url, value, mode) {
     if (mode === 'currentPage') {
         window.location.href = url + value;
     } else if (mode === 'newPage') {

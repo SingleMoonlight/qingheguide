@@ -5,7 +5,7 @@ import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
 import BackgroundImage from '@/components/BackgroundImage.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
-import { useSettingStore } from '@/stores/setting'
+import { useSettingStore } from '@/stores/settingStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
 import { ref, onMounted } from 'vue'
@@ -159,16 +159,16 @@ onMounted(() => {
                     </SettingCard>
                     <SettingCard :card-name="'时间日期'">
                         <SettingItem :label="'时间'" :type="'switch'" :onoff="settingStore.showTime"
-                            @switch-onoff="settingStore.showTime = !settingStore.showTime">
+                            @turn-switch="settingStore.showTime = !settingStore.showTime">
                         </SettingItem>
                         <SettingItem :label="'日期'" :type="'switch'" :onoff="settingStore.showDate"
-                            @switch-onoff="settingStore.showDate = !settingStore.showDate">
+                            @turn-switch="settingStore.showDate = !settingStore.showDate">
                         </SettingItem>
                         <SettingItem :label="'秒钟'" :type="'switch'" :onoff="settingStore.showSecond"
-                            @switch-onoff="settingStore.showSecond = !settingStore.showSecond">
+                            @turn-switch="settingStore.showSecond = !settingStore.showSecond">
                         </SettingItem>
                         <SettingItem :label="'时间分隔符闪烁'" :type="'switch'" :onoff="settingStore.blinkTimeSeparator"
-                            @switch-onoff="settingStore.blinkTimeSeparator = !settingStore.blinkTimeSeparator">
+                            @turn-switch="settingStore.blinkTimeSeparator = !settingStore.blinkTimeSeparator">
                         </SettingItem>
                         <SettingItem :label="'时间字体粗细'" :type="'next'"
                             :next-value="getTimeFontWeightName(settingStore.timeFontWeight)"
@@ -177,10 +177,10 @@ onMounted(() => {
                     </SettingCard>
                     <SettingCard :card-name="'搜索'">
                         <SettingItem :label="'搜索历史'" :type="'switch'" :onoff="settingStore.openHistory"
-                            @switch-onoff="settingStore.openHistory = !settingStore.openHistory">
+                            @turn-switch="settingStore.openHistory = !settingStore.openHistory">
                         </SettingItem>
                         <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
-                            @switch-onoff="settingStore.openSuggest = !settingStore.openSuggest">
+                            @turn-switch="settingStore.openSuggest = !settingStore.openSuggest">
                         </SettingItem>
                         <SettingItem :label="'自动聚焦搜索框'" :type="'next'"
                             :next-value="getOnoffName(settingStore.autoFocusSearchInput)"
@@ -271,7 +271,7 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <SettingCard :card-des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'">
                     <SettingItem :label="'背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
-                        @switch-onoff="settingStore.blurBackground = !settingStore.blurBackground">
+                        @turn-switch="settingStore.blurBackground = !settingStore.blurBackground">
                     </SettingItem>
                 </SettingCard>
             </div>
@@ -288,7 +288,7 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <SettingCard :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
                     <SettingItem :label="'显示备案信息'" :type="'switch'" :onoff="settingStore.showCopyright"
-                        @switch-onoff="settingStore.showCopyright = !settingStore.showCopyright">
+                        @turn-switch="settingStore.showCopyright = !settingStore.showCopyright">
                     </SettingItem>
                 </SettingCard>
             </div>
@@ -331,8 +331,7 @@ onMounted(() => {
         </div>
         <div ref="autoFocusSearchInputPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
-                <div class="setting-pane-back-btn"
-                    @click="backToPrev(autoFocusSearchInputPaneRef, mainSettingPaneRef)">
+                <div class="setting-pane-back-btn" @click="backToPrev(autoFocusSearchInputPaneRef, mainSettingPaneRef)">
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
@@ -342,7 +341,7 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <SettingCard :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
                     <SettingItem :label="'自动聚焦搜索框'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
-                        @switch-onoff="settingStore.autoFocusSearchInput = !settingStore.autoFocusSearchInput">
+                        @turn-switch="settingStore.autoFocusSearchInput = !settingStore.autoFocusSearchInput">
                     </SettingItem>
                 </SettingCard>
             </div>

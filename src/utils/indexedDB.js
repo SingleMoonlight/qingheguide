@@ -126,8 +126,8 @@ export class IndexedDB {
 }
 
 // 目前仅有图片放在indexed数据库中，以下接口不在另分文件
-import { useSettingStore } from '@/stores/setting'
-import { useFlagStore } from '@/stores/flag'
+import { useSettingStore } from '@/stores/settingStore'
+import { useFlagStore } from '@/stores/flagStore'
 import { printPromiseLog } from '@/utils/common'
 
 let imageDB = null
@@ -177,7 +177,7 @@ export function getBackgroundImg() {
         let imgURL = window.URL.createObjectURL(res.data);
         settingStore.$state.backgroundUrl = imgURL;
 
-        flagStore.$state.bgImgIsGet = true;
+        flagStore.$state.bgImgIsGot = true;
 
         printPromiseLog('result', 'getDataByKey', res);
     }).catch((err) => {

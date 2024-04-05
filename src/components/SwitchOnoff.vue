@@ -1,14 +1,14 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 
-const emit = defineEmits(['changeOnoff'])
+const emit = defineEmits(['change'])
 const props = defineProps({
     onoff: Boolean,
 })
 const switchRoundRef = ref()
 
 function changeOnoff() {
-    emit('changeOnoff');
+    emit('change');
 }
 
 watch(() => props.onoff, (newValue) => {
