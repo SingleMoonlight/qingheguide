@@ -5,6 +5,7 @@ import CopyrightStatement from '@/components/CopyrightStatement.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { useSettingStore } from '@/stores/setting'
 import { copyrightInfo, searchEngineList } from '@/utils/constant'
+import { printPromiseLog } from '@/utils/common'
 import { getSearchSuggest, startSearch } from '@/api/search'
 import { useSearchHistoryStore } from '@/stores/searchHistory'
 import { useFlagStore } from '@/stores/flag'
@@ -32,6 +33,7 @@ function searchBarInputUpdate(value) {
     getSearchSuggest(value).then(res => {
         suggest.value = [...res];
     }).catch(err => {
+        printPromiseLog('error', 'getSearchSuggest', err)
     })
 }
 

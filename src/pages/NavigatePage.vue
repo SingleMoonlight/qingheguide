@@ -39,8 +39,8 @@ function selectOtherMenuItem(index) {
             </ButtonWrap>
         </div>
         <div class="other-menu-container">
-            <SelectList v-show="showOtherMenu" :transition="'extension-from-right-top'">
-                <SelectItem v-for="(item, index) in otherMenuList" :index="index" :label="item.name"
+            <SelectList :show="showOtherMenu" :transition="'extension-from-right-top'">
+                <SelectItem v-for="(item, index) in otherMenuList" :key="index" :index="index" :label="item.name"
                     @select="selectOtherMenuItem">
                     <div class="menu-item-icon">
                         <OtherMenuIcon :icon-name="item.iconName"></OtherMenuIcon>

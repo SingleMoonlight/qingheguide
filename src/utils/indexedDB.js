@@ -128,6 +128,7 @@ export class IndexedDB {
 // 目前仅有图片放在indexed数据库中，以下接口不在另分文件
 import { useSettingStore } from '@/stores/setting'
 import { useFlagStore } from '@/stores/flag'
+import { printPromiseLog } from '@/utils/common'
 
 let imageDB = null
 
@@ -137,13 +138,17 @@ export function initImageDB() {
     });
     imageDB.initDB().then(res => {
         getBackgroundImg();
+        printPromiseLog('result', 'initDB', res);
     }).catch((err) => {
+        printPromiseLog('error', 'initDB', err);
     });
 }
 
 export function deleteImageDB() {
     imageDB.deleteDatabase().then(res => {
+        printPromiseLog('result', 'deleteDatabase', res);
     }).catch((err) => {
+        printPromiseLog('error', 'deleteDatabase', err);
     });
 }
 
@@ -156,7 +161,10 @@ export function setBackgroundImg(imageData) {
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(imageData);
         settingStore.$state.backgroundUrl = imgURL;
+
+        printPromiseLog('result', 'updateData', res);
     }).catch((err) => {
+        printPromiseLog('error', 'updateData', err);
     });
 }
 
@@ -170,13 +178,18 @@ export function getBackgroundImg() {
         settingStore.$state.backgroundUrl = imgURL;
 
         flagStore.$state.bgImgIsGet = true;
+
+        printPromiseLog('result', 'getDataByKey', res);
     }).catch((err) => {
+        printPromiseLog('error', 'getDataByKey', err);
     });
 }
 
 export function deleteBackgroundImg() {
     imageDB.deleteData('background').then(res => {
+        printPromiseLog('result', 'deleteData', res);
     }).catch((err) => {
+        printPromiseLog('error', 'deleteData', err);
     });
 }
 

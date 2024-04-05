@@ -230,8 +230,8 @@ watch(() => props.closeSearch, (newValue) => {
         </ButtonWrap>
     </div>
     <div class="search-engine-container">
-        <SelectList v-show="showEngine" :transition="'extension-from-left-top'">
-            <SelectItem v-for="(item, index) in props.searchEngineList" :index="index" :label="item.name"
+        <SelectList :show="showEngine" :transition="'extension-from-left-top'">
+            <SelectItem v-for="(item, index) in props.searchEngineList" :key="index" :index="index" :label="item.name"
                 @select="selectSearchEngine">
                 <div class="search-engine-item-icon">
                     <SearchEngineIcon :icon-name="item.iconName"></SearchEngineIcon>
@@ -241,15 +241,15 @@ watch(() => props.closeSearch, (newValue) => {
         </SelectList>
     </div>
     <div class="search-suggest-container" v-show="props.openSuggest">
-        <SelectList v-show="showSuggest" :transition="'stretch'">
-            <SelectItem v-for="(item, index) in props.suggestList" :index="index" :label="item"
+        <SelectList :show="showSuggest" :transition="'stretch'">
+            <SelectItem v-for="(item, index) in props.suggestList" :key="index" :index="index" :label="item"
                 :focus="index === searchSuggestIndex" @select="selectSearchSuggest">
             </SelectItem>
         </SelectList>
     </div>
     <div class="search-history-container" v-show="props.openHistory">
-        <SelectList v-show="showHistory" :transition="'stretch'">
-            <SelectItem v-for="(item, index) in props.historyList" :index="index" :label="item"
+        <SelectList :show="showHistory" :transition="'stretch'">
+            <SelectItem v-for="(item, index) in props.historyList" :key="index" :index="index" :label="item"
                 :focus="index === searchHistoryIndex" @select="selectSearchHistory">
             </SelectItem>
             <SelectItem class="search-history-clear-item" v-if="props.historyList.length > 0"

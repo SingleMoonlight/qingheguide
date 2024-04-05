@@ -208,7 +208,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <SettingCard>
-                    <SettingItem v-for="(item, index) in themeList" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in themeList" :key="index" :type="'list'" :label="item.name"
                         :checked="getThemeIndex(settingStore.theme) === index" @checked-list-item="selectTheme(index)">
                     </SettingItem>
                 </SettingCard>
@@ -225,7 +225,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <SettingCard>
-                    <SettingItem v-for="(item, index) in bgSourceList" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in bgSourceList" :key="index" :type="'list'" :label="item.name"
                         :checked="getBgSourceIndex(settingStore.backgroundSource) === index"
                         @checked-list-item="selectBgSource(index)">
                     </SettingItem>
@@ -251,7 +251,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <SettingCard>
-                    <SettingItem v-for="(item, index) in timeFontWeight" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in timeFontWeight" :key="index" :type="'list'" :label="item.name"
                         :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
                         @checked-list-item="selectTimeFontWeight(index)">
                     </SettingItem>
@@ -305,7 +305,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <SettingCard>
-                    <SettingItem v-for="(item, index) in searchOpenMode" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in searchOpenMode" :key="index" :type="'list'" :label="item.name"
                         :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
                         @checked-list-item="selectSearchOpenMode(index)">
                     </SettingItem>

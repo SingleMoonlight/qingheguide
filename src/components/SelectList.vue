@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
     transition: String,
+    show: Boolean,
 })
 
 function handleBeforeEnter(el) {
@@ -42,7 +43,7 @@ function handleLeave(el) {
 <template>
     <Transition mode="out-in" :name="props.transition" @before-enter="handleBeforeEnter" @enter="handleEnter"
         @before-leave="handleBeforeLeave" @leave="handleLeave">
-        <div class="select">
+        <div class="select" v-show="props.show">
             <slot></slot>
         </div>
     </Transition>
