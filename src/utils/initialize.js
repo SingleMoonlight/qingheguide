@@ -1,5 +1,6 @@
 import config from '../../package.json'
 import { useSettingStore } from '@/stores/setting'
+import { useFlagStore } from '@/stores/flag'
 import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting, setLocalHistory, getLocalHistory } from './localStorage'
 import { useSearchHistoryStore } from '@/stores/searchHistory'
 
@@ -25,6 +26,7 @@ export function checkUpdate() {
 export function loadConfig() {
     const settingStore = useSettingStore();
     const searchHistoryStore = useSearchHistoryStore();
+    const flagStore = useFlagStore();
 
     settingStore.$subscribe((mutation, state) => {
         // 每当状态发生变化时，将整个 state 持久化到本地存储
@@ -37,6 +39,7 @@ export function loadConfig() {
     // pinia同步本地设置
     if (getLocalSetting()) {
         settingStore.$patch(getLocalSetting());
+        flagStore.$state.settingIsPatched = true;
     }
 
     searchHistoryStore.$subscribe((mutation, state) => {
@@ -47,9 +50,6 @@ export function loadConfig() {
     if (getLocalHistory()) {
         searchHistoryStore.$patch(getLocalHistory());
     }
-
-    // 设置主题
-    document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
 }
 
 export function printWebsiteInfo() {

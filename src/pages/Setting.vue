@@ -21,6 +21,7 @@ const blurBackgroundSettingPaneRef = ref()
 const copyrightSettingPaneRef = ref()
 const searchOpenModeSettingPaneRef = ref()
 const customSearchEngineSettingPaneRef = ref()
+const autoFocusSearchInputPaneRef = ref()
 const showSettingPane = ref(false)
 
 
@@ -181,6 +182,10 @@ onMounted(() => {
                         <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
                             @switch-onoff="settingStore.openSuggest = !settingStore.openSuggest">
                         </SettingItem>
+                        <SettingItem :label="'自动聚焦搜索框'" :type="'next'"
+                            :next-value="getOnoffName(settingStore.autoFocusSearchInput)"
+                            @open-next="goToNext(mainSettingPaneRef, autoFocusSearchInputPaneRef)">
+                        </SettingItem>
                         <SettingItem :label="'搜索打开方式'" :type="'next'"
                             :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
                             @open-next="goToNext(mainSettingPaneRef, searchOpenModeSettingPaneRef)">
@@ -198,7 +203,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    主题
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -215,7 +220,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    背景
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -241,7 +246,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    时间字体粗细
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -260,7 +265,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    背景遮罩
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -277,7 +282,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    备案信息
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -295,7 +300,7 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    搜索打开方式
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
@@ -314,12 +319,30 @@ onMounted(() => {
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
-                    自定义搜索引擎
+                    设置
                 </div>
             </div>
             <div class="setting-pane-body">
                 <SettingCard :card-des="'搜索引擎URL 一般以https://开头，搜索关键字参数及连接符结尾。'">
                     <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" @ensure-input="updateCustomSearchEngineUrl">
+                    </SettingItem>
+                </SettingCard>
+            </div>
+        </div>
+        <div ref="autoFocusSearchInputPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(autoFocusSearchInputPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <SettingCard :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
+                    <SettingItem :label="'自动聚焦搜索框'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
+                        @switch-onoff="settingStore.autoFocusSearchInput = !settingStore.autoFocusSearchInput">
                     </SettingItem>
                 </SettingCard>
             </div>

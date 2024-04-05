@@ -68,7 +68,8 @@ function doSearch(value) {
     <div class="home-container" @click="closeSearch" @contextmenu="emit('openNavigate')">
         <div class="time-container" @click="emit('openNavigate')">
             <Time :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
-                :blink-time-separator="settingStore.$state.blinkTimeSeparator" :font-weight="settingStore.$state.timeFontWeight">
+                :blink-time-separator="settingStore.$state.blinkTimeSeparator"
+                :font-weight="settingStore.$state.timeFontWeight">
             </Time>
         </div>
         <div class="date-container">
@@ -76,10 +77,11 @@ function doSearch(value) {
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @input-update="searchBarInputUpdate" @do-search="doSearch"
-                @search-engine-update="searchEngineUpdate" :close-search="flagStore.$state.closeSearch"
-                :search-engine="settingStore.$state.searchEngine" :search-engine-list="searchEngineList"
-                :open-history="settingStore.$state.openHistory" :history-list="searchHistoryStore.$state.history"
-                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest">
+                @search-engine-update="searchEngineUpdate" :auto-focus="settingStore.$state.autoFocusSearchInput"
+                :close-search="flagStore.$state.closeSearch" :search-engine="settingStore.$state.searchEngine"
+                :search-engine-list="searchEngineList" :open-history="settingStore.$state.openHistory"
+                :history-list="searchHistoryStore.$state.history" :open-suggest="settingStore.$state.openSuggest"
+                :suggest-list="suggest">
             </SearchBar>
         </div>
         <div class="copyright-container">

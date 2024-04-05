@@ -94,15 +94,21 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
   }
 })
 
+watch(() => flagStore.$state.settingIsPatched, (newValue) => {
+  if (newValue) {
+    document.getElementById("qinghe-guide").setAttribute("class", settingStore.$state.theme);
+  }
+})
+
 </script>
 
 <template>
   <div class="background-container">
-    <div ref="bgMaskRef" class="background-mask"></div>
-    <Background v-if="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
+    <Background v-show="flagStore.$state.bgImgIsGet" :background-url="settingStore.$state.backgroundUrl"
       :default-background-url="defaultBackgroundUrl" :background-blur="backgroundBlur"
       :background-scale="backgroundScale">
     </Background>
+    <div ref="bgMaskRef" class="background-mask"></div>
   </div>
 
   <Transition mode="out-in" name="fade">
@@ -134,6 +140,8 @@ watch(() => flagStore.$state.bgImgIsGet, (newValue) => {
 }
 
 .background-mask {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   opacity: 1;

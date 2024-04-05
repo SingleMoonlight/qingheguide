@@ -8,6 +8,7 @@ import { watch, ref } from 'vue'
 
 const emit = defineEmits(['focusInput', 'inputUpdate', 'doSearch', 'searchEngineUpdate'])
 const props = defineProps({
+    autoFocus: Boolean,
     closeSearch: Boolean,
     searchEngine: String,
     searchEngineList: Object,
@@ -89,6 +90,12 @@ function selectSearchEngine(index) {
 function getSearchEngineIconName(searchEngine) {
     return props.searchEngineList.filter(obj => obj.engine === searchEngine)[0].iconName;;
 }
+
+watch(() => props.autoFocus, (newValue) => {
+    if (newValue) {
+        focusInput();
+    }
+})
 
 watch(() => props.suggestList, (newValue) => {
     showSuggest.value = newValue.length > 0;

@@ -17,5 +17,6 @@ export const useSettingStore = defineStore('setting', {
         openHistory: true,
         openSuggest: true,
         searchOpenMode: 'newPage',
+        autoFocusSearchInput: false,
     })
 })
