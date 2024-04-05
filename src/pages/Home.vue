@@ -39,6 +39,10 @@ function searchEngineUpdate(index) {
     settingStore.$state.searchEngine = searchEngineList[index].engine;
 }
 
+function clearSearchHistory() {
+    searchHistoryStore.$state.history = [...[]];
+}
+
 function doSearch(value) {
     let searchUrl = '';
     if (value === '') {
@@ -76,8 +80,9 @@ function doSearch(value) {
             <Date :show-date="settingStore.$state.showDate"></Date>
         </div>
         <div class="search-bar-container">
-            <SearchBar @focus-input="emit('openSearch')" @input-update="searchBarInputUpdate" @do-search="doSearch"
-                @search-engine-update="searchEngineUpdate" :auto-focus="settingStore.$state.autoFocusSearchInput"
+            <SearchBar @focus-input="emit('openSearch')" @blur-input="emit('closeSearch')"
+                @input-update="searchBarInputUpdate" @do-search="doSearch" @search-engine-update="searchEngineUpdate"
+                @clear-search-history="clearSearchHistory" :auto-focus="settingStore.$state.autoFocusSearchInput"
                 :close-search="flagStore.$state.closeSearch" :search-engine="settingStore.$state.searchEngine"
                 :search-engine-list="searchEngineList" :open-history="settingStore.$state.openHistory"
                 :history-list="searchHistoryStore.$state.history" :open-suggest="settingStore.$state.openSuggest"

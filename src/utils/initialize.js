@@ -55,9 +55,9 @@ export function loadConfig() {
 export function printWebsiteInfo() {
     const year = new Date().getFullYear();
 
-    console.log("%c欢迎使用青何导航, 马上开始简单纯粹的搜索之旅吧! " +
-        "\n\n%cCopyRight © " + year + " smilingly",
+    console.log("%c欢迎使用青何导航, 马上开始简单纯粹的搜索之旅吧! \n\n" +
+        "%c© " + year + " ifback.com",
         "color: #0ebeff",
-        "color: white");
+        "color: #ffffff");
 }
 

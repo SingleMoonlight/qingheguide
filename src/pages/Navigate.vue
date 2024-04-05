@@ -82,7 +82,6 @@ function selectOtherMenuItem(index) {
     width: 20px;
     height: 20px;
     padding-right: 10px;
-    float: left;
 }
 
 .menu-item-label {

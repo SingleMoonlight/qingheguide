@@ -1,18 +1,30 @@
 <script setup>
+import { watch, ref } from 'vue';
+
 const emit = defineEmits(['select'])
 const props = defineProps({
     index: Number,
     label: String,
+    focus: Boolean,
 })
+const selectItemRef = ref()
 
 function select() {
     emit('select', props.index);
 }
 
+watch(() => props.focus, (newValue) => {
+    if (newValue) {
+        selectItemRef.value.classList.add('select-item-focus');
+    } else {
+        selectItemRef.value.classList.remove('select-item-focus');
+    }
+})
+
 </script>
 
 <template>
-    <div class="select-item" @click="select">
+    <div ref="selectItemRef" class="select-item" @click="select">
         <slot>
             {{ props.label }}
         </slot>
@@ -30,6 +42,8 @@ function select() {
     font-size: 14px;
     cursor: pointer;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
     color: var(--common-font-color);
     transition: .25s;
 }
@@ -43,5 +57,10 @@ function select() {
     background: var(--item-active-background-color);
     transform: scale(0.99, 0.99);
     transition: .25s;
+}
+
+.select-item-focus {
+    padding-left: 10px;
+    background: var(--item-hover-background-color);
 }
 </style>

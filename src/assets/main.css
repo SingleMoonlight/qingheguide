@@ -53,6 +53,10 @@ button {
     cursor: pointer;
 }
 
+:focus {
+    outline: none;
+}
+
 ::selection {
     background: var(--selection-background-color);
     border-radius: 4px;

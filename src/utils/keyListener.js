@@ -4,24 +4,20 @@ export function globalKeydown() {
             return false;
         }
         if (import.meta.env.PROD) {
-            if (e.keyCode === 123) {
+            if (e.code === 'F12') {
                 // 禁用F12
                 return false;
-            } else if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            } else if (e.ctrlKey && e.shiftKey && e.code === 'KeyI') {
                 // 禁用ctrl+shift+i
                 return false;
-            } else if (e.shiftKey && e.keyCode === 121) {
+            } else if (e.shiftKey && e.code === 'F10') {
                 // 禁用shift+F10
                 return false;
-            }
+            } 
         }
 
-        if (e.keyCode === 32) {
-            // 按下空格
-            return true;
-        } else if (e.keyCode === 27) {
-            // 按下Esc
-            return true;
+        if (e.code === 'Tab') {
+            return false;
         }
     }
 
