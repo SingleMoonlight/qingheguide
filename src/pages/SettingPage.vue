@@ -6,13 +6,15 @@ import BackIcon from '@/components/icons/BackIcon.vue'
 import BackgroundImage from '@/components/BackgroundImage.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import { useSettingStore } from '@/stores/settingStore'
+import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
-import { setClassForElement } from '@/utils/common'
+import { setClassForElement, isValidURL } from '@/utils/common'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
 const settingStore = useSettingStore()
+const messageBoxStore = useMessageBoxStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
 const bgSettingPaneRef = ref()
@@ -97,7 +99,19 @@ function getOnoffName(onoff) {
 }
 
 function updateCustomSearchEngineUrl(url) {
-    settingStore.$state.customSearchEngineUrl = url;
+    if (isValidURL(url)) {
+        settingStore.$state.customSearchEngineUrl = url;
+    } else {
+        messageBoxStore.openMessageBox('warn', '提示', '您输入的URL格式可能不正确，请确认或者重新输入。',
+            {
+                okBtnText: '确定',
+                cancelBtnText: '重新输入',
+                okHandler: () => {
+                    settingStore.$state.customSearchEngineUrl = url;
+                },
+            }
+        );
+    }
 }
 
 function goToNext(cur, next) {
@@ -325,7 +339,8 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-des="'搜索引擎URL 一般以https://开头，搜索关键字参数及连接符结尾。'">
-                    <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" @ensure-input="updateCustomSearchEngineUrl">
+                    <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" :input-value="settingStore.customSearchEngineUrl"
+                        @ensure-input="updateCustomSearchEngineUrl">
                     </SettingItem>
                 </CardContainer>
             </div>

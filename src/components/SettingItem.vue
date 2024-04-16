@@ -51,7 +51,7 @@ function ensureSettingInput() {
             </Transition>
         </div>
         <div v-else-if="props.type === 'input'" class="setting-input-container">
-            <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" />
+            <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" :value="props.inputValue" />
             <ButtonWrap :type="'icon'" @click="ensureSettingInput">
                 <CheckedIcon></CheckedIcon>
             </ButtonWrap>

@@ -114,7 +114,7 @@ function handleOkBtnClick() {
 
 .message-box-content {
     margin-left: 32px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     font-size: 14px;
 }
 

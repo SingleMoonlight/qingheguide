@@ -68,12 +68,14 @@ function handelMouseUp(event) {
 .text-btn {
     min-width: 60px;
     min-height: 30px;
+    padding: 0 16px;
     border-radius: 5px;
     transition: .25s;
     box-shadow: var(--common-box-shadow);
     backdrop-filter: var(--common-backdrop-filter);
     background-color: var(--common-background-color);
     color: var(--primary-font-color);
+    font-size: 14px;
 }
 
 .text-btn:hover {
