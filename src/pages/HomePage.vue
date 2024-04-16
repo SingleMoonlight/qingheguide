@@ -134,6 +134,6 @@ function startSearch(value) {
     left: 50%;
     bottom: 20px;
     transform: translateX(-50%);
-    color: var(--secondary-font-color);
+    color: rgb(255, 255, 255);
 }
 </style>
