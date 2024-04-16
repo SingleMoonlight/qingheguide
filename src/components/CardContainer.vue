@@ -33,7 +33,7 @@ const props = defineProps({
 .card-body {
     width: 100%;
     border-radius: 10px;
-    background: var(--common-background-color);
+    background: var(--card-background-color);
     box-shadow: var(--common-box-shadow);
     overflow: hidden;
 }

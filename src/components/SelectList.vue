@@ -53,8 +53,9 @@ function handleLeave(el) {
 .select {
     width: 100%;
     border-radius: 10px;
-    background: var(--common-background-color);
-    box-shadow: var(--common-box-shadow);
     overflow: hidden;
+    background-color: var(--common-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
+    box-shadow: var(--common-box-shadow);
 }
 </style>

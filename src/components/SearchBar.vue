@@ -225,7 +225,7 @@ watch(() => props.closeSearch, (newValue) => {
             <SearchEngineIcon :icon-name="getSearchEngineIconName(props.searchEngine)"></SearchEngineIcon>
         </ButtonWrap>
         <input ref="searchBarInputRef" type="text" class="search-bar-input" placeholder="搜索" autocomplete="none"
-            @focus="focusInput" @input="handleSearchInputChange" @keydown.enter="startSearch">
+            @focus="focusInput" @input="handleSearchInputChange" @keydown.enter="handleSearchBtnClick">
         <ButtonWrap :type="'icon'" @click="handleSearchBtnClick">
             <SearchIcon></SearchIcon>
         </ButtonWrap>
@@ -286,7 +286,7 @@ watch(() => props.closeSearch, (newValue) => {
     padding: 0 5px;
     box-sizing: border-box;
     font-size: 14px;
-    color: inherit;
+    color: var(--primary-font-color);
     background-color: transparent;
 }
 
@@ -295,8 +295,6 @@ watch(() => props.closeSearch, (newValue) => {
     width: 130px;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .search-engine-item-icon {
@@ -317,8 +315,6 @@ watch(() => props.closeSearch, (newValue) => {
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .search-history-container {
@@ -326,8 +322,6 @@ watch(() => props.closeSearch, (newValue) => {
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .search-history-clear-item {

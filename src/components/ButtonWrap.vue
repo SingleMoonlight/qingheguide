@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue'
+
 const emit = defineEmits(['click'])
 const props = defineProps({
     type: String,
@@ -6,39 +8,43 @@ const props = defineProps({
     hoverColor: String,
     activeColor: String,
 })
+const buttonWrapRef = ref()
+let buttonDefaultBgColor = ''
 
-function handelMouseEnter(event) {
+function handelMouseEnter() {
+    buttonDefaultBgColor = window.getComputedStyle(buttonWrapRef.value).backgroundColor;
+
     if (props.hoverColor !== '' && props.hoverColor !== undefined) {
-        event.target.style.backgroundColor = props.hoverColor;
+        buttonWrapRef.value.style.backgroundColor = props.hoverColor;
     }
 }
 
-function handelMouseLeave(event) {
+function handelMouseLeave() {
     if (props.hoverColor !== '' && props.hoverColor !== undefined) {
-        event.target.style.backgroundColor = '';
+        buttonWrapRef.value.style.backgroundColor = buttonDefaultBgColor;
     }
 }
 
-function handelMouseDown(event) {
+function handelMouseDown() {
     if (props.activeColor !== '' && props.activeColor !== undefined && event.button === 0) {
-        event.target.style.backgroundColor = props.activeColor;
+        buttonWrapRef.value.style.backgroundColor = props.activeColor;
     }
 }
 
 function handelMouseUp(event) {
     if (props.hoverColor !== '' && props.hoverColor !== undefined && event.button === 0) {
-        event.target.style.backgroundColor = props.hoverColor;
+        buttonWrapRef.value.style.backgroundColor = props.hoverColor;
     }
 }
 
 </script>
 
 <template>
-    <button v-if="props.type === 'icon'" class="icon-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
+    <button ref="buttonWrapRef" v-if="props.type === 'icon'" class="icon-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
         @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click')" @click.stop>
         <slot></slot>
     </button>
-    <button v-if="props.type === 'text'" class="text-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
+    <button ref="buttonWrapRef" v-if="props.type === 'text'" class="text-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
         @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click');" @click.stop>
         {{ props.text }}
     </button>
@@ -51,18 +57,18 @@ function handelMouseUp(event) {
     min-height: 32px;
     border-radius: 40px;
     transition: .25s;
-    background-color: var(--button-background-color);
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .icon-btn:hover {
-    background-color: var(--button-hover-background-color);
+    background-color: var(--icon-button-hover-background-color);
 }
 
 .icon-btn:active {
-    background-color: var(--button-active-background-color);
+    background-color: var(--icon-button-active-background-color);
 }
 
 .text-btn {
@@ -73,16 +79,16 @@ function handelMouseUp(event) {
     transition: .25s;
     box-shadow: var(--common-box-shadow);
     backdrop-filter: var(--common-backdrop-filter);
-    background-color: var(--common-background-color);
+    background-color: var(--text-button-background-color);
     color: var(--primary-font-color);
     font-size: 14px;
 }
 
 .text-btn:hover {
-    background-color: var(--button-hover-background-color);
+    background-color: var(--text-button-hover-background-color);
 }
 
 .text-btn:active {
-    background-color: var(--button-active-background-color);
+    background-color: var(--text-button-active-background-color);
 }
 </style>

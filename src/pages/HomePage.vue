@@ -108,7 +108,7 @@ function startSearch(value) {
     left: 50%;
     top: 100px;
     transform: translateX(-50%);
-    color: var(--primary-font-color);
+    color: rgb(255, 255, 255);
 }
 
 .date-container {
@@ -116,7 +116,7 @@ function startSearch(value) {
     left: 50%;
     top: 160px;
     transform: translateX(-50%);
-    color: var(--primary-font-color);
+    color: rgb(255, 255, 255);
 }
 
 .search-bar-container {

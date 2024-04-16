@@ -34,7 +34,8 @@ function selectOtherMenuItem(index) {
 <template>
     <div class="navigate-container" @click="closeNavigate">
         <div class="other-btn-container">
-            <ButtonWrap :type="'icon'" @click="openOtherMenu">
+            <ButtonWrap :type="'icon'" :hover-color="'rgba(255, 255, 255, 0.1)'"
+                :active-color="'rgba(255, 255, 255, 0.2)'" @click="openOtherMenu">
                 <OtherIcon></OtherIcon>
             </ButtonWrap>
         </div>
@@ -59,6 +60,7 @@ function selectOtherMenuItem(index) {
     overflow: hidden;
     margin: 0;
     position: absolute;
+    color: var(--primary-font-color);
 }
 
 .other-btn-container {
@@ -73,9 +75,6 @@ function selectOtherMenuItem(index) {
     right: 3%;
     width: 130px;
     border-radius: 10px;
-    color: var(--primary-font-color);
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
 }
 
 .menu-item-icon {

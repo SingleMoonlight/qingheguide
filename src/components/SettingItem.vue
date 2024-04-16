@@ -133,7 +133,7 @@ function ensureSettingInput() {
     min-width: 10px;
     box-sizing: border-box;
     font-size: 14px;
-    color: inherit;
+    color: var(--primary-font-color);
     background-color: transparent;
 }
 </style>
