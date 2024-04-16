@@ -13,6 +13,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  build: {
+    outDir: 'dist/qingheGuide'
+  },
   server: {
     host: 'localhost',
     port: 8000,
