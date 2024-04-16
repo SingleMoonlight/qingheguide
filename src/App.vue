@@ -5,6 +5,7 @@ import SettingPage from './pages/SettingPage.vue'
 import AboutPage from './pages/AboutPage.vue'
 import BackgroundImage from './components/BackgroundImage.vue'
 import MessageBox from './components/MessageBox.vue'
+import GlobalLoading from './components/GlobalLoading.vue'
 import { usePageStore } from '@/stores/pageStore'
 import { useSettingStore } from './stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
@@ -144,6 +145,8 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
     :ok-btn-text="messageBoxStore.okBtnText" :cancel-handler="messageBoxStore.cancelHandler"
     :ok-handler="messageBoxStore.okHandler">
   </MessageBox>
+
+  <GlobalLoading :show="flagStore.globalLoadingIsShow"></GlobalLoading>
 </template>
 
 <style scpoed>

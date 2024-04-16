@@ -5,5 +5,11 @@ export const useFlagStore = defineStore('flag', {
         settingIsPatched: false,
         bgImgIsGot: false,
         searchIsClose: true,
+        globalLoadingIsShow: false,
     }),
+    actions: {
+        setShowGlobalLoading(show) {
+            this.globalLoadingIsShow = show;
+        }
+    }
 })

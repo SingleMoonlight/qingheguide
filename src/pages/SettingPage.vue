@@ -7,6 +7,7 @@ import BackgroundImage from '@/components/BackgroundImage.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import { useSettingStore } from '@/stores/settingStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
+import { useFlagStore } from '@/stores/flagStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
 import { setClassForElement, isValidURL } from '@/utils/common'
@@ -15,6 +16,7 @@ import { ref, onMounted } from 'vue'
 const emit = defineEmits(['closeSetting'])
 const settingStore = useSettingStore()
 const messageBoxStore = useMessageBoxStore()
+const flagStore = useFlagStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
 const bgSettingPaneRef = ref()
