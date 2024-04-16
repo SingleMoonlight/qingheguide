@@ -4,7 +4,6 @@ import { onMounted, ref, watch } from 'vue'
 const emit = defineEmits(['loaded'])
 const props = defineProps({
     backgroundUrl: String,
-    defaultBackgroundUrl: String,
     backgroundBlur: Number,
     backgroundScale: Number
 })
@@ -13,8 +12,6 @@ const bgImgRef = ref()
 function failLoadBackground(target) {
     // 防止onerror无限触发
     target.srcElement.onerror = '';
-    // 加载失败使用默认背景
-    target.srcElement.src = props.defaultBackgroundUrl;
 }
 
 watch(() => props.backgroundBlur, (newValue) => {
@@ -40,13 +37,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <img ref="bgImgRef" v-if="props.backgroundUrl === ''" class="background" :src="props.defaultBackgroundUrl"
-        :onerror="failLoadBackground">
-    <img ref="bgImgRef" v-else class="background" :src="props.backgroundUrl" :onerror="failLoadBackground">
+    <img ref="bgImgRef" class="background-image" :src="props.backgroundUrl" :onerror="failLoadBackground">
 </template>
 
 <style scpoed>
-.background {
+.background-image {
     display: block;
     width: 100%;
     height: 100%;

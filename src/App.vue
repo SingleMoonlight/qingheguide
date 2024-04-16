@@ -9,7 +9,6 @@ import { usePageStore } from '@/stores/pageStore'
 import { useSettingStore } from './stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
-import { defaultBackgroundUrl } from '@/utils/constant'
 import { setClassForElement } from '@/utils/common'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
@@ -121,8 +120,8 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 <template>
   <div class="background-container">
     <BackgroundImage v-if="flagStore.$state.bgImgIsGot" @loaded="handleBgLoaded"
-      :background-url="settingStore.$state.backgroundUrl" :default-background-url="defaultBackgroundUrl"
-      :background-blur="backgroundBlur" :background-scale="backgroundScale">
+      :background-url="settingStore.$state.backgroundUrl" :background-blur="backgroundBlur"
+      :background-scale="backgroundScale">
     </BackgroundImage>
     <div ref="bgMaskRef" class="background-mask"></div>
   </div>

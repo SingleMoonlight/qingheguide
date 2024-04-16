@@ -129,6 +129,7 @@ export class IndexedDB {
 import { useSettingStore } from '@/stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
 import { printPromiseLog } from '@/utils/common'
+import { defaultBackgroundUrl } from '@/utils/constant'
 
 let imageDB = null
 
@@ -153,34 +154,37 @@ export function deleteImageDB() {
 }
 
 export function setBackgroundImg(imageData) {
+    const settingStore = useSettingStore();
     let data = { 'name': 'background', 'data': imageData };
 
     imageDB.updateData(data).then(res => {
-        const settingStore = useSettingStore();
-
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(imageData);
         settingStore.$state.backgroundUrl = imgURL;
 
         printPromiseLog('result', 'updateData', res);
     }).catch((err) => {
+        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
+
         printPromiseLog('error', 'updateData', err);
     });
 }
 
 export function getBackgroundImg() {
-    imageDB.getDataByKey('background').then(res => {
-        const settingStore = useSettingStore();
-        const flagStore = useFlagStore();
+    const settingStore = useSettingStore();
+    const flagStore = useFlagStore();
 
+    imageDB.getDataByKey('background').then(res => {
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(res.data);
         settingStore.$state.backgroundUrl = imgURL;
-
         flagStore.$state.bgImgIsGot = true;
 
         printPromiseLog('result', 'getDataByKey', res);
     }).catch((err) => {
+        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
+        flagStore.$state.bgImgIsGot = true;
+
         printPromiseLog('error', 'getDataByKey', err);
     });
 }
