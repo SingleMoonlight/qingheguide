@@ -174,6 +174,11 @@ export function getBackgroundImg() {
     const settingStore = useSettingStore();
     const flagStore = useFlagStore();
 
+    if (settingStore.$state.backgroundSource === 'default') {
+        flagStore.$state.bgImgIsGot = true;
+        return;
+    }
+
     imageDB.getDataByKey('background').then(res => {
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(res.data);

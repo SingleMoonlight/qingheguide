@@ -245,7 +245,7 @@ onMounted(() => {
                         @checked-list-item="selectBgSource(index)">
                     </SettingItem>
                 </CardContainer>
-                <CardContainer :card-name="'预览'" style="">
+                <CardContainer :card-name="'预览'">
                     <BackgroundImage :background-url="settingStore.$state.backgroundUrl">
                     </BackgroundImage>
                 </CardContainer>
