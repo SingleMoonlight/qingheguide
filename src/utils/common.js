@@ -6,13 +6,6 @@ export function numLeftPadding(num, count, digit) {
     return (increase + num).slice(-count);
 }
 
-export function printPromiseLog(type, func, data) {
-    if (!import.meta.env.PROD) {
-        console.log(type + ": " + func);
-        console.log(data);
-    }
-}
-
 export function setClassForElement(elementId, className) {
     document.getElementById(elementId).setAttribute("class", className);
 }
@@ -22,4 +15,10 @@ export function isValidURL(url) {
 
     return urlRegex.test(url);
 }
- 
+
+export function printLog(type, func, data) {
+    if (!import.meta.env.PROD) {
+        console.log(type + ": " + func);
+        console.log(data);
+    }
+}

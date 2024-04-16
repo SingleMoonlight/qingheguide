@@ -1,5 +1,5 @@
 import axios from "axios"
-import { printPromiseLog } from '@/utils/common'
+import { printLog } from '@/utils/common'
 import {
     nowWeatherUpdatePeriod, nowAirUpdatePeriod,
     futureWeatherUpdatePeriod, futureAirUpdatePeriod
@@ -13,11 +13,11 @@ export function getCurrentLocation() {
                     resolve(res[0]);
                 }).catch(err => {
                     reject(new Error('获取定位失败，请重试或者手动选择位置。'));
-                    printPromiseLog('error', 'getCurrentPosition', err);
+                    printLog('error', 'getCurrentPosition', err);
                 });
             }, (err) => {
                 reject(new Error('获取定位失败，请确认浏览器已允许本网站获取定位，若仍然失败请重试或者手动选择位置。'));
-                printPromiseLog('error', 'getCurrentPosition', err);
+                printLog('error', 'getCurrentPosition', err);
             }, {
                 timeout: 3000,
             });
@@ -114,9 +114,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.nowWeather.icon = res.icon;
             weatherStoreState.nowWeather.text = res.text;
 
-            printPromiseLog('result', 'getNowWeather', res);
+            printLog('result', 'getNowWeather', res);
         }).catch(err => {
-            printPromiseLog('error', 'getNowWeather', err);
+            printLog('error', 'getNowWeather', err);
         })
     }
     if (focusUpdate || (weatherStoreState.lastNowAirUpdateTime === null ||
@@ -125,9 +125,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.lastNowAirUpdateTime = nowDate;
             weatherStoreState.nowAir.category = res.category;
 
-            printPromiseLog('result', 'getNowAir', res);
+            printLog('result', 'getNowAir', res);
         }).catch(err => {
-            printPromiseLog('error', 'getNowAir', err);
+            printLog('error', 'getNowAir', err);
         });
 
     }
@@ -145,9 +145,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
                 })
             )
 
-            printPromiseLog('result', 'getFutureWeather', res);
+            printLog('result', 'getFutureWeather', res);
         }).catch(err => {
-            printPromiseLog('error', 'getFutureWeather', err);
+            printLog('error', 'getFutureWeather', err);
         });
     }
     if (focusUpdate || (weatherStoreState.lastFutureAirUpdateTime === null ||
@@ -161,9 +161,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
                 })
             );
 
-            printPromiseLog('result', 'getFutureAir', res);
+            printLog('result', 'getFutureAir', res);
         }).catch(err => {
-            printPromiseLog('error', 'getFutureAir', err);
+            printLog('error', 'getFutureAir', err);
         });
     }
 }

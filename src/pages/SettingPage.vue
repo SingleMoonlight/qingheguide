@@ -17,7 +17,7 @@ import {
     searchOpenMode, weatherLocationMode
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
-import { setClassForElement, isValidURL, printPromiseLog } from '@/utils/common'
+import { setClassForElement, isValidURL, printLog } from '@/utils/common'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
@@ -182,7 +182,7 @@ function searchWeatherLocation(input) {
         )
 
         flagStore.setShowGlobalLoading(false);
-        printPromiseLog('result', 'searchLocation', res);
+        printLog('result', 'searchLocation', res);
     }).catch(err => {
         showWeatherLocationList.value = false;
         flagStore.setShowGlobalLoading(false);
@@ -191,7 +191,7 @@ function searchWeatherLocation(input) {
                 okBtnText: '好的',
             }
         );
-        printPromiseLog('error', 'searchLocation', err);
+        printLog('error', 'searchLocation', err);
     })
 }
 

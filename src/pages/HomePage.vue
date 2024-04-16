@@ -4,7 +4,7 @@ import TodayDate from '@/components/TodayDate.vue'
 import CopyrightStatement from '@/components/CopyrightStatement.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { copyrightInfo, searchEngineList } from '@/utils/constant'
-import { printPromiseLog } from '@/utils/common'
+import { printLog } from '@/utils/common'
 import { getSearchSuggest, doSearch } from '@/api/search'
 import { useSettingStore } from '@/stores/settingStore'
 import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
@@ -33,7 +33,7 @@ function handleSearchBarInputUpdate(value) {
     getSearchSuggest(value).then(res => {
         suggest.value = [...res];
     }).catch(err => {
-        printPromiseLog('error', 'getSearchSuggest', err)
+        printLog('error', 'getSearchSuggest', err)
     })
 }
 

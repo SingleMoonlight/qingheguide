@@ -128,7 +128,7 @@ export class IndexedDB {
 // 目前仅有图片放在indexed数据库中，以下接口不在另分文件
 import { useSettingStore } from '@/stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
-import { printPromiseLog } from '@/utils/common'
+import { printLog } from '@/utils/common'
 import { defaultBackgroundUrl } from '@/utils/constant'
 
 let imageDB = null
@@ -139,17 +139,17 @@ export function initImageDB() {
     });
     imageDB.initDB().then(res => {
         getBackgroundImg();
-        printPromiseLog('result', 'initDB', res);
+        printLog('result', 'initDB', res);
     }).catch((err) => {
-        printPromiseLog('error', 'initDB', err);
+        printLog('error', 'initDB', err);
     });
 }
 
 export function deleteImageDB() {
     imageDB.deleteDatabase().then(res => {
-        printPromiseLog('result', 'deleteDatabase', res);
+        printLog('result', 'deleteDatabase', res);
     }).catch((err) => {
-        printPromiseLog('error', 'deleteDatabase', err);
+        printLog('error', 'deleteDatabase', err);
     });
 }
 
@@ -162,11 +162,11 @@ export function setBackgroundImg(imageData) {
         let imgURL = window.URL.createObjectURL(imageData);
         settingStore.$state.backgroundUrl = imgURL;
 
-        printPromiseLog('result', 'updateData', res);
+        printLog('result', 'updateData', res);
     }).catch((err) => {
         settingStore.$state.backgroundUrl = defaultBackgroundUrl;
 
-        printPromiseLog('error', 'updateData', err);
+        printLog('error', 'updateData', err);
     });
 }
 
@@ -185,20 +185,20 @@ export function getBackgroundImg() {
         settingStore.$state.backgroundUrl = imgURL;
         flagStore.$state.bgImgIsGot = true;
 
-        printPromiseLog('result', 'getDataByKey', res);
+        printLog('result', 'getDataByKey', res);
     }).catch((err) => {
         settingStore.$state.backgroundUrl = defaultBackgroundUrl;
         flagStore.$state.bgImgIsGot = true;
 
-        printPromiseLog('error', 'getDataByKey', err);
+        printLog('error', 'getDataByKey', err);
     });
 }
 
 export function deleteBackgroundImg() {
     imageDB.deleteData('background').then(res => {
-        printPromiseLog('result', 'deleteData', res);
+        printLog('result', 'deleteData', res);
     }).catch((err) => {
-        printPromiseLog('error', 'deleteData', err);
+        printLog('error', 'deleteData', err);
     });
 }
 
