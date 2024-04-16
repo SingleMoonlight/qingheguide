@@ -96,11 +96,15 @@ function handleSearchBtnClick() {
 }
 
 function openSearchEngineMenu() {
+    let searchInputDom = searchBarInputRef.value;
+
+    emit('focusInput');
+
     showHistory.value = false;
     showSuggest.value = false;
     showEngine.value = !showEngine.value;
     if (!showEngine.value) {
-        focusInput();
+        searchInputDom.focus();
     }
 }
 
