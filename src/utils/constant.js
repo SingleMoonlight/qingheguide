@@ -24,6 +24,11 @@ export const nowAirUpdatePeriod = 30
 export const futureWeatherUpdatePeriod = 60
 export const futureAirUpdatePeriod = 8 * 60
 
+export const weatherLocationMode = [
+    { mode: 'auto', name: '自动定位' },
+    { mode: 'custom', name: '自定义' },
+]
+
 export const otherMenuList = [
     { iconName: 'setting', name: '设置', emit: 'openSetting' },
     { iconName: 'about', name: '关于', emit: 'openAbout' },

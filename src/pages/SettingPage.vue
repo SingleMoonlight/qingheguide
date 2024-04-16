@@ -5,18 +5,26 @@ import CloseIcon from '@/components/icons/CloseIcon.vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
 import BackgroundImage from '@/components/BackgroundImage.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
+import SelectList from '@/components/SelectList.vue'
+import SelectItem from '@/components/SelectItem.vue'
 import { useSettingStore } from '@/stores/settingStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { useFlagStore } from '@/stores/flagStore'
+import { useWeatherStore } from '@/stores/weatherStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
-import { themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight, searchOpenMode } from '@/utils/constant'
-import { setClassForElement, isValidURL } from '@/utils/common'
+import {
+    themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight,
+    searchOpenMode, weatherLocationMode
+} from '@/utils/constant'
+import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
+import { setClassForElement, isValidURL, printPromiseLog } from '@/utils/common'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
 const settingStore = useSettingStore()
 const messageBoxStore = useMessageBoxStore()
 const flagStore = useFlagStore()
+const weatherStore = useWeatherStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
 const bgSettingPaneRef = ref()
@@ -27,8 +35,10 @@ const copyrightSettingPaneRef = ref()
 const searchOpenModeSettingPaneRef = ref()
 const customSearchEngineSettingPaneRef = ref()
 const autoFocusSearchInputPaneRef = ref()
+const weatherLocationSettingPaneRef = ref()
+const weatherLocationList = ref([])
+const showWeatherLocationList = ref(false)
 const showSettingPane = ref(false)
-
 
 function setBackground(e) {
     let imgFile = e.target.files[0];
@@ -116,6 +126,83 @@ function updateCustomSearchEngineUrl(url) {
     }
 }
 
+function getWeatherLocationModeName(mode) {
+    return weatherLocationMode.filter(obj => obj.mode === mode)[0].name;
+}
+
+function getWeatherLocationModeIndex(mode) {
+    return weatherLocationMode.findIndex(obj => obj.mode === mode);
+}
+
+function selectWeatherLocationMode(index) {
+    if (weatherLocationMode[index].mode === 'auto') {
+        flagStore.setShowGlobalLoading(true);
+        getCurrentLocation().then(res => {
+            weatherStore.$state.location.id = res.id;
+            weatherStore.$state.location.name = res.name;
+            weatherStore.$state.location.adm1 = res.adm1;
+            weatherStore.$state.location.adm2 = res.adm2;
+
+            flagStore.setShowGlobalLoading(false);
+            settingStore.$state.weatherLocationMode = 'auto';
+        }).catch(err => {
+            flagStore.setShowGlobalLoading(false);
+            messageBoxStore.openMessageBox('warn', '提示', err.message,
+                {
+                    okBtnText: '确定',
+                }
+            )
+        })
+    } else if (weatherLocationMode[index].mode === 'custom') {
+        settingStore.$state.weatherLocationMode = 'custom';
+    }
+}
+
+function searchWeatherLocation(input) {
+    if (input.trim() === '') {
+        messageBoxStore.openMessageBox('warn', '提示', '请先输入您想搜索的城市地点。',
+            {
+                okBtnText: '好的',
+            }
+        );
+        return;
+    }
+    showWeatherLocationList.value = false;
+    flagStore.setShowGlobalLoading(true);
+
+    searchLocation(input).then(res => {
+        showWeatherLocationList.value = true;
+        weatherLocationList.value = res.map(
+            item => ({
+                id: item.id,
+                name: item.name,
+                adm1: item.adm1,
+                adm2: item.adm2,
+            })
+        )
+
+        flagStore.setShowGlobalLoading(false);
+        printPromiseLog('result', 'searchLocation', res);
+    }).catch(err => {
+        showWeatherLocationList.value = false;
+        flagStore.setShowGlobalLoading(false);
+        messageBoxStore.openMessageBox('warn', '提示', '搜索地点失败，请确认输入是否正确，如果输入正确请检查网络是否连接。',
+            {
+                okBtnText: '好的',
+            }
+        );
+        printPromiseLog('error', 'searchLocation', err);
+    })
+}
+
+function selectWeatherLocation(index) {
+    weatherStore.$state.location = weatherLocationList.value[index];
+    getWeatherInfo(true, weatherStore);
+
+    showWeatherLocationList.value = false;
+    weatherLocationList.value = [...[]];
+}
+
 function goToNext(cur, next) {
     if (cur === null || cur === undefined) return;
     if (next === null || next === undefined) return;
@@ -190,6 +277,15 @@ onMounted(() => {
                         <SettingItem :label="'时间字体粗细'" :type="'next'"
                             :next-value="getTimeFontWeightName(settingStore.timeFontWeight)"
                             @open-next="goToNext(mainSettingPaneRef, timeFontWeightSettingPaneRef)">
+                        </SettingItem>
+                    </CardContainer>
+                    <CardContainer :card-name="'天气'">
+                        <SettingItem :label="'天气'" :type="'switch'" :onoff="settingStore.showWeather"
+                            @turn-switch="settingStore.showWeather = !settingStore.showWeather">
+                        </SettingItem>
+                        <SettingItem :label="'天气定位'" :type="'next'"
+                            :next-value="getWeatherLocationModeName(settingStore.weatherLocationMode)"
+                            @open-next="goToNext(mainSettingPaneRef, weatherLocationSettingPaneRef)">
                         </SettingItem>
                     </CardContainer>
                     <CardContainer :card-name="'搜索'">
@@ -364,6 +460,41 @@ onMounted(() => {
                 </CardContainer>
             </div>
         </div>
+        <div ref="weatherLocationSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(weatherLocationSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'天气定位'"
+                    :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。使用自动定位功能需要浏览器支持，且需要您进行授权。自动定位可能存在误差，如果定位不准，请切换至自定义模式。'">
+                    <SettingItem v-for="(item, index) in weatherLocationMode" :key="index" :type="'list'"
+                        :label="item.name"
+                        :checked="getWeatherLocationModeIndex(settingStore.weatherLocationMode) === index"
+                        @checked-list-item="selectWeatherLocationMode(index)">
+                    </SettingItem>
+                </CardContainer>
+                <CardContainer :card-name="'地点'">
+                    <SettingItem :label="'省/市'" :type="'text'" :text-value="weatherStore.location.adm1"></SettingItem>
+                    <SettingItem :label="'市/区'" :type="'text'" :text-value="weatherStore.location.adm2"></SettingItem>
+                    <SettingItem :label="'区/县'" :type="'text'" :text-value="weatherStore.location.name"></SettingItem>
+                </CardContainer>
+                <CardContainer :card-name="'搜索城市'" v-show="settingStore.weatherLocationMode === 'custom'">
+                    <SettingItem :label="'请输入城市名'" :type="'input'" @ensure-input="searchWeatherLocation">
+                    </SettingItem>
+                </CardContainer>
+                <SelectList :show="showWeatherLocationList" :transition="'stretch'" class="weather-location-list">
+                    <SelectItem v-for="(item, index) in weatherLocationList" :key="index" :index="index"
+                        :label="item.adm1 + ' ' + item.adm2 + ' ' + item.name" @select="selectWeatherLocation">
+                    </SelectItem>
+                </SelectList>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -445,5 +576,10 @@ onMounted(() => {
     height: calc(100% - 72px - 20px);
     box-sizing: border-box;
     overflow: auto;
+}
+
+.weather-location-list {
+    margin-top: -20px;
+    background-color: var(--card-background-color) !important;
 }
 </style>

@@ -14,6 +14,7 @@ const props = defineProps({
     nextValue: String,
     checked: Boolean,
     inputValue: String,
+    textValue: String,
 })
 const settingInputRef = ref()
 
@@ -51,10 +52,14 @@ function ensureSettingInput() {
             </Transition>
         </div>
         <div v-else-if="props.type === 'input'" class="setting-input-container">
-            <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" :value="props.inputValue" />
+            <input ref="settingInputRef" class="setting-input" :placeholder="'请输入'" :value="props.inputValue"
+                @keydown.enter="ensureSettingInput" />
             <ButtonWrap :type="'icon'" @click="ensureSettingInput">
                 <CheckedIcon></CheckedIcon>
             </ButtonWrap>
+        </div>
+        <div v-else-if="props.type === 'text'" class="setting-text">
+            <div class="setting-text-value">{{ props.textValue }}</div>
         </div>
     </div>
 
@@ -115,8 +120,11 @@ function ensureSettingInput() {
 
 
 .setting-list-item-checked-icon {
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: .25s;
 }
 
@@ -135,5 +143,20 @@ function ensureSettingInput() {
     font-size: 14px;
     color: var(--primary-font-color);
     background-color: transparent;
+}
+
+.setting-text {
+    max-width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.setting-text-value {
+    line-height: 20px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--secondary-font-color);
 }
 </style>

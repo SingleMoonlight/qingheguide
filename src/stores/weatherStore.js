@@ -5,6 +5,8 @@ export const useWeatherStore = defineStore('weatherStore', {
         location: {
             id: 101010100,
             name: '北京',
+            adm1: '北京市',
+            adm2: '北京',
         },
         nowWeather: {
             temp: 0,

@@ -26,7 +26,9 @@ watch(() => props.focus, (newValue) => {
 <template>
     <div ref="selectItemRef" class="select-item" @click="select">
         <slot>
-            {{ props.label }}
+            <div class="select-item-label">
+                {{ props.label }}
+            </div>
         </slot>
     </div>
 
@@ -46,6 +48,12 @@ watch(() => props.focus, (newValue) => {
     align-items: center;
     color: var(--common-font-color);
     transition: .25s;
+}
+
+.select-item-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .select-item:hover {
