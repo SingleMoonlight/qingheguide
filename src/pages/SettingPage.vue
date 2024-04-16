@@ -222,7 +222,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer>
+                <CardContainer :card-name="'主题'">
                     <SettingItem v-for="(item, index) in themeList" :key="index" :type="'list'" :label="item.name"
                         :checked="getThemeIndex(settingStore.theme) === index" @checked-list-item="selectTheme(index)">
                     </SettingItem>
@@ -239,7 +239,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer>
+                <CardContainer :card-name="'背景'">
                     <SettingItem v-for="(item, index) in bgSourceList" :key="index" :type="'list'" :label="item.name"
                         :checked="getBgSourceIndex(settingStore.backgroundSource) === index"
                         @checked-list-item="selectBgSource(index)">
@@ -265,7 +265,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer>
+                <CardContainer :card-name="'时间字体粗细'">
                     <SettingItem v-for="(item, index) in timeFontWeight" :key="index" :type="'list'" :label="item.name"
                         :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
                         @checked-list-item="selectTimeFontWeight(index)">
@@ -284,8 +284,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'">
-                    <SettingItem :label="'背景遮罩'" :type="'switch'" :onoff="settingStore.blurBackground"
+                <CardContainer :card-name="'背景遮罩'" :card-des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'">
+                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.blurBackground"
                         @turn-switch="settingStore.blurBackground = !settingStore.blurBackground">
                     </SettingItem>
                 </CardContainer>
@@ -301,8 +301,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
-                    <SettingItem :label="'显示备案信息'" :type="'switch'" :onoff="settingStore.showCopyright"
+                <CardContainer :card-name="'备案信息'" :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
+                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.showCopyright"
                         @turn-switch="settingStore.showCopyright = !settingStore.showCopyright">
                     </SettingItem>
                 </CardContainer>
@@ -319,7 +319,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer>
+                <CardContainer :card-name="'搜索打开方式'">
                     <SettingItem v-for="(item, index) in searchOpenMode" :key="index" :type="'list'" :label="item.name"
                         :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
                         @checked-list-item="selectSearchOpenMode(index)">
@@ -338,8 +338,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-des="'搜索引擎URL 一般以https://开头，搜索关键字参数及连接符结尾。'">
-                    <SettingItem :type="'input'" :label="'自定义搜索引擎URL'" :input-value="settingStore.customSearchEngineUrl"
+                <CardContainer :card-name="'自定义搜索引擎'" :card-des="'搜索引擎URL 一般以https://开头，搜索关键字参数及连接符结尾。'">
+                    <SettingItem :type="'input'" :label="'URL'" :input-value="settingStore.customSearchEngineUrl"
                         @ensure-input="updateCustomSearchEngineUrl">
                     </SettingItem>
                 </CardContainer>
@@ -355,8 +355,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
-                    <SettingItem :label="'自动聚焦搜索框'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
+                <CardContainer :card-name="'自动聚焦搜索框'" :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
+                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
                         @turn-switch="settingStore.autoFocusSearchInput = !settingStore.autoFocusSearchInput">
                     </SettingItem>
                 </CardContainer>
