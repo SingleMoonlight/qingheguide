@@ -8,7 +8,8 @@ export function numLeftPadding(num, count, digit) {
 
 export function printPromiseLog(type, func, data) {
     if (!import.meta.env.PROD) {
-        console.log(type + ": " + func + " (" + data + ")");
+        console.log(type + ": " + func);
+        console.log(data);
     }
 }
 

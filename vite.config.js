@@ -25,6 +25,31 @@ export default defineConfig({
         changeOrigin: true, // 允许跨域
         rewrite: (path) => path.replace(/^\/sug/, ''), 
       },
+      '/geo': {
+        target: 'https://geoapi.qweather.com/v2/city/lookup',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/geo\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+      },
+      '/nowWeather': {
+        target: 'https://devapi.qweather.com/v7/weather/now',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/nowWeather\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+      },
+      '/nowAir': {
+        target: 'https://devapi.qweather.com/v7/air/now',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/nowAir\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+      },
+      '/futureWeather': {
+        target: 'https://devapi.qweather.com/v7/weather/3d',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/futureWeather\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+      },
+      '/futureAir': {
+        target: 'https://devapi.qweather.com/v7/air/5d',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/futureAir\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='),
+      },
     },
-  }
+  },
 })

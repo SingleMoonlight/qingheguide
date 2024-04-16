@@ -21,3 +21,11 @@ export function getLocalHistory() {
 export function setLocalHistory(searchHistory) {
     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 }
+
+export function getLocalWeather() {
+    return JSON.parse(localStorage.getItem('weather'));
+}
+
+export function setLocalWeather(searchHistory) {
+    localStorage.setItem('weather', JSON.stringify(searchHistory));
+}

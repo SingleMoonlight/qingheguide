@@ -4,11 +4,18 @@ import OtherMenuIcon from '@/components/icons/OtherMenuIcon.vue'
 import SelectList from '@/components/SelectList.vue'
 import SelectItem from '@/components/SelectItem.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
-import { otherMenuList } from '@/utils/constant'
-import { ref } from 'vue'
+import { useWeatherStore } from '@/stores/weatherStore'
+import {
+    otherMenuList, nowWeatherUpdatePeriod, nowAirUpdatePeriod,
+    futureWeatherUpdatePeriod, futureAirUpdatePeriod
+} from '@/utils/constant'
+import { getNowWeather, getNowAir, getFutureWeather, getFutureAir } from '@/api/weather'
+import { printPromiseLog } from '@/utils/common'
+import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
 const showOtherMenu = ref(false)
+const weatherStore = useWeatherStore()
 
 
 function closeNavigate(e) {
@@ -28,6 +35,76 @@ function selectOtherMenuItem(index) {
 
     emit(otherMenuList[index].emit);
 }
+
+function getWeatherInfo(focusUpdate) {
+    let nowDate = new Date();
+    let locationId = weatherStore.$state.location.id;
+
+    if (focusUpdate || (weatherStore.$state.lastNowWeatherUpdateTime === null ||
+        (nowDate - weatherStore.$state.lastNowWeatherUpdateTime) / 60000 >= nowWeatherUpdatePeriod)) {
+        getNowWeather(locationId).then((res) => {
+            weatherStore.$state.lastNowWeatherUpdateTime = nowDate;
+            weatherStore.$state.nowWeather.temp = res.temp;
+            weatherStore.$state.nowWeather.icon = res.icon;
+            weatherStore.$state.nowWeather.text = res.text;
+
+            printPromiseLog('result', 'getNowWeather', res);
+        }).catch(err => {
+            printPromiseLog('error', 'getNowWeather', err);
+        })
+    }
+    if (focusUpdate || (weatherStore.$state.lastNowAirUpdateTime === null ||
+        (nowDate - weatherStore.$state.lastNowAirUpdateTime) / 60000 >= nowAirUpdatePeriod)) {
+        getNowAir(locationId).then((res) => {
+            weatherStore.$state.lastNowAirUpdateTime = nowDate;
+            weatherStore.$state.nowAir.category = res.category;
+
+            printPromiseLog('result', 'getNowAir', res);
+        }).catch(err => {
+            printPromiseLog('error', 'getNowAir', err);
+        });
+
+    }
+    if (focusUpdate || (weatherStore.$state.lastFutureWeatherUpdateTime === null ||
+        (nowDate - weatherStore.$state.lastFutureWeatherUpdateTime) / 60000 >= futureWeatherUpdatePeriod)) {
+        getFutureWeather(locationId).then((res) => {
+            weatherStore.$state.lastFutureWeatherUpdateTime = nowDate;
+            weatherStore.$state.futureWeather = res.map(
+                item => ({
+                    date: item.fxDate.substring(5, item.fxDate.length),
+                    tempMin: item.tempMin,
+                    tempMax: item.tempMax,
+                    icon: item.iconDay,
+                    text: item.textDay
+                })
+            )
+
+            printPromiseLog('result', 'getFutureWeather', res);
+        }).catch(err => {
+            printPromiseLog('error', 'getFutureWeather', err);
+        });
+    }
+    if (focusUpdate || (weatherStore.$state.lastFutureAirUpdateTime === null ||
+        (nowDate - weatherStore.$state.lastNowWeatherUpdateTime) / 60000 >= futureAirUpdatePeriod)) {
+        getFutureAir(locationId).then((res) => {
+            weatherStore.$state.lastFutureAirUpdateTime = nowDate;
+            weatherStore.$state.futureAir = res.slice(0, 3).map(
+                item => ({
+                    date: item.fxDate.substring(5, item.fxDate.length),
+                    category: item.category
+                })
+            );
+
+            printPromiseLog('result', 'getFutureAir', res);
+        }).catch(err => {
+            printPromiseLog('error', 'getFutureAir', err);
+        });
+    }
+}
+
+onMounted(() => {
+    getWeatherInfo(false);
+})
 
 </script>
 

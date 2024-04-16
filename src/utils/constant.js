@@ -18,6 +18,12 @@ export const searchEngineList = [
     { iconName: 'custom', engine: 'custom', name: '自定义', url: '' }
 ]
 
+// 天气数据获取刷新间隔
+export const nowWeatherUpdatePeriod = 10
+export const nowAirUpdatePeriod = 30
+export const futureWeatherUpdatePeriod = 60
+export const futureAirUpdatePeriod = 8 * 60
+
 export const otherMenuList = [
     { iconName: 'setting', name: '设置', emit: 'openSetting' },
     { iconName: 'about', name: '关于', emit: 'openAbout' },
@@ -50,13 +56,12 @@ export const updateHistory = [
         time: '2024-6-1',
         version: 'V3.0.0',
         item: [
-            { type: 'fix', des: '修复拼音输入时点击搜索建议，输入框文字错误的问题' },
-            { type: 'opt', des: '系统使用vue3全面重构' },
+            { type: 'fix', des: '修复拼音输入时点击搜索建议，搜索输入框文字错误的问题' },
+            { type: 'opt', des: '系统使用vite + vue3全面重构' },
             { type: 'opt', des: '优化UI，修改部分页面动画、样式' },
             { type: 'opt', des: '取消背景设置的大小限制' },
             { type: 'opt', des: '修改按键逻辑，首页空格聚焦搜索，Esc取消聚焦搜索，搜索建议或历史页面，方向键上下切换搜索建议或历史' },
             { type: 'del', des: '移除智能推荐处理功能' },
-            { type: 'del', des: '移除Dock栏功能' },
             { type: 'del', des: '移除部分不常用的搜索引擎' },
         ]
     },

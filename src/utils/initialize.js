@@ -1,8 +1,12 @@
 import config from '../../package.json'
 import { useSettingStore } from '@/stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
-import { getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting, setLocalHistory, getLocalHistory } from './localStorage'
+import {
+    getLocalVersion, setLocalVersion, getLocalSetting, setLocalSetting,
+    setLocalHistory, getLocalHistory, getLocalWeather, setLocalWeather
+} from './localStorage'
 import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
+import { useWeatherStore } from '@/stores/weatherStore'
 
 export function checkUpdate() {
     const settingStore = useSettingStore();
@@ -27,6 +31,7 @@ export function loadConfig() {
     const settingStore = useSettingStore();
     const searchHistoryStore = useSearchHistoryStore();
     const flagStore = useFlagStore();
+    const weatherStore = useWeatherStore();
 
     settingStore.$subscribe((mutation, state) => {
         // 每当状态发生变化时，将整个 state 持久化到本地存储
@@ -50,6 +55,16 @@ export function loadConfig() {
     if (getLocalHistory()) {
         searchHistoryStore.$patch(getLocalHistory());
     }
+
+    weatherStore.$subscribe((mutation, state) => {
+        setLocalWeather(state);
+    }, {
+        detached: true
+    });
+    if (getLocalWeather()) {
+        weatherStore.$patch(getLocalWeather());
+    }
+
 }
 
 export function printWebsiteInfo() {
