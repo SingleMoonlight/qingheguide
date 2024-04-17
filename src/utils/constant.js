@@ -18,13 +18,15 @@ export const searchEngineList = [
     { iconName: 'custom', engine: 'custom', name: '自定义', url: '' }
 ]
 
-// 天气数据获取刷新间隔
-export const nowWeatherUpdatePeriod = 10
-export const nowAirUpdatePeriod = 30
-export const futureWeatherUpdatePeriod = 60
-export const futureAirUpdatePeriod = 8 * 60
+// 天气数据获取刷新间隔，单位分钟
+export const weatherUpdateInterval = {
+    nowWeather: 10,
+    nowAir: 30,
+    futureWeather: 60,
+    futureAir: 8 * 60,
+}
 
-export const weatherLocationMode = [
+export const weatherLocationModeList = [
     { mode: 'auto', name: '自动定位' },
     { mode: 'custom', name: '自定义' },
 ]
@@ -45,14 +47,14 @@ export const bgSourceList = [
     { source: 'custom', name: '自定义' },
 ]
 
-export const timeFontWeight = [
+export const timeFontWeightList = [
     { weight: 'normal', name: '粗体' },
     { weight: 'light', name: '细体' },
 ]
 
-export const searchOpenMode = [
-    { mode: 'currentPage', name: '当前标签页' },
-    { mode: 'newPage', name: '新标签页' },
+export const searchOpenModeList = [
+    { mode: 'current', name: '当前标签页' },
+    { mode: 'new', name: '新标签页' },
 ]
 
 // 顺序：fix opt add del
@@ -62,10 +64,11 @@ export const updateHistory = [
         version: 'V3.0.0',
         item: [
             { type: 'fix', des: '修复拼音输入时点击搜索建议，搜索输入框文字错误的问题' },
-            { type: 'opt', des: '系统使用vite + vue3全面重构' },
+            { type: 'opt', des: '系统全面重构' },
             { type: 'opt', des: '优化UI，修改部分页面动画、样式' },
-            { type: 'opt', des: '取消背景设置的大小限制' },
-            { type: 'opt', des: '修改按键逻辑，首页空格聚焦搜索，Esc取消聚焦搜索，搜索建议或历史页面，方向键上下切换搜索建议或历史' },
+            { type: 'opt', des: '取消自定义背景的大小限制' },
+            { type: 'opt', des: '修改天气组件，支持自动定位和自定义地点' },
+            { type: 'opt', des: '修改按键逻辑，首页按空格键自动聚焦搜索框，按Esc键取消聚焦搜索。在搜索建议或历史页面，按方向键上下切换搜索建议或历史' },
             { type: 'del', des: '移除智能推荐处理功能' },
             { type: 'del', des: '移除部分不常用的搜索引擎' },
         ]

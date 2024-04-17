@@ -37,13 +37,13 @@ onMounted(() => {
                     </CardContainer>
                     <CardContainer :card-name="'更新'">
                         <TimeLine>
-                            <TimeLineItem v-for="(updateHistory, updateHistoryIndex) in updateHistory"
-                                :key="updateHistoryIndex" :time="updateHistory.time" :des="updateHistory.version">
-                                <div v-for="(updateHistoryItem, updateHistoryItemIndex) in updateHistory.item"
-                                    :key="updateHistoryItemIndex" class="update-history-item">
-                                    <UpdateTag :type="updateHistoryItem.type"></UpdateTag>
+                            <TimeLineItem v-for="(history, historyIndex) in updateHistory"
+                                :key="historyIndex" :time="history.time" :des="history.version">
+                                <div v-for="(historyItem, historyItemIndex) in history.item"
+                                    :key="historyItemIndex" class="update-history-item">
+                                    <UpdateTag :type="historyItem.type"></UpdateTag>
                                     <div class="update-history-item-des">
-                                        {{ updateHistoryItem.des }}
+                                        {{ historyItem.des }}
                                     </div>
                                 </div>
                             </TimeLineItem>

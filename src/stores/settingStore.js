@@ -16,7 +16,7 @@ export const useSettingStore = defineStore('setting', {
         customSearchEngineUrl: '',
         openHistory: true,
         openSuggest: true,
-        searchOpenMode: 'newPage',
+        searchOpenMode: 'new',
         autoFocusSearchInput: false,
         showWeather: true,
         weatherLocationMode: 'custom',
