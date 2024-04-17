@@ -12,6 +12,11 @@ const buttonWrapRef = ref()
 let buttonDefaultBgColor = ''
 
 function handelMouseEnter() {
+    // 防止页面跳转时，鼠标移入button，此时由于页面销毁ref为空出现的报错
+    if (buttonWrapRef.value === null) {
+        return;
+    }
+
     buttonDefaultBgColor = window.getComputedStyle(buttonWrapRef.value).backgroundColor;
 
     if (props.hoverColor !== '' && props.hoverColor !== undefined) {
