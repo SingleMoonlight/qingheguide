@@ -36,9 +36,9 @@ export function getSearchSuggest(keyword) {
 }
 
 export function doSearch(url, value, mode) {
-    if (mode === 'currentPage') {
+    if (mode === 'current') {
         window.location.href = url + value;
-    } else if (mode === 'newPage') {
+    } else if (mode === 'new') {
         window.open(url + value, '_blank');
     }
 }

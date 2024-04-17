@@ -13,8 +13,8 @@ import { useFlagStore } from '@/stores/flagStore'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import {
-    themeList, bgSourceList, defaultBackgroundUrl, timeFontWeight,
-    searchOpenMode, weatherLocationMode
+    defaultBackgroundUrl, themeList, bgSourceList, timeFontWeightList,
+    searchOpenModeList, weatherLocationModeList
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
 import { setClassForElement, isValidURL, printLog } from '@/utils/common'
@@ -83,27 +83,27 @@ function selectBgSource(index) {
 }
 
 function getTimeFontWeightName(weight) {
-    return timeFontWeight.filter(obj => obj.weight === weight)[0].name;
+    return timeFontWeightList.filter(obj => obj.weight === weight)[0].name;
 }
 
 function getTimeFontWeightIndex(weight) {
-    return timeFontWeight.findIndex(obj => obj.weight === weight);
+    return timeFontWeightList.findIndex(obj => obj.weight === weight);
 }
 
 function selectTimeFontWeight(index) {
-    settingStore.$state.timeFontWeight = timeFontWeight[index].weight;
+    settingStore.$state.timeFontWeight = timeFontWeightList[index].weight;
 }
 
 function getSearchOpenModeName(mode) {
-    return searchOpenMode.filter(obj => obj.mode === mode)[0].name;
+    return searchOpenModeList.filter(obj => obj.mode === mode)[0].name;
 }
 
 function getSearchOpenModeIndex(mode) {
-    return searchOpenMode.findIndex(obj => obj.mode === mode);
+    return searchOpenModeList.findIndex(obj => obj.mode === mode);
 }
 
 function selectSearchOpenMode(index) {
-    settingStore.$state.searchOpenMode = searchOpenMode[index].mode;
+    settingStore.$state.searchOpenMode = searchOpenModeList[index].mode;
 }
 
 function getOnoffName(onoff) {
@@ -127,15 +127,15 @@ function updateCustomSearchEngineUrl(url) {
 }
 
 function getWeatherLocationModeName(mode) {
-    return weatherLocationMode.filter(obj => obj.mode === mode)[0].name;
+    return weatherLocationModeList.filter(obj => obj.mode === mode)[0].name;
 }
 
 function getWeatherLocationModeIndex(mode) {
-    return weatherLocationMode.findIndex(obj => obj.mode === mode);
+    return weatherLocationModeList.findIndex(obj => obj.mode === mode);
 }
 
 function selectWeatherLocationMode(index) {
-    if (weatherLocationMode[index].mode === 'auto') {
+    if (weatherLocationModeList[index].mode === 'auto') {
         flagStore.setShowGlobalLoading(true);
         getCurrentLocation().then(res => {
             weatherStore.$state.location.id = res.id;
@@ -153,7 +153,7 @@ function selectWeatherLocationMode(index) {
                 }
             )
         })
-    } else if (weatherLocationMode[index].mode === 'custom') {
+    } else if (weatherLocationModeList[index].mode === 'custom') {
         settingStore.$state.weatherLocationMode = 'custom';
     }
 }
@@ -364,7 +364,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'时间字体粗细'">
-                    <SettingItem v-for="(item, index) in timeFontWeight" :key="index" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in timeFontWeightList" :key="index" :type="'list'" :label="item.name"
                         :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
                         @checked-list-item="selectTimeFontWeight(index)">
                     </SettingItem>
@@ -418,7 +418,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'搜索打开方式'">
-                    <SettingItem v-for="(item, index) in searchOpenMode" :key="index" :type="'list'" :label="item.name"
+                    <SettingItem v-for="(item, index) in searchOpenModeList" :key="index" :type="'list'" :label="item.name"
                         :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
                         @checked-list-item="selectSearchOpenMode(index)">
                     </SettingItem>
@@ -473,7 +473,7 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <CardContainer :card-name="'天气定位'"
                     :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。使用自动定位功能需要浏览器支持，且需要您进行授权。自动定位可能存在误差，如果定位不准，请切换至自定义模式。'">
-                    <SettingItem v-for="(item, index) in weatherLocationMode" :key="index" :type="'list'"
+                    <SettingItem v-for="(item, index) in weatherLocationModeList" :key="index" :type="'list'"
                         :label="item.name"
                         :checked="getWeatherLocationModeIndex(settingStore.weatherLocationMode) === index"
                         @checked-list-item="selectWeatherLocationMode(index)">

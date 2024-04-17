@@ -1,9 +1,6 @@
 import axios from "axios"
 import { printLog } from '@/utils/common'
-import {
-    nowWeatherUpdatePeriod, nowAirUpdatePeriod,
-    futureWeatherUpdatePeriod, futureAirUpdatePeriod
-} from '@/utils/constant'
+import { weatherUpdateInterval } from '@/utils/constant'
 
 export function getCurrentLocation() {
     return new Promise((resolve, reject) => {
@@ -107,7 +104,7 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
     let locationId = weatherStoreState.location.id;
 
     if (focusUpdate || (weatherStoreState.lastNowWeatherUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= nowWeatherUpdatePeriod)) {
+        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather)) {
         getNowWeather(locationId).then((res) => {
             weatherStoreState.lastNowWeatherUpdateTime = nowDate;
             weatherStoreState.nowWeather.temp = res.temp;
@@ -120,7 +117,7 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         })
     }
     if (focusUpdate || (weatherStoreState.lastNowAirUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowAirUpdateTime) / 60000 >= nowAirUpdatePeriod)) {
+        (nowDate - weatherStoreState.lastNowAirUpdateTime) / 60000 >= weatherUpdateInterval.nowAir)) {
         getNowAir(locationId).then((res) => {
             weatherStoreState.lastNowAirUpdateTime = nowDate;
             weatherStoreState.nowAir.category = res.category;
@@ -132,7 +129,7 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
 
     }
     if (focusUpdate || (weatherStoreState.lastFutureWeatherUpdateTime === null ||
-        (nowDate - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= futureWeatherUpdatePeriod)) {
+        (nowDate - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather)) {
         getFutureWeather(locationId).then((res) => {
             weatherStoreState.lastFutureWeatherUpdateTime = nowDate;
             weatherStoreState.futureWeather = res.map(
@@ -151,7 +148,7 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         });
     }
     if (focusUpdate || (weatherStoreState.lastFutureAirUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= futureAirUpdatePeriod)) {
+        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureAir)) {
         getFutureAir(locationId).then((res) => {
             weatherStoreState.lastFutureAirUpdateTime = nowDate;
             weatherStoreState.futureAir = res.slice(0, 3).map(
