@@ -24,6 +24,7 @@ const props = defineProps({
 .update-tag {
     min-width: 24px;
     height: 16px;
+    margin-top: 1px;
     padding: 0 3px;
     border-radius: 4px;
     font-size: 12px;
