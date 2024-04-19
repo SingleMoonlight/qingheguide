@@ -34,7 +34,7 @@ const blurBackgroundSettingPaneRef = ref()
 const copyrightSettingPaneRef = ref()
 const searchOpenModeSettingPaneRef = ref()
 const customSearchEngineSettingPaneRef = ref()
-const autoFocusSearchInputPaneRef = ref()
+const autoFocusSearchInputSettingPaneRef = ref()
 const weatherLocationSettingPaneRef = ref()
 const weatherLocationList = ref([])
 const showWeatherLocationList = ref(false)
@@ -297,7 +297,7 @@ onMounted(() => {
                         </SettingItem>
                         <SettingItem :label="'自动聚焦搜索框'" :type="'next'"
                             :next-value="getOnoffName(settingStore.autoFocusSearchInput)"
-                            @open-next="goToNext(mainSettingPaneRef, autoFocusSearchInputPaneRef)">
+                            @open-next="goToNext(mainSettingPaneRef, autoFocusSearchInputSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'搜索打开方式'" :type="'next'"
                             :next-value="getSearchOpenModeName(settingStore.searchOpenMode)"
@@ -443,9 +443,9 @@ onMounted(() => {
                 </CardContainer>
             </div>
         </div>
-        <div ref="autoFocusSearchInputPaneRef" class="setting-pane setting-pane-before-enter">
+        <div ref="autoFocusSearchInputSettingPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
-                <div class="setting-pane-back-btn" @click="backToPrev(autoFocusSearchInputPaneRef, mainSettingPaneRef)">
+                <div class="setting-pane-back-btn" @click="backToPrev(autoFocusSearchInputSettingPaneRef, mainSettingPaneRef)">
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
