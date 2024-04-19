@@ -59,7 +59,7 @@ export function getNowAir(locationId) {
         axios.get('/nowAir/' + locationId
         ).then(res => {
             if (res.data.code === '200') {
-                resolve(res.data.now);
+                resolve(res.data);
             } else {
                 reject(res);
             }
@@ -120,7 +120,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         (nowDate - weatherStoreState.lastNowAirUpdateTime) / 60000 >= weatherUpdateInterval.nowAir)) {
         getNowAir(locationId).then((res) => {
             weatherStoreState.lastNowAirUpdateTime = nowDate;
-            weatherStoreState.nowAir.category = res.category;
+            weatherStoreState.nowAir.category = res.now.category;
+            weatherStoreState.nowAir.aqi = res.now.aqi;
+            weatherStoreState.airReferSources = res.refer.sources;
 
             printLog('result', 'getNowAir', res);
         }).catch(err => {
@@ -134,7 +136,6 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.lastFutureWeatherUpdateTime = nowDate;
             weatherStoreState.futureWeather = res.map(
                 item => ({
-                    date: item.fxDate.substring(5, item.fxDate.length),
                     tempMin: item.tempMin,
                     tempMax: item.tempMax,
                     icon: item.iconDay,
@@ -153,8 +154,8 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.lastFutureAirUpdateTime = nowDate;
             weatherStoreState.futureAir = res.slice(0, 3).map(
                 item => ({
-                    date: item.fxDate.substring(5, item.fxDate.length),
-                    category: item.category
+                    category: item.category,
+                    aqi: item.aqi,
                 })
             );
 

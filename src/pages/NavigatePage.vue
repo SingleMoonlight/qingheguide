@@ -4,6 +4,7 @@ import OtherMenuIcon from '@/components/icons/OtherMenuIcon.vue'
 import SelectList from '@/components/SelectList.vue'
 import SelectItem from '@/components/SelectItem.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
+import WeatherPresenter from '@/components/WeatherPresenter.vue'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { otherMenuList } from '@/utils/constant'
@@ -43,6 +44,12 @@ onMounted(() => {
 
 <template>
     <div class="navigate-container" @click="closeNavigate">
+        <div class="weather-presenter-container" v-if="settingStore.showWeather">
+            <WeatherPresenter :location-name="weatherStore.location.name" :now-weather="weatherStore.nowWeather"
+                :now-air="weatherStore.nowAir" :future-weather="weatherStore.futureWeather"
+                :future-air="weatherStore.futureAir">
+            </WeatherPresenter>
+        </div>
         <div class="other-btn-container">
             <ButtonWrap :type="'icon'" :hover-color="'rgba(255, 255, 255, 0.1)'"
                 :active-color="'rgba(255, 255, 255, 0.2)'" @click="openOtherMenu">
@@ -71,6 +78,12 @@ onMounted(() => {
     margin: 0;
     position: absolute;
     color: var(--primary-font-color);
+}
+
+.weather-presenter-container {
+    position: absolute;
+    top: 20px;
+    left: 3%;
 }
 
 .other-btn-container {

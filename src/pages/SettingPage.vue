@@ -36,6 +36,7 @@ const searchOpenModeSettingPaneRef = ref()
 const customSearchEngineSettingPaneRef = ref()
 const autoFocusSearchInputSettingPaneRef = ref()
 const weatherLocationSettingPaneRef = ref()
+const showWeatherSettingPaneRef = ref()
 const weatherLocationList = ref([])
 const showWeatherLocationList = ref(false)
 const showSettingPane = ref(false)
@@ -280,8 +281,8 @@ onMounted(() => {
                         </SettingItem>
                     </CardContainer>
                     <CardContainer :card-name="'天气'">
-                        <SettingItem :label="'天气'" :type="'switch'" :onoff="settingStore.showWeather"
-                            @turn-switch="settingStore.showWeather = !settingStore.showWeather">
+                        <SettingItem :label="'天气'" :type="'next'" :next-value="getOnoffName(settingStore.showWeather)"
+                            @open-next="goToNext(mainSettingPaneRef, showWeatherSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'天气定位'" :type="'next'"
                             :next-value="getWeatherLocationModeName(settingStore.weatherLocationMode)"
@@ -364,8 +365,8 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'时间字体粗细'">
-                    <SettingItem v-for="(item, index) in timeFontWeightList" :key="index" :type="'list'" :label="item.name"
-                        :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
+                    <SettingItem v-for="(item, index) in timeFontWeightList" :key="index" :type="'list'"
+                        :label="item.name" :checked="getTimeFontWeightIndex(settingStore.timeFontWeight) === index"
                         @checked-list-item="selectTimeFontWeight(index)">
                     </SettingItem>
                 </CardContainer>
@@ -418,8 +419,8 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'搜索打开方式'">
-                    <SettingItem v-for="(item, index) in searchOpenModeList" :key="index" :type="'list'" :label="item.name"
-                        :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
+                    <SettingItem v-for="(item, index) in searchOpenModeList" :key="index" :type="'list'"
+                        :label="item.name" :checked="getSearchOpenModeIndex(settingStore.searchOpenMode) === index"
                         @checked-list-item="selectSearchOpenMode(index)">
                     </SettingItem>
                 </CardContainer>
@@ -445,7 +446,8 @@ onMounted(() => {
         </div>
         <div ref="autoFocusSearchInputSettingPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
-                <div class="setting-pane-back-btn" @click="backToPrev(autoFocusSearchInputSettingPaneRef, mainSettingPaneRef)">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(autoFocusSearchInputSettingPaneRef, mainSettingPaneRef)">
                     <BackIcon></BackIcon>
                 </div>
                 <div class="setting-pane-title">
@@ -493,6 +495,35 @@ onMounted(() => {
                         :label="item.adm1 + ' ' + item.adm2 + ' ' + item.name" @select="selectWeatherLocation">
                     </SelectItem>
                 </SelectList>
+            </div>
+        </div>
+        <div ref="showWeatherSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(showWeatherSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面右上角查看当前位置或者指定位置的天气信息。'">
+                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather"
+                        @turn-switch="settingStore.showWeather = !settingStore.showWeather">
+                    </SettingItem>
+                </CardContainer>
+                <div class="weather-info-des">
+                    <div>
+                        天气服务：
+                        <a :underline="false" href="https://www.qweather.com/" target="_blank">和风天气</a>
+                    </div>
+                    <div>
+                        空气质量数据来源：
+                        <a v-for="(item, index) in weatherStore.airReferSources" :key="index">
+                            {{ item + ' ' }}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -581,5 +612,11 @@ onMounted(() => {
 .weather-location-list {
     margin-top: -20px;
     background-color: var(--card-background-color) !important;
+}
+
+.weather-info-des {
+    padding-left: 10px;
+    font-size: 12px;
+    color: var(--secondary-font-color);
 }
 </style>
