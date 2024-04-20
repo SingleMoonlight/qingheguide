@@ -16,9 +16,9 @@ export const useWeatherStore = defineStore('weatherStore', {
             { category: '优', aqi: 0 }, 
         ],
         airReferSources: '',
-        lastNowWeatherUpdateTime: null,
-        lastNowAirUpdateTime: null,
-        lastFutureWeatherUpdateTime: null,
-        lastFutureAirUpdateTime: null,
+        lastNowWeatherUpdateTime: 0,
+        lastNowAirUpdateTime: 0,
+        lastFutureWeatherUpdateTime: 0,
+        lastFutureAirUpdateTime: 0,
     }),
 })

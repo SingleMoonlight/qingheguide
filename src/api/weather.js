@@ -100,13 +100,13 @@ export function getFutureAir(locationId) {
 }
 
 export function getWeatherInfo(focusUpdate, weatherStoreState) {
-    let nowDate = new Date();
+    let nowTime = new Date().valueOf();
     let locationId = weatherStoreState.location.id;
 
     if (focusUpdate || (weatherStoreState.lastNowWeatherUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather)) {
+        (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather)) {
         getNowWeather(locationId).then((res) => {
-            weatherStoreState.lastNowWeatherUpdateTime = nowDate;
+            weatherStoreState.lastNowWeatherUpdateTime = nowTime;
             weatherStoreState.nowWeather.temp = res.temp;
             weatherStoreState.nowWeather.icon = res.icon;
             weatherStoreState.nowWeather.text = res.text;
@@ -117,9 +117,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         })
     }
     if (focusUpdate || (weatherStoreState.lastNowAirUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowAirUpdateTime) / 60000 >= weatherUpdateInterval.nowAir)) {
+        (nowTime - weatherStoreState.lastNowAirUpdateTime) / 60000 >= weatherUpdateInterval.nowAir)) {
         getNowAir(locationId).then((res) => {
-            weatherStoreState.lastNowAirUpdateTime = nowDate;
+            weatherStoreState.lastNowAirUpdateTime = nowTime;
             weatherStoreState.nowAir.category = res.now.category;
             weatherStoreState.nowAir.aqi = res.now.aqi;
             weatherStoreState.airReferSources = res.refer.sources;
@@ -131,9 +131,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
 
     }
     if (focusUpdate || (weatherStoreState.lastFutureWeatherUpdateTime === null ||
-        (nowDate - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather)) {
+        (nowTime - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather)) {
         getFutureWeather(locationId).then((res) => {
-            weatherStoreState.lastFutureWeatherUpdateTime = nowDate;
+            weatherStoreState.lastFutureWeatherUpdateTime = nowTime;
             weatherStoreState.futureWeather = res.map(
                 item => ({
                     tempMin: item.tempMin,
@@ -149,9 +149,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         });
     }
     if (focusUpdate || (weatherStoreState.lastFutureAirUpdateTime === null ||
-        (nowDate - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureAir)) {
+        (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureAir)) {
         getFutureAir(locationId).then((res) => {
-            weatherStoreState.lastFutureAirUpdateTime = nowDate;
+            weatherStoreState.lastFutureAirUpdateTime = nowTime;
             weatherStoreState.futureAir = res.slice(0, 3).map(
                 item => ({
                     category: item.category,
