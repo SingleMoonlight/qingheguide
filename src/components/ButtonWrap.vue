@@ -25,18 +25,30 @@ function handelMouseEnter() {
 }
 
 function handelMouseLeave() {
+    if (buttonWrapRef.value === null) {
+        return;
+    }
+
     if (props.hoverColor !== '' && props.hoverColor !== undefined) {
         buttonWrapRef.value.style.backgroundColor = buttonDefaultBgColor;
     }
 }
 
 function handelMouseDown() {
+    if (buttonWrapRef.value === null) {
+        return;
+    }
+
     if (props.activeColor !== '' && props.activeColor !== undefined && event.button === 0) {
         buttonWrapRef.value.style.backgroundColor = props.activeColor;
     }
 }
 
 function handelMouseUp(event) {
+    if (buttonWrapRef.value === null) {
+        return;
+    }
+
     if (props.hoverColor !== '' && props.hoverColor !== undefined && event.button === 0) {
         buttonWrapRef.value.style.backgroundColor = props.hoverColor;
     }
