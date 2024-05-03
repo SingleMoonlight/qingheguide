@@ -29,3 +29,11 @@ export function getLocalWeather() {
 export function setLocalWeather(searchHistory) {
     localStorage.setItem('weather', JSON.stringify(searchHistory));
 }
+
+export function getLocalWebApp() {
+    return JSON.parse(localStorage.getItem('webApp'));
+}
+
+export function setLocalWebApp(webApp) {
+    localStorage.setItem('webApp', JSON.stringify(webApp));
+}
