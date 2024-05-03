@@ -5,8 +5,10 @@ import SelectList from '@/components/SelectList.vue'
 import SelectItem from '@/components/SelectItem.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import WeatherPresenter from '@/components/WeatherPresenter.vue'
+import PaginationContainer from '@/components/PaginationContainer.vue'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
+import { useWebAppStore } from '@/stores/webAppStore'
 import { otherMenuList } from '@/utils/constant'
 import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
@@ -15,6 +17,8 @@ const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
 const showOtherMenu = ref(false)
 const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
+const webAppStore = useWebAppStore()
+const webAppGroup = ref([])
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -34,16 +38,57 @@ function selectOtherMenuItem(index) {
     emit(otherMenuList[index].emit);
 }
 
+function getOriginPageSlotName(index) {
+    return 'originalPage' + index.toString();
+}
+
+function updateDefaultWebAppGroup(index) {
+    settingStore.webAppGroup = index;
+}
+
+function updateWebAppGroupOrder(list) {
+    let newWebAppGroup = [];
+    for (let i = 0; i < list.length; i++) {
+        for (let j = 0; j < list.length; j++) {
+            if (list[i].id === webAppStore.app[j].groupId) {
+                newWebAppGroup.push(webAppStore.app[j]);
+            }
+        }
+    }
+    webAppStore.app = newWebAppGroup;
+    webAppGroup.value = webAppStore.app.map(item => ({
+        id: item.groupId,
+        name: item.groupName,
+    }));
+}
+
 onMounted(() => {
     if (settingStore.$state.showWeather) {
         getWeatherInfo(false, weatherStore);
     }
+
+    webAppGroup.value = webAppStore.app.map(item => ({
+        id: item.groupId,
+        name: item.groupName,
+    }));
 })
 
 </script>
 
 <template>
     <div class="navigate-container" @click="closeNavigate">
+        <div class="web-apps-container">
+            <PaginationContainer :page-count="webAppGroup.length" :active-page-index="settingStore.webAppGroup"
+                :circular-sliding="settingStore.circularSliding" :flipping-effect="settingStore.flippingEffect"
+                :page-name-list="webAppGroup" @change-active-page="updateDefaultWebAppGroup"
+                @change-page-order="updateWebAppGroupOrder">
+                <template #[getOriginPageSlotName(index)] v-for="(item, index) in webAppStore.app" :key="index">
+                    <div class="web-apps-group">
+                        {{ item.groupName }}
+                    </div>
+                </template>
+            </PaginationContainer>
+        </div>
         <div class="weather-presenter-container" v-if="settingStore.showWeather">
             <WeatherPresenter :location-name="weatherStore.location.name" :now-weather="weatherStore.nowWeather"
                 :now-air="weatherStore.nowAir" :future-weather="weatherStore.futureWeather"
@@ -111,5 +156,22 @@ onMounted(() => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.web-apps-container {
+    position: absolute;
+    display: flex;
+    top: 160px;
+    bottom: 80px;
+    width: 80%;
+    height: calc(100% - 160px - 80px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+}
+
+.web-apps-group {
+    width: 100%;
+    background-color: transparent;
 }
 </style>

@@ -20,5 +20,8 @@ export const useSettingStore = defineStore('setting', {
         autoFocusSearchInput: false,
         showWeather: true,
         weatherLocationMode: 'custom',
+        webAppGroup: 0,
+        circularSliding: true,
+        flippingEffect: 'slide'
     })
 })
