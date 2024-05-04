@@ -14,9 +14,11 @@ const props = defineProps({
                 {{ props.time }}
             </div>
             <div class="time-line-item-des">
-                {{ props.des }}
+                <slot name="des">
+                    {{ props.des }}
+                </slot>
             </div>
-            <slot></slot>
+            <slot name="content"></slot>
         </div>
     </div>
 </template>

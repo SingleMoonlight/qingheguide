@@ -62,15 +62,18 @@ export const updateHistory = [
     {
         time: '2024-6-1',
         version: 'V3.0.0',
+        des: '系统全面重构',
         item: [
             { type: 'fix', des: '修复拼音输入时点击搜索建议，搜索输入框文字错误的问题' },
-            { type: 'opt', des: '系统全面重构' },
             { type: 'opt', des: '优化UI，修改部分页面动画、样式' },
             { type: 'opt', des: '取消自定义背景的大小限制' },
             { type: 'opt', des: '修改天气组件，支持自动定位和自定义地点' },
             { type: 'opt', des: '修改按键逻辑，首页按空格键自动聚焦搜索框，按Esc键取消聚焦搜索。在搜索建议或历史页面，按方向键上下切换搜索建议或历史' },
+            { type: 'opt', des: '修改导航页面分组切换方式，支持点击切换和鼠标滑动切换' },
+            { type: 'opt', des: '修改导航页面拖拽逻辑，支持分组拖拽，支持图标跨分组拖拽' },
             { type: 'del', des: '移除智能推荐处理功能' },
             { type: 'del', des: '移除部分不常用的搜索引擎' },
+            { type: 'del', des: '移除部分不常用的图标' },
         ]
     },
     {
@@ -155,9 +158,9 @@ export const updateHistory = [
     {
         time: '2023-2-18',
         version: 'V2.0.0',
+        des: '重构代码以提升性能',
         item: [
             { type: 'fix', des: '修复若干已知问题' },
-            { type: 'opt', des: '重构代码以提升性能' },
             { type: 'opt', des: '优化UI，包括排版、样式、动画等，使整体风格更简约美观' },
             { type: 'add', des: '增加部分设置项' },
             { type: 'del', des: '移除PC端通过键盘左右按键切换导航页面的方式' },
@@ -335,8 +338,6 @@ export const updateHistory = [
     {
         time: '2022-01-27',
         version: 'V1.0.0',
-        item: [
-            { type: 'add', des: '青何导航正式上线' }
-        ]
+        des: '青何导航正式上线',
     }
 ]
