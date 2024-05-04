@@ -87,7 +87,7 @@ function slideRight() {
 }
 
 function handleWheel(e) {
-    let container = originalPageRef.value[0];
+    let container = originalPageRef.value[curActivePageIndex.value];
     let scrollTop = 0;
     let scrollHeight = 0;
     let clientHeight = 0;
@@ -114,11 +114,11 @@ function handleWheel(e) {
 function handleThumbnailPageEnter(el, done) {
     let delay = el.dataset.index * 100; //进入延时
     el.style.opacity = '0';
-    el.style.transform = 'translateX(150%)';
+    el.style.transform = 'scale(0)';
     setTimeout(() => {
         el.style.transition = '0.25s ease';
         el.style.opacity = '1';
-        el.style.transform = 'translateX(0)';
+        el.style.transform = 'scale(1)';
         done();
     }, delay);
 }
@@ -142,6 +142,11 @@ function handleLongPressBar() {
     showPageName.value = false;
     showPageThumbnail.value = !showPageThumbnail.value;
 }
+
+defineExpose({
+    slideLeft,
+    slideRight,
+})
 
 onMounted(() => {
     curActivePageIndex.value = props.activePageIndex;
@@ -174,7 +179,7 @@ watch(() => props.pageNameList, (newValue) => {
             <div v-else class="pagination-original-page-container">
                 <div v-for="i in props.pageCount" :key="i">
                     <Transition mode="out-in" :name="transitionEffectName" appear>
-                        <div ref="originalPageRef" v-if="(i - 1) === curActivePageIndex"
+                        <div ref="originalPageRef" v-show="(i - 1) === curActivePageIndex"
                             class="pagination-original-page" @wheel="handleWheel">
                             <slot :name="'originalPage' + (i - 1)"></slot>
                         </div>
@@ -257,7 +262,12 @@ watch(() => props.pageNameList, (newValue) => {
     height: 100%;
     min-width: 100%;
     background-color: transparent;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pagination-original-page::-webkit-scrollbar {
+    display: none;
 }
 
 .pagination-name-container {

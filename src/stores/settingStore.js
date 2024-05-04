@@ -22,6 +22,8 @@ export const useSettingStore = defineStore('setting', {
         weatherLocationMode: 'custom',
         webAppGroup: 0,
         circularSliding: true,
-        flippingEffect: 'slide'
+        flippingEffect: 'slide',
+        webAppOpenMode: 'new',
+        showWebAppName: true,
     })
 })

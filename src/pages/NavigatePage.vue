@@ -6,6 +6,8 @@ import SelectItem from '@/components/SelectItem.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import WeatherPresenter from '@/components/WeatherPresenter.vue'
 import PaginationContainer from '@/components/PaginationContainer.vue'
+import WebApp from '@/components/WebApp.vue'
+import { VueDraggable } from 'vue-draggable-plus'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { useWebAppStore } from '@/stores/webAppStore'
@@ -14,11 +16,16 @@ import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
+const paginationContainerRef = ref()
 const showOtherMenu = ref(false)
 const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
 const webAppStore = useWebAppStore()
 const webAppGroup = ref([])
+let webAppGroupLeft = 0;
+let webAppGroupRight = 0;
+let webAppNearLeftTime = 0;
+let webAppNearRightTime = 0;
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -62,6 +69,47 @@ function updateWebAppGroupOrder(list) {
     }));
 }
 
+function handleWebAppDragStart(event) {
+    let webAppParentDom = event.originalEvent.srcElement.parentElement;
+    if (webAppParentDom) {
+        webAppGroupLeft = webAppParentDom.getBoundingClientRect().left;
+        webAppGroupRight = webAppParentDom.getBoundingClientRect().right;
+    }
+}
+
+function handleWebAppDrag(event) {
+    let isOnLeftEdge = event.clientX < webAppGroupLeft;
+    let isOnRightEdge = event.clientX > webAppGroupRight;
+    let nowTime = new Date().valueOf();
+
+    if (isOnLeftEdge) {
+        if (nowTime - webAppNearLeftTime > 1000) {
+            paginationContainerRef.value.slideRight();
+            webAppNearLeftTime = nowTime;
+        }
+    }
+    if (isOnRightEdge) {
+        if (nowTime - webAppNearRightTime > 1000) {
+            paginationContainerRef.value.slideLeft();
+            webAppNearRightTime = nowTime;
+        }
+    }
+}
+
+function handleClickWebAppGroup(event) {
+    if (event.target === event.currentTarget) {
+        emit('closeNavigate');
+    }
+}
+
+function handleClickWebApp(url) {
+    if (settingStore.webAppOpenMode === 'current') {
+        window.location.href = url;
+    } else if (settingStore.webAppOpenMode === 'new') {
+        window.open(url, '_blank');
+    }
+}
+
 onMounted(() => {
     if (settingStore.$state.showWeather) {
         getWeatherInfo(false, weatherStore);
@@ -77,15 +125,22 @@ onMounted(() => {
 
 <template>
     <div class="navigate-container" @click="closeNavigate">
-        <div class="web-apps-container">
-            <PaginationContainer :page-count="webAppGroup.length" :active-page-index="settingStore.webAppGroup"
-                :circular-sliding="settingStore.circularSliding" :flipping-effect="settingStore.flippingEffect"
-                :page-name-list="webAppGroup" @change-active-page="updateDefaultWebAppGroup"
-                @change-page-order="updateWebAppGroupOrder">
-                <template #[getOriginPageSlotName(index)] v-for="(item, index) in webAppStore.app" :key="index">
-                    <div class="web-apps-group">
-                        {{ item.groupName }}
-                    </div>
+        <div class="web-app-group-container">
+            <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
+                :active-page-index="settingStore.webAppGroup" :circular-sliding="settingStore.circularSliding"
+                :flipping-effect="settingStore.flippingEffect" :page-name-list="webAppGroup"
+                @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
+                <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
+                    :key="groupIndex">
+                    <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps" :animation="150"
+                        :scroll="true" :group="'webApp'" @start="handleWebAppDragStart" @drag="handleWebAppDrag"
+                        @click="handleClickWebAppGroup">
+                        <div class="web-app-container" v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps"
+                            :key="app.id">
+                            <WebApp :name="app.name" :icon="app.icon" @click="handleClickWebApp(app.url)">
+                            </WebApp>
+                        </div>
+                    </VueDraggable>
                 </template>
             </PaginationContainer>
         </div>
@@ -158,7 +213,7 @@ onMounted(() => {
     text-overflow: ellipsis;
 }
 
-.web-apps-container {
+.web-app-group-container {
     position: absolute;
     display: flex;
     top: 160px;
@@ -170,8 +225,23 @@ onMounted(() => {
     background-color: transparent;
 }
 
-.web-apps-group {
+.web-app-group {
     width: 100%;
+    height: 100%;
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 90px);
+    grid-template-rows: repeat(auto-fill, 90px);
+    grid-gap: 20px;
+    align-items: baseline;
+    justify-items: center;
+    align-content: baseline;
+    justify-content: center;
     background-color: transparent;
+}
+
+.web-app-container {
+    width: 60px;
+    height: 60px;
 }
 </style>
