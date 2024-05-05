@@ -15,6 +15,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { useWebAppStore } from '@/stores/webAppStore'
+import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { otherMenuList, webAppMenuList, webAppGroupMenuList } from '@/utils/constant'
 import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
@@ -22,6 +23,7 @@ import { onMounted, ref } from 'vue'
 const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
 const paginationContainerRef = ref()
 const showOtherMenu = ref(false)
+const showWebAppGroup = ref(true)
 const showWebAppMenu = ref(false)
 const showWebAppGroupMenu = ref(false)
 const showWebAppHandler = ref(false)
@@ -33,6 +35,7 @@ const webAppGroupMenuRef = ref()
 const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
 const webAppStore = useWebAppStore()
+const messageBoxStore = useMessageBoxStore()
 const webAppGroup = ref([])
 const webAppTransition = ref('')
 let webAppGroupLeft = 0;
@@ -177,6 +180,8 @@ function handleClickOutsideWebAppGroupMenu() {
 }
 
 function handleDeleteWebApp(deleteNotice) {
+    settingStore.$state.deleteWebAppNotice = deleteNotice;
+
     if (checkedWebApp === null) {
         return;
     }
@@ -194,8 +199,6 @@ function handleDeleteWebApp(deleteNotice) {
         checkedWebApp = null;
         webAppTransition.value = '';
     })
-
-    settingStore.$state.deleteWebAppNotice = deleteNotice;
 }
 
 function selectWebAppMenuItem(index) {
@@ -208,9 +211,37 @@ function selectWebAppMenuItem(index) {
             showWebAppHandler.value = true;
             webAppHandlerType.value = 'delete';
         } else {
-            handleDeleteWebApp();
+            handleDeleteWebApp(false);
         }
     }
+}
+
+function handleDeleteWebAppGroup(deleteNotice) {
+    settingStore.$state.deleteWebAppGroupNotice = deleteNotice;
+
+    let curGroupNum = webAppStore.$state.app.length;
+    if (curGroupNum === 1) {
+        messageBoxStore.openMessageBox('warn', '提示', '当前仅剩一个分组，无法删除。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return;
+    }
+
+    let groupIndex = settingStore.$state.webAppGroupIndex;
+
+    showWebAppGroup.value = false;
+    webAppStore.$state.app.splice(groupIndex, 1);
+    settingStore.$state.webAppGroupIndex = groupIndex === curGroupNum - 1 ? 0 : groupIndex;
+    webAppGroup.value = webAppStore.$state.app.map(item => ({
+        id: item.groupId,
+        name: item.groupName,
+    }));
+
+    requestAnimationFrame(() => {
+        showWebAppGroup.value = true;
+    })
 }
 
 function selectWebAppGroupMenuItem(index) {
@@ -228,6 +259,8 @@ function selectWebAppGroupMenuItem(index) {
         if (settingStore.$state.deleteWebAppGroupNotice) {
             showWebAppGroupHandler.value = true;
             webAppGroupHandlerType.value = 'delete';
+        } else {
+            handleDeleteWebAppGroup(false);
         }
     }
 }
@@ -257,29 +290,32 @@ onMounted(() => {
 
 <template>
     <div class="navigate-container" @click="closeNavigate">
-        <div class="web-app-group-container">
-            <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
-                :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
-                :flipping-effect="settingStore.flippingEffect" :page-name-list="webAppGroup"
-                @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
-                <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
-                    :key="groupIndex">
-                    <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps" :animation="150"
-                        :scroll="true" :group="'webApp'" @start="handleWebAppDragStart" @drag="handleWebAppDrag"
-                        @click="handleClickWebAppGroup" @contextmenu="handleRightClickWebAppGroup(group, $event)">
-                        <TransitionGroup :css="false" :name="webAppTransition">
-                            <div class="web-app-container"
-                                v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps" :key="app">
-                                <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
-                                    @click="handleClickWebApp(app.url)"
-                                    @contextmenu="handleRightClickWebApp(app, $event)">
-                                </WebApp>
-                            </div>
-                        </TransitionGroup>
-                    </VueDraggable>
-                </template>
-            </PaginationContainer>
-        </div>
+        <Transition mode="out-in" name="fade">
+            <div class="web-app-group-container" v-if="showWebAppGroup">
+                <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
+                    :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
+                    :flipping-effect="settingStore.flippingEffect" :page-name-list="webAppGroup"
+                    @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
+                    <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
+                        :key="groupIndex">
+                        <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps"
+                            :animation="150" :scroll="true" :group="'webApp'" @start="handleWebAppDragStart"
+                            @drag="handleWebAppDrag" @click="handleClickWebAppGroup"
+                            @contextmenu="handleRightClickWebAppGroup(group, $event)">
+                            <TransitionGroup :css="false" :name="webAppTransition">
+                                <div class="web-app-container"
+                                    v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps" :key="app">
+                                    <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
+                                        @click="handleClickWebApp(app.url)"
+                                        @contextmenu="handleRightClickWebApp(app, $event)">
+                                    </WebApp>
+                                </div>
+                            </TransitionGroup>
+                        </VueDraggable>
+                    </template>
+                </PaginationContainer>
+            </div>
+        </Transition>
         <div class="weather-presenter-container" v-if="settingStore.showWeather">
             <WeatherPresenter :location-name="weatherStore.location.name" :now-weather="weatherStore.nowWeather"
                 :now-air="weatherStore.nowAir" :future-weather="weatherStore.futureWeather"
@@ -333,7 +369,9 @@ onMounted(() => {
         </Transition>
         <Transition mode="out-in" name="fade">
             <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
-                @close-web-app-group-handler="handleCloseWebAppGroupHandler">
+                :group-name="webAppGroup[settingStore.webAppGroupIndex].name"
+                @close-web-app-group-handler="handleCloseWebAppGroupHandler"
+                @delete-web-app-group="handleDeleteWebAppGroup">
             </WebAppGroupHandler>
         </Transition>
     </div>

@@ -345,6 +345,9 @@ onMounted(() => {
                         <SettingItem :label="'删除App时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppNotice"
                             @turn-switch="settingStore.deleteWebAppNotice = !settingStore.deleteWebAppNotice">
                         </SettingItem>
+                        <SettingItem :label="'删除分组时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppGroupNotice"
+                            @turn-switch="settingStore.deleteWebAppGroupNotice = !settingStore.deleteWebAppGroupNotice">
+                        </SettingItem>
                         <SettingItem :label="'App打开方式'" :type="'next'"
                             :next-value="getWebAppOpenModeName(settingStore.webAppOpenMode)"
                             @open-next="goToNext(mainSettingPaneRef, webAppOpenModeSettingPaneRef)">
