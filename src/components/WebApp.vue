@@ -1,5 +1,4 @@
 <script setup>
-const emit = defineEmits(['click'])
 const props = defineProps({
     name: String,
     icon: String,
@@ -9,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="web-app" @click="emit('click')">
+    <div class="web-app">
         <img class="web-app-icon" :src="props.icon">
         <div class="web-app-name" v-show="props.showName">
             {{ props.name }}

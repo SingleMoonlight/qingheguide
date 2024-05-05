@@ -301,6 +301,9 @@ watch(() => props.closeSearch, (newValue) => {
     width: 20px;
     height: 20px;
     padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-engine-item-label {

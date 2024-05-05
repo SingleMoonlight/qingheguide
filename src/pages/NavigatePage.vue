@@ -7,17 +7,23 @@ import ButtonWrap from '@/components/ButtonWrap.vue'
 import WeatherPresenter from '@/components/WeatherPresenter.vue'
 import PaginationContainer from '@/components/PaginationContainer.vue'
 import WebApp from '@/components/WebApp.vue'
+import WebAppMenuIcon from '@/components/icons/WebAppMenuIcon.vue'
+import WebAppGroupMenuIcon from '@/components/icons/WebAppGroupMenuIcon.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { useWebAppStore } from '@/stores/webAppStore'
-import { otherMenuList } from '@/utils/constant'
+import { otherMenuList, webAppMenuList, webAppGroupMenuList } from '@/utils/constant'
 import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
 const paginationContainerRef = ref()
 const showOtherMenu = ref(false)
+const showWebAppMenu = ref(false)
+const showWebAppGroupMenu = ref(false)
+const webAppMenuRef = ref()
+const webAppGroupMenuRef = ref()
 const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
 const webAppStore = useWebAppStore()
@@ -26,6 +32,8 @@ let webAppGroupLeft = 0;
 let webAppGroupRight = 0;
 let webAppNearLeftTime = 0;
 let webAppNearRightTime = 0;
+let checkedWebApp = null;
+let checkedWebAppGroup = null;
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -51,6 +59,8 @@ function getOriginPageSlotName(index) {
 
 function updateDefaultWebAppGroup(index) {
     settingStore.webAppGroup = index;
+    showWebAppMenu.value = false;
+    showWebAppGroupMenu.value = false;
 }
 
 function updateWebAppGroupOrder(list) {
@@ -98,7 +108,9 @@ function handleWebAppDrag(event) {
 
 function handleClickWebAppGroup(event) {
     if (event.target === event.currentTarget) {
-        emit('closeNavigate');
+        if (!showWebAppMenu.value && !showWebAppGroupMenu.value) {
+            emit('closeNavigate');
+        }
     }
 }
 
@@ -108,6 +120,64 @@ function handleClickWebApp(url) {
     } else if (settingStore.webAppOpenMode === 'new') {
         window.open(url, '_blank');
     }
+}
+
+function handleRightClickWebApp(app, event) {
+    let x = event.pageX;
+    let y = event.pageY;
+    showWebAppMenu.value = false;
+    showWebAppGroupMenu.value = false;
+
+    requestAnimationFrame(() => {
+        if (webAppMenuRef.value) {
+            webAppMenuRef.value.style.left = `${x}px`;
+            webAppMenuRef.value.style.top = `${y}px`;
+        }
+        showWebAppMenu.value = true;
+    })
+
+    checkedWebApp = app;
+}
+
+function handleRightClickWebAppGroup(group, event) {
+    if (event.target !== event.currentTarget) {
+        return;
+    }
+
+    let x = event.pageX;
+    let y = event.pageY;
+    showWebAppMenu.value = false;
+    showWebAppGroupMenu.value = false;
+
+    requestAnimationFrame(() => {
+        if (webAppGroupMenuRef.value) {
+            webAppGroupMenuRef.value.style.left = `${x}px`;
+            webAppGroupMenuRef.value.style.top = `${y}px`;
+        }
+        showWebAppGroupMenu.value = true;
+    })
+
+    checkedWebAppGroup = group;
+}
+
+function handleClickOutsideWebAppMenu() {
+    if (showWebAppMenu.value) {
+        showWebAppMenu.value = false;
+    }
+}
+
+function handleClickOutsideWebAppGroupMenu() {
+    if (showWebAppGroupMenu.value) {
+        showWebAppGroupMenu.value = false;
+    }
+}
+
+function selectWebAppMenuItem(index) {
+    showWebAppMenu.value = false;
+}
+
+function selectWebAppGroupMenuItem(index) {
+    showWebAppGroupMenu.value = false;
 }
 
 onMounted(() => {
@@ -134,11 +204,11 @@ onMounted(() => {
                     :key="groupIndex">
                     <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps" :animation="150"
                         :scroll="true" :group="'webApp'" @start="handleWebAppDragStart" @drag="handleWebAppDrag"
-                        @click="handleClickWebAppGroup">
+                        @click="handleClickWebAppGroup" @contextmenu="handleRightClickWebAppGroup(group, $event)">
                         <div class="web-app-container" v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps"
                             :key="app.id">
                             <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
-                                @click="handleClickWebApp(app.url)">
+                                @click="handleClickWebApp(app.url)" @contextmenu="handleRightClickWebApp(app, $event)">
                             </WebApp>
                         </div>
                     </VueDraggable>
@@ -163,6 +233,29 @@ onMounted(() => {
                     @select="selectOtherMenuItem">
                     <div class="menu-item-icon">
                         <OtherMenuIcon :icon-name="item.iconName"></OtherMenuIcon>
+                    </div>
+                    <div class="menu-item-label">{{ item.name }}</div>
+                </SelectItem>
+            </SelectList>
+        </div>
+        <div class="web-app-menu-container" ref="webAppMenuRef" v-clickoutside="handleClickOutsideWebAppMenu">
+            <SelectList :show="showWebAppMenu" :transition="'extension-from-left-top'">
+                <SelectItem v-for="(item, index) in webAppMenuList" :key="index" :index="index" :label="item.name"
+                    @select="selectWebAppMenuItem">
+                    <div class="menu-item-icon">
+                        <WebAppMenuIcon :icon-name="item.iconName"></WebAppMenuIcon>
+                    </div>
+                    <div class="menu-item-label">{{ item.name }}</div>
+                </SelectItem>
+            </SelectList>
+        </div>
+        <div class="web-app-group-menu-container" ref="webAppGroupMenuRef"
+            v-clickoutside="handleClickOutsideWebAppGroupMenu">
+            <SelectList :show="showWebAppGroupMenu" :transition="'extension-from-left-top'">
+                <SelectItem v-for="(item, index) in webAppGroupMenuList" :key="index" :index="index" :label="item.name"
+                    @select="selectWebAppGroupMenuItem">
+                    <div class="menu-item-icon">
+                        <WebAppGroupMenuIcon :icon-name="item.iconName"></WebAppGroupMenuIcon>
                     </div>
                     <div class="menu-item-label">{{ item.name }}</div>
                 </SelectItem>
@@ -205,6 +298,9 @@ onMounted(() => {
     width: 20px;
     height: 20px;
     padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu-item-label {
@@ -244,5 +340,17 @@ onMounted(() => {
 .web-app-container {
     width: 60px;
     height: 60px;
+}
+
+.web-app-menu-container {
+    position: absolute;
+    width: 130px;
+    border-radius: 10px;
+}
+
+.web-app-group-menu-container {
+    position: absolute;
+    width: 130px;
+    border-radius: 10px;
 }
 </style>

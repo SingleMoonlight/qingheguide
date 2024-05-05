@@ -68,6 +68,18 @@ export const flippingEffectList = [
     { effect: 'windmill', name: '风车' },
 ]
 
+export const webAppMenuList = [
+    { iconName: 'editApp', name: '编辑App' },
+    { iconName: 'deleteApp', name: '删除App' },
+]
+
+export const webAppGroupMenuList = [
+    { iconName: 'addApp', name: '添加App' },
+    { iconName: 'addGroup', name: '添加分组' },
+    { iconName: 'editGroup', name: '编辑分组' },
+    { iconName: 'deleteGroup', name: '删除分组' },
+]
+
 // 顺序：fix opt add del
 export const updateHistory = [
     {
