@@ -27,7 +27,10 @@ function handleSelectPage(index) {
         } else if (index < curActivePageIndex.value) {
             transitionEffectName.value = props.flippingEffect + '-right';
         }
+    } else {
+        transitionEffectName.value = props.flippingEffect;
     }
+    
     curActivePageIndex.value = index;
     pageName.value = props.pageNameList[curActivePageIndex.value].name;
     showPageName.value = true;
@@ -51,6 +54,8 @@ function handleMouseLeaveBarDot(index) {
 function slideLeft() {
     if (props.flippingEffect !== 'fade') {
         transitionEffectName.value = props.flippingEffect + '-left';
+    } else {
+        transitionEffectName.value = props.flippingEffect;
     }
 
     if (props.circularSliding) {
@@ -70,6 +75,8 @@ function slideLeft() {
 function slideRight() {
     if (props.flippingEffect !== 'fade') {
         transitionEffectName.value = props.flippingEffect + '-right';
+    } else {
+        transitionEffectName.value = props.flippingEffect;
     }
 
     if (props.circularSliding) {
@@ -151,6 +158,8 @@ defineExpose({
 onMounted(() => {
     if (props.flippingEffect !== 'fade') {
         transitionEffectName.value = props.flippingEffect + '-left';
+    } else {
+        transitionEffectName.value = props.flippingEffect;
     }
     curActivePageIndex.value = props.activePageIndex;
 })
@@ -185,7 +194,7 @@ watch(() => props.pageNameList, (newValue) => {
             </VueDraggable>
             <div v-else class="pagination-original-page-container">
                 <div v-for="i in props.pageCount" :key="i">
-                    <Transition mode="out-in" :name="transitionEffectName" appear>
+                    <Transition mode="out-in" :name="transitionEffectName">
                         <div ref="originalPageRef" v-show="(i - 1) === curActivePageIndex"
                             class="pagination-original-page" @wheel="handleWheel">
                             <slot :name="'originalPage' + (i - 1)"></slot>

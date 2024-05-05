@@ -63,6 +63,7 @@ export const webAppOpenModeList = [
 ]
 
 export const flippingEffectList = [
+    { effect: 'fade', name: '渐隐' },
     { effect: 'slide', name: '滑动' },
     { effect: 'toggle', name: '弹性' },
     { effect: 'windmill', name: '风车' },
