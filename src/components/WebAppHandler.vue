@@ -2,13 +2,28 @@
 import { ref, onMounted } from 'vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
+import CheckBox from '@/components/CheckBox.vue'
 
-const emit = defineEmits(['closeWebAppHandler'])
+const emit = defineEmits(['closeWebAppHandler', 'deleteWebApp'])
 const props = defineProps({
     type: String,
+    app: Object,
 })
 
 const showHandler = ref(false)
+const deleteNotice = ref(false)
+
+function handleCancelBtnClick() {
+    emit('closeWebAppHandler');
+}
+
+function handleOkBtnClick() {
+    emit('closeWebAppHandler');
+
+    if (props.type === 'delete') {
+        emit('deleteWebApp', !deleteNotice.value);
+    }
+}
 
 onMounted(() => {
     showHandler.value = true
@@ -31,6 +46,22 @@ onMounted(() => {
                     </ButtonWrap>
                 </div>
                 <div class="web-app-handler-body">
+                    <div v-if="props.type === 'delete'">
+                        <div class="web-app-handler-delete-des">
+                            您确定要删除 {{ props.app.name }} 吗？
+                        </div>
+                        <div class="web-app-handle-delete-checkbox">
+                            <CheckBox :checked="deleteNotice" :label="'下次不再提示'" @change="deleteNotice = !deleteNotice">
+                            </CheckBox>
+                        </div>
+                    </div>
+                    <div class="web-app-handler-btn">
+                        <ButtonWrap :type="'text'" :text="'取消'" @click="handleCancelBtnClick">
+                        </ButtonWrap>
+                        <div style="width: 10px;"></div>
+                        <ButtonWrap :type="'text'" :text="'确定'" @click="handleOkBtnClick">
+                        </ButtonWrap>
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -55,7 +86,6 @@ onMounted(() => {
     transform: translate(-50%, -50%);
     border-radius: 10px;
     width: 600px;
-    height: fit-content;
     max-width: 80%;
     max-height: 80%;
     color: var(--primary-font-color);
@@ -91,11 +121,22 @@ onMounted(() => {
 }
 
 .web-app-handler-body {
-    position: absolute;
-    padding: 0 20px 0 20px;
+    padding: 0 20px 20px 20px;
     width: 100%;
-    height: calc(100% - 72px - 20px);
     box-sizing: border-box;
     overflow: auto;
+}
+
+.web-app-handler-delete-des {
+    font-size: 14px;
+}
+
+.web-app-handle-delete-checkbox {
+    margin-top: 20px;
+}
+
+.web-app-handler-btn {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>

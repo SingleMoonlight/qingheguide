@@ -176,6 +176,28 @@ function handleClickOutsideWebAppGroupMenu() {
     }
 }
 
+function handleDeleteWebApp(deleteNotice) {
+    if (checkedWebApp === null) {
+        return;
+    }
+    let groupApps = webAppStore.$state.app[settingStore.$state.webAppGroupIndex].groupApps;
+    let appIndex = groupApps.findIndex(item => item.id === checkedWebApp.id);
+    if (appIndex < 0) {
+        return;
+    }
+
+    // 指定过渡动画，删除后其他元素顺序过渡
+    webAppTransition.value = 'list';
+    groupApps.splice(appIndex, 1);
+
+    requestAnimationFrame(() => {
+        checkedWebApp = null;
+        webAppTransition.value = '';
+    })
+
+    settingStore.$state.deleteWebAppNotice = deleteNotice;
+}
+
 function selectWebAppMenuItem(index) {
     showWebAppMenu.value = false;
     if (webAppMenuList[index].iconName === 'editApp') {
@@ -185,6 +207,8 @@ function selectWebAppMenuItem(index) {
         if (settingStore.$state.deleteWebAppNotice) {
             showWebAppHandler.value = true;
             webAppHandlerType.value = 'delete';
+        } else {
+            handleDeleteWebApp();
         }
     }
 }
@@ -303,8 +327,8 @@ onMounted(() => {
             </SelectList>
         </div>
         <Transition mode="out-in" name="fade">
-            <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType"
-                @close-web-app-handler="handleCloseWebAppHandler">
+            <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
+                @close-web-app-handler="handleCloseWebAppHandler" @delete-web-app="handleDeleteWebApp">
             </WebAppHandler>
         </Transition>
         <Transition mode="out-in" name="fade">

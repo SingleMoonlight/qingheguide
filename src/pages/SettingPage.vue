@@ -342,6 +342,9 @@ onMounted(() => {
                         <SettingItem :label="'显示App名称'" :type="'switch'" :onoff="settingStore.showWebAppName"
                             @turn-switch="settingStore.showWebAppName = !settingStore.showWebAppName">
                         </SettingItem>
+                        <SettingItem :label="'删除App时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppNotice"
+                            @turn-switch="settingStore.deleteWebAppNotice = !settingStore.deleteWebAppNotice">
+                        </SettingItem>
                         <SettingItem :label="'App打开方式'" :type="'next'"
                             :next-value="getWebAppOpenModeName(settingStore.webAppOpenMode)"
                             @open-next="goToNext(mainSettingPaneRef, webAppOpenModeSettingPaneRef)">
