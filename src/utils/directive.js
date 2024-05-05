@@ -28,6 +28,24 @@ const longPressDirective = {
     }
 };
 
+const clickOutsideDirective = {
+    beforeMount(el, binding) {
+        el.clickOutsideEvent = (event) => {
+            // 判断点击是否发生在 el 外部
+            if (!(el === event.target || el.contains(event.target))) {
+                // 如果是，调用绑定的方法
+                binding.value();
+            }
+        };
+        document.addEventListener('click', el.clickOutsideEvent);
+    },
+    unmounted(el) {
+        // 移除事件监听
+        document.removeEventListener('click', el.clickOutsideEvent);
+    },
+};
+
 export function installDirective(app) {
     app.directive('longpress', longPressDirective);
+    app.directive('clickoutside', clickOutsideDirective);
 }
