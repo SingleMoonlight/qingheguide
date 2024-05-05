@@ -9,6 +9,8 @@ import PaginationContainer from '@/components/PaginationContainer.vue'
 import WebApp from '@/components/WebApp.vue'
 import WebAppMenuIcon from '@/components/icons/WebAppMenuIcon.vue'
 import WebAppGroupMenuIcon from '@/components/icons/WebAppGroupMenuIcon.vue'
+import WebAppHandler from '@/components/WebAppHandler.vue'
+import WebAppGroupHandler from '@/components/WebAppGroupHandler.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
@@ -22,18 +24,22 @@ const paginationContainerRef = ref()
 const showOtherMenu = ref(false)
 const showWebAppMenu = ref(false)
 const showWebAppGroupMenu = ref(false)
+const showWebAppHandler = ref(false)
+const webAppHandlerType = ref('edit')
+const showWebAppGroupHandler = ref(false)
+const webAppGroupHandlerType = ref('edit')
 const webAppMenuRef = ref()
 const webAppGroupMenuRef = ref()
 const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
 const webAppStore = useWebAppStore()
 const webAppGroup = ref([])
+const webAppTransition = ref('')
 let webAppGroupLeft = 0;
 let webAppGroupRight = 0;
 let webAppNearLeftTime = 0;
 let webAppNearRightTime = 0;
 let checkedWebApp = null;
-let checkedWebAppGroup = null;
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -58,7 +64,7 @@ function getOriginPageSlotName(index) {
 }
 
 function updateDefaultWebAppGroup(index) {
-    settingStore.webAppGroup = index;
+    settingStore.$state.webAppGroupIndex = index;
     showWebAppMenu.value = false;
     showWebAppGroupMenu.value = false;
 }
@@ -67,13 +73,13 @@ function updateWebAppGroupOrder(list) {
     let newWebAppGroup = [];
     for (let i = 0; i < list.length; i++) {
         for (let j = 0; j < list.length; j++) {
-            if (list[i].id === webAppStore.app[j].groupId) {
-                newWebAppGroup.push(webAppStore.app[j]);
+            if (list[i].id === webAppStore.$state.app[j].groupId) {
+                newWebAppGroup.push(webAppStore.$state.app[j]);
             }
         }
     }
-    webAppStore.app = newWebAppGroup;
-    webAppGroup.value = webAppStore.app.map(item => ({
+    webAppStore.$state.app = newWebAppGroup;
+    webAppGroup.value = webAppStore.$state.app.map(item => ({
         id: item.groupId,
         name: item.groupName,
     }));
@@ -115,9 +121,9 @@ function handleClickWebAppGroup(event) {
 }
 
 function handleClickWebApp(url) {
-    if (settingStore.webAppOpenMode === 'current') {
+    if (settingStore.$state.webAppOpenMode === 'current') {
         window.location.href = url;
-    } else if (settingStore.webAppOpenMode === 'new') {
+    } else if (settingStore.$state.webAppOpenMode === 'new') {
         window.open(url, '_blank');
     }
 }
@@ -156,8 +162,6 @@ function handleRightClickWebAppGroup(group, event) {
         }
         showWebAppGroupMenu.value = true;
     })
-
-    checkedWebAppGroup = group;
 }
 
 function handleClickOutsideWebAppMenu() {
@@ -174,10 +178,44 @@ function handleClickOutsideWebAppGroupMenu() {
 
 function selectWebAppMenuItem(index) {
     showWebAppMenu.value = false;
+    if (webAppMenuList[index].iconName === 'editApp') {
+        showWebAppHandler.value = true;
+        webAppHandlerType.value = 'edit';
+    } else if (webAppMenuList[index].iconName === 'deleteApp') {
+        if (settingStore.$state.deleteWebAppNotice) {
+            showWebAppHandler.value = true;
+            webAppHandlerType.value = 'delete';
+        }
+    }
 }
 
 function selectWebAppGroupMenuItem(index) {
     showWebAppGroupMenu.value = false;
+    if (webAppGroupMenuList[index].iconName === 'addApp') {
+        showWebAppHandler.value = true;
+        webAppHandlerType.value = 'add';
+    } else if (webAppGroupMenuList[index].iconName === 'addGroup') {
+        showWebAppGroupHandler.value = true;
+        webAppGroupHandlerType.value = 'add';
+    } else if (webAppGroupMenuList[index].iconName === 'editGroup') {
+        showWebAppGroupHandler.value = true;
+        webAppGroupHandlerType.value = 'edit';
+    } else if (webAppGroupMenuList[index].iconName === 'deleteGroup') {
+        if (settingStore.$state.deleteWebAppGroupNotice) {
+            showWebAppGroupHandler.value = true;
+            webAppGroupHandlerType.value = 'delete';
+        }
+    }
+}
+
+function handleCloseWebAppHandler() {
+    showWebAppHandler.value = false;
+    webAppHandlerType.value = 'edit';
+}
+
+function handleCloseWebAppGroupHandler() {
+    showWebAppGroupHandler.value = false;
+    webAppGroupHandlerType.value = 'edit';
 }
 
 onMounted(() => {
@@ -185,7 +223,7 @@ onMounted(() => {
         getWeatherInfo(false, weatherStore);
     }
 
-    webAppGroup.value = webAppStore.app.map(item => ({
+    webAppGroup.value = webAppStore.$state.app.map(item => ({
         id: item.groupId,
         name: item.groupName,
     }));
@@ -197,7 +235,7 @@ onMounted(() => {
     <div class="navigate-container" @click="closeNavigate">
         <div class="web-app-group-container">
             <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
-                :active-page-index="settingStore.webAppGroup" :circular-sliding="settingStore.circularSliding"
+                :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
                 :flipping-effect="settingStore.flippingEffect" :page-name-list="webAppGroup"
                 @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
                 <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
@@ -205,12 +243,15 @@ onMounted(() => {
                     <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps" :animation="150"
                         :scroll="true" :group="'webApp'" @start="handleWebAppDragStart" @drag="handleWebAppDrag"
                         @click="handleClickWebAppGroup" @contextmenu="handleRightClickWebAppGroup(group, $event)">
-                        <div class="web-app-container" v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps"
-                            :key="app.id">
-                            <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
-                                @click="handleClickWebApp(app.url)" @contextmenu="handleRightClickWebApp(app, $event)">
-                            </WebApp>
-                        </div>
+                        <TransitionGroup :css="false" :name="webAppTransition">
+                            <div class="web-app-container"
+                                v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps" :key="app">
+                                <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
+                                    @click="handleClickWebApp(app.url)"
+                                    @contextmenu="handleRightClickWebApp(app, $event)">
+                                </WebApp>
+                            </div>
+                        </TransitionGroup>
                     </VueDraggable>
                 </template>
             </PaginationContainer>
@@ -261,6 +302,16 @@ onMounted(() => {
                 </SelectItem>
             </SelectList>
         </div>
+        <Transition mode="out-in" name="fade">
+            <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType"
+                @close-web-app-handler="handleCloseWebAppHandler">
+            </WebAppHandler>
+        </Transition>
+        <Transition mode="out-in" name="fade">
+            <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
+                @close-web-app-group-handler="handleCloseWebAppGroupHandler">
+            </WebAppGroupHandler>
+        </Transition>
     </div>
 </template>
 

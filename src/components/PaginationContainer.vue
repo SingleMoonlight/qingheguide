@@ -149,7 +149,14 @@ defineExpose({
 })
 
 onMounted(() => {
+    if (props.flippingEffect !== 'fade') {
+        transitionEffectName.value = props.flippingEffect + '-left';
+    }
     curActivePageIndex.value = props.activePageIndex;
+})
+
+watch(() => props.activePageIndex, (newValue) => {
+    curActivePageIndex.value = newValue;
 })
 
 watch(() => props.flippingEffect, (newValue) => {
@@ -170,7 +177,7 @@ watch(() => props.pageNameList, (newValue) => {
                 @update="handleUpdatePageOrder">
                 <TransitionGroup appear :css="false" @enter="handleThumbnailPageEnter"
                     @after-enter="handleThumbnailPageAfterEnter">
-                    <div v-for="(item, index) in pageNameListForDrag" :key="item.id" :data-index="index"
+                    <div v-for="(item, index) in pageNameListForDrag" :key="item" :data-index="index"
                         class="pagination-thumbnail-page">
                         {{ item.name }}
                     </div>
