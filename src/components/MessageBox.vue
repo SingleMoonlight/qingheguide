@@ -34,7 +34,6 @@ function handleOkBtnClick() {
 <template>
     <Transition name="fade">
         <div class="message-box-container" v-show="props.show">
-            <div class="message-box-mask"></div>
             <Transition name="extension-from-center">
                 <div class="message-box" v-show="props.show">
                     <div class="message-box-header">
@@ -64,16 +63,11 @@ function handleOkBtnClick() {
 .message-box-container {
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    margin: 0;
     position: absolute;
-}
-
-.message-box-mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
+    backdrop-filter: blur(10px);
 }
 
 .message-box {
