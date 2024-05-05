@@ -57,6 +57,17 @@ export const searchOpenModeList = [
     { mode: 'new', name: '新标签页' },
 ]
 
+export const webAppOpenModeList = [
+    { mode: 'current', name: '当前标签页' },
+    { mode: 'new', name: '新标签页' },
+]
+
+export const flippingEffectList = [
+    { effect: 'slide', name: '滑动' },
+    { effect: 'toggle', name: '弹性' },
+    { effect: 'windmill', name: '风车' },
+]
+
 // 顺序：fix opt add del
 export const updateHistory = [
     {

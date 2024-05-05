@@ -14,7 +14,8 @@ import { useWeatherStore } from '@/stores/weatherStore'
 import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import {
     defaultBackgroundUrl, themeList, bgSourceList, timeFontWeightList,
-    searchOpenModeList, weatherLocationModeList
+    searchOpenModeList, weatherLocationModeList, webAppOpenModeList,
+    flippingEffectList
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
 import { setClassForElement, isValidURL, printLog } from '@/utils/common'
@@ -37,6 +38,8 @@ const customSearchEngineSettingPaneRef = ref()
 const autoFocusSearchInputSettingPaneRef = ref()
 const weatherLocationSettingPaneRef = ref()
 const showWeatherSettingPaneRef = ref()
+const webAppOpenModeSettingPaneRef = ref()
+const flippingEffectSettingPaneRef = ref()
 const weatherLocationList = ref([])
 const showWeatherLocationList = ref(false)
 const showSettingPane = ref(false)
@@ -204,6 +207,30 @@ function selectWeatherLocation(index) {
     weatherLocationList.value = [...[]];
 }
 
+function getWebAppOpenModeName(mode) {
+    return webAppOpenModeList.filter(obj => obj.mode === mode)[0].name;
+}
+
+function getWebAppOpenModeIndex(mode) {
+    return webAppOpenModeList.findIndex(obj => obj.mode === mode);
+}
+
+function selectWebAppOpenMode(index) {
+    settingStore.$state.webAppOpenMode = webAppOpenModeList[index].mode;
+}
+
+function getFlippingEffectName(effect) {
+    return flippingEffectList.filter(obj => obj.effect === effect)[0].name;
+}
+
+function getFlippingEffectIndex(effect) {
+    return flippingEffectList.findIndex(obj => obj.effect === effect);
+}
+
+function selectFlippingEffect(index) {
+    settingStore.$state.flippingEffect = flippingEffectList[index].effect;
+}
+
 function goToNext(cur, next) {
     if (cur === null || cur === undefined) return;
     if (next === null || next === undefined) return;
@@ -306,6 +333,22 @@ onMounted(() => {
                         </SettingItem>
                         <SettingItem :label="'自定义搜索引擎'" :type="'next'" :next-value="settingStore.customSearchEngineUrl"
                             @open-next="goToNext(mainSettingPaneRef, customSearchEngineSettingPaneRef)">
+                        </SettingItem>
+                    </CardContainer>
+                    <CardContainer :card-name="'导航'">
+                        <SettingItem :label="'分组循环滑动'" :type="'switch'" :onoff="settingStore.circularSliding"
+                            @turn-switch="settingStore.circularSliding = !settingStore.circularSliding">
+                        </SettingItem>
+                        <SettingItem :label="'显示App名称'" :type="'switch'" :onoff="settingStore.showWebAppName"
+                            @turn-switch="settingStore.showWebAppName = !settingStore.showWebAppName">
+                        </SettingItem>
+                        <SettingItem :label="'App打开方式'" :type="'next'"
+                            :next-value="getWebAppOpenModeName(settingStore.webAppOpenMode)"
+                            @open-next="goToNext(mainSettingPaneRef, webAppOpenModeSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'分组翻页效果'" :type="'next'"
+                            :next-value="getFlippingEffectName(settingStore.flippingEffect)"
+                            @open-next="goToNext(mainSettingPaneRef, flippingEffectSettingPaneRef)">
                         </SettingItem>
                     </CardContainer>
                 </div>
@@ -524,6 +567,44 @@ onMounted(() => {
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div ref="webAppOpenModeSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(webAppOpenModeSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'App打开方式'">
+                    <SettingItem v-for="(item, index) in webAppOpenModeList" :key="index" :type="'list'"
+                        :label="item.name" :checked="getWebAppOpenModeIndex(settingStore.webAppOpenMode) === index"
+                        @checked-list-item="selectWebAppOpenMode(index)">
+                    </SettingItem>
+                </CardContainer>
+            </div>
+        </div>
+        <div ref="flippingEffectSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn"
+                    @click="backToPrev(flippingEffectSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'分组翻页效果'">
+                    <SettingItem v-for="(item, index) in flippingEffectList" :key="index" :type="'list'"
+                        :label="item.name" :checked="getFlippingEffectIndex(settingStore.flippingEffect) === index"
+                        @checked-list-item="selectFlippingEffect(index)">
+                    </SettingItem>
+                </CardContainer>
             </div>
         </div>
     </div>

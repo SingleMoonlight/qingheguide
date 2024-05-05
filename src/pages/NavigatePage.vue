@@ -137,7 +137,8 @@ onMounted(() => {
                         @click="handleClickWebAppGroup">
                         <div class="web-app-container" v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps"
                             :key="app.id">
-                            <WebApp :name="app.name" :icon="app.icon" @click="handleClickWebApp(app.url)">
+                            <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
+                                @click="handleClickWebApp(app.url)">
                             </WebApp>
                         </div>
                     </VueDraggable>
