@@ -17,6 +17,7 @@ import { useSettingStore } from '@/stores/settingStore'
 import { useWebAppStore } from '@/stores/webAppStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { otherMenuList, webAppMenuList, webAppGroupMenuList } from '@/utils/constant'
+import { generateUID } from '@/utils/common'
 import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
 
@@ -72,6 +73,13 @@ function updateDefaultWebAppGroup(index) {
     showWebAppGroupMenu.value = false;
 }
 
+function updateWebAppGroup() {
+    webAppGroup.value = webAppStore.$state.app.map(item => ({
+        id: item.groupId,
+        name: item.groupName,
+    }));
+}
+
 function updateWebAppGroupOrder(list) {
     let newWebAppGroup = [];
     for (let i = 0; i < list.length; i++) {
@@ -82,10 +90,7 @@ function updateWebAppGroupOrder(list) {
         }
     }
     webAppStore.$state.app = newWebAppGroup;
-    webAppGroup.value = webAppStore.$state.app.map(item => ({
-        id: item.groupId,
-        name: item.groupName,
-    }));
+    updateWebAppGroup();
 }
 
 function handleWebAppDragStart(event) {
@@ -232,16 +237,50 @@ function handleDeleteWebAppGroup(deleteNotice) {
     let groupIndex = settingStore.$state.webAppGroupIndex;
 
     showWebAppGroup.value = false;
+
     webAppStore.$state.app.splice(groupIndex, 1);
     settingStore.$state.webAppGroupIndex = groupIndex === curGroupNum - 1 ? 0 : groupIndex;
-    webAppGroup.value = webAppStore.$state.app.map(item => ({
-        id: item.groupId,
-        name: item.groupName,
-    }));
 
+    updateWebAppGroup();
     requestAnimationFrame(() => {
         showWebAppGroup.value = true;
     })
+}
+
+function handleEditWebAppGroup(newName) {
+    if (newName === '') {
+        messageBoxStore.openMessageBox('warn', '提示', '分组名不能为空。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return;
+    }
+
+    let groupIndex = settingStore.$state.webAppGroupIndex;
+    let group = webAppStore.$state.app[groupIndex];
+
+    group.groupName = newName;
+
+    updateWebAppGroup();
+}
+
+function handleAddWebAppGroup(groupName) {
+    if (groupName === '') {
+        messageBoxStore.openMessageBox('warn', '提示', '分组名不能为空。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return;
+    }
+
+    webAppStore.$state.app.push({
+        groupId: generateUID(),
+        groupName: groupName,
+        groupApps: [],
+    })
+    updateWebAppGroup();
 }
 
 function selectWebAppGroupMenuItem(index) {
@@ -280,10 +319,7 @@ onMounted(() => {
         getWeatherInfo(false, weatherStore);
     }
 
-    webAppGroup.value = webAppStore.$state.app.map(item => ({
-        id: item.groupId,
-        name: item.groupName,
-    }));
+    updateWebAppGroup();
 })
 
 </script>
@@ -294,7 +330,7 @@ onMounted(() => {
             <div class="web-app-group-container" v-if="showWebAppGroup">
                 <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
                     :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
-                    :flipping-effect="settingStore.flippingEffect" :page-name-list="webAppGroup"
+                    :flipping-effect="settingStore.flippingEffect" :page-list="webAppGroup"
                     @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
                     <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
                         :key="groupIndex">
@@ -371,7 +407,8 @@ onMounted(() => {
             <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
                 :group-name="webAppGroup[settingStore.webAppGroupIndex].name"
                 @close-web-app-group-handler="handleCloseWebAppGroupHandler"
-                @delete-web-app-group="handleDeleteWebAppGroup">
+                @delete-web-app-group="handleDeleteWebAppGroup" @edit-web-app-group="handleEditWebAppGroup"
+                @add-web-app-group="handleAddWebAppGroup">
             </WebAppGroupHandler>
         </Transition>
     </div>

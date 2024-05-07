@@ -7,7 +7,7 @@ import { onMounted, ref, watch } from 'vue'
 const emit = defineEmits(['changeActivePage', 'changePageOrder'])
 const props = defineProps({
     pageCount: Number,
-    pageNameList: Array,
+    pageList: Array,
     activePageIndex: Number,
     circularSliding: Boolean,
     flippingEffect: String,
@@ -32,7 +32,7 @@ function handleSelectPage(index) {
     }
     
     curActivePageIndex.value = index;
-    pageName.value = props.pageNameList[curActivePageIndex.value].name;
+    pageName.value = props.pageList[curActivePageIndex.value].name;
     showPageName.value = true;
     setTimeout(() => {
         showPageName.value = false;
@@ -42,12 +42,12 @@ function handleSelectPage(index) {
 }
 
 function handleMouseEnterBarDot(index) {
-    pageName.value = props.pageNameList[index].name;
+    pageName.value = props.pageList[index].name;
     showPageName.value = true;
 }
 
 function handleMouseLeaveBarDot(index) {
-    pageName.value = props.pageNameList[index].name;
+    pageName.value = props.pageList[index].name;
     showPageName.value = false;
 }
 
@@ -63,7 +63,7 @@ function slideLeft() {
     } else {
         curActivePageIndex.value = curActivePageIndex.value === props.pageCount - 1 ? props.pageCount - 1 : curActivePageIndex.value + 1;
     }
-    pageName.value = props.pageNameList[curActivePageIndex.value].name;
+    pageName.value = props.pageList[curActivePageIndex.value].name;
     showPageName.value = true;
     setTimeout(() => {
         showPageName.value = false;
@@ -84,7 +84,7 @@ function slideRight() {
     } else {
         curActivePageIndex.value = curActivePageIndex.value === 0 ? 0 : curActivePageIndex.value - 1;
     }
-    pageName.value = props.pageNameList[curActivePageIndex.value].name;
+    pageName.value = props.pageList[curActivePageIndex.value].name;
     showPageName.value = true;
     setTimeout(() => {
         showPageName.value = false;
@@ -172,7 +172,7 @@ watch(() => props.flippingEffect, (newValue) => {
     transitionEffectName.value = newValue;
 })
 
-watch(() => props.pageNameList, (newValue) => {
+watch(() => props.pageList, (newValue) => {
     pageNameListForDrag.value = newValue;
 })
 

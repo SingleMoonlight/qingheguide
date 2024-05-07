@@ -16,6 +16,16 @@ export function isValidURL(url) {
     return urlRegex.test(url);
 }
 
+export function generateUID() {
+    let dt = new Date().getTime(); // 当前时间的毫秒数
+    let uid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uid;
+}
+
 export function printLog(type, func, data) {
     if (!import.meta.env.PROD) {
         console.log(type + ": " + func);

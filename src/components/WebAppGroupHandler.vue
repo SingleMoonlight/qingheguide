@@ -3,13 +3,14 @@ import { ref, onMounted } from 'vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import CheckBox from '@/components/CheckBox.vue'
+import CardContainer from '@/components/CardContainer.vue'
 
-const emit = defineEmits(['closeWebAppGroupHandler', 'deleteWebAppGroup'])
+const emit = defineEmits(['closeWebAppGroupHandler', 'deleteWebAppGroup', 'editWebAppGroup', 'addWebAppGroup'])
 const props = defineProps({
     type: String,
     groupName: String,
 })
-
+const webAppGroupNameInputRef = ref()
 const showHandler = ref(false)
 const deleteNotice = ref(false)
 
@@ -22,11 +23,18 @@ function handleOkBtnClick() {
 
     if (props.type === 'delete') {
         emit('deleteWebAppGroup', !deleteNotice.value);
+    } else if (props.type === 'edit') {
+        emit('editWebAppGroup', webAppGroupNameInputRef.value.value);
+    } else if (props.type === 'add') {
+        emit('addWebAppGroup', webAppGroupNameInputRef.value.value);
     }
 }
 
 onMounted(() => {
-    showHandler.value = true
+    if (props.type === 'edit') {
+        webAppGroupNameInputRef.value.value = props.groupName;
+    }
+    showHandler.value = true;
 })
 
 </script>
@@ -54,6 +62,14 @@ onMounted(() => {
                             <CheckBox :checked="deleteNotice" :label="'下次不再提示'" @change="deleteNotice = !deleteNotice">
                             </CheckBox>
                         </div>
+                    </div>
+                    <div v-else>
+                        <CardContainer :card-name="'名称'">
+                            <div class="web-app-group-handler-input-container">
+                                <input ref="webAppGroupNameInputRef" class="web-app-group-handler-input" type="text"
+                                    placeholder="请输入分组名称" />
+                            </div>
+                        </CardContainer>
                     </div>
                     <div class="web-app-group-handler-btn">
                         <ButtonWrap :type="'text'" :text="'取消'" @click="handleCancelBtnClick">
@@ -138,5 +154,24 @@ onMounted(() => {
 .web-app-group-handler-btn {
     display: flex;
     justify-content: flex-end;
+}
+
+.web-app-group-handler-input-container {
+    width: 100%;
+    height: 30px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.web-app-group-handler-input {
+    width: 100%;
+    height: 100%;
+    min-width: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: var(--primary-font-color);
+    background-color: transparent;
 }
 </style>
