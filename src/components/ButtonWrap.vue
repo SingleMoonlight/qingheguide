@@ -95,7 +95,6 @@ function handelMouseUp(event) {
     border-radius: 5px;
     transition: .25s;
     box-shadow: var(--common-box-shadow);
-    backdrop-filter: var(--common-backdrop-filter);
     background-color: var(--text-button-background-color);
     color: var(--primary-font-color);
     font-size: 14px;

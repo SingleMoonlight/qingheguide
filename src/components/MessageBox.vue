@@ -82,6 +82,7 @@ function handleOkBtnClick() {
     border-radius: 10px;
     box-sizing: border-box;
     background: var(--common-background-color);
+    backdrop-filter: var(--common-backdrop-filter);
     box-shadow: var(--common-box-shadow);
     color: var(--primary-font-color);
     overflow: hidden;

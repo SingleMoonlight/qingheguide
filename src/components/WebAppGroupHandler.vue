@@ -91,8 +91,8 @@ onMounted(() => {
     overflow: hidden;
     margin: 0;
     position: absolute;
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
+    background-color: transparent;
+    backdrop-filter: blur(10px);
 }
 
 .web-app-group-handler {
