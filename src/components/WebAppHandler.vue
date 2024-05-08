@@ -18,8 +18,6 @@ function handleCancelBtnClick() {
 }
 
 function handleOkBtnClick() {
-    emit('closeWebAppHandler');
-
     if (props.type === 'delete') {
         emit('deleteWebApp', !deleteNotice.value);
     }

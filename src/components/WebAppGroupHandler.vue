@@ -19,8 +19,6 @@ function handleCancelBtnClick() {
 }
 
 function handleOkBtnClick() {
-    emit('closeWebAppGroupHandler');
-
     if (props.type === 'delete') {
         emit('deleteWebAppGroup', !deleteNotice.value);
     } else if (props.type === 'edit') {

@@ -184,6 +184,11 @@ function handleClickOutsideWebAppGroupMenu() {
     }
 }
 
+function closeWebAppHandler() {
+    showWebAppHandler.value = false;
+    webAppHandlerType.value = 'edit';
+}
+
 function handleDeleteWebApp(deleteNotice) {
     settingStore.$state.deleteWebAppNotice = deleteNotice;
 
@@ -203,7 +208,8 @@ function handleDeleteWebApp(deleteNotice) {
     requestAnimationFrame(() => {
         checkedWebApp = null;
         webAppTransition.value = '';
-    })
+    });
+    closeWebAppHandler();
 }
 
 function selectWebAppMenuItem(index) {
@@ -219,6 +225,11 @@ function selectWebAppMenuItem(index) {
             handleDeleteWebApp(false);
         }
     }
+}
+
+function closeWebAppGroupHandler() {
+    showWebAppGroupHandler.value = false;
+    webAppGroupHandlerType.value = 'edit';
 }
 
 function handleDeleteWebAppGroup(deleteNotice) {
@@ -244,7 +255,8 @@ function handleDeleteWebAppGroup(deleteNotice) {
     updateWebAppGroup();
     requestAnimationFrame(() => {
         showWebAppGroup.value = true;
-    })
+    });
+    closeWebAppGroupHandler();
 }
 
 function handleEditWebAppGroup(newName) {
@@ -263,6 +275,7 @@ function handleEditWebAppGroup(newName) {
     group.groupName = newName;
 
     updateWebAppGroup();
+    closeWebAppGroupHandler();
 }
 
 function handleAddWebAppGroup(groupName) {
@@ -281,6 +294,7 @@ function handleAddWebAppGroup(groupName) {
         groupApps: [],
     })
     updateWebAppGroup();
+    closeWebAppGroupHandler();
 }
 
 function selectWebAppGroupMenuItem(index) {
@@ -302,16 +316,6 @@ function selectWebAppGroupMenuItem(index) {
             handleDeleteWebAppGroup(false);
         }
     }
-}
-
-function handleCloseWebAppHandler() {
-    showWebAppHandler.value = false;
-    webAppHandlerType.value = 'edit';
-}
-
-function handleCloseWebAppGroupHandler() {
-    showWebAppGroupHandler.value = false;
-    webAppGroupHandlerType.value = 'edit';
 }
 
 onMounted(() => {
@@ -400,13 +404,13 @@ onMounted(() => {
         </div>
         <Transition mode="out-in" name="fade">
             <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
-                @close-web-app-handler="handleCloseWebAppHandler" @delete-web-app="handleDeleteWebApp">
+                @close-web-app-handler="closeWebAppHandler" @delete-web-app="handleDeleteWebApp">
             </WebAppHandler>
         </Transition>
         <Transition mode="out-in" name="fade">
             <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
                 :group-name="webAppGroup[settingStore.webAppGroupIndex].name"
-                @close-web-app-group-handler="handleCloseWebAppGroupHandler"
+                @close-web-app-group-handler="closeWebAppGroupHandler"
                 @delete-web-app-group="handleDeleteWebAppGroup" @edit-web-app-group="handleEditWebAppGroup"
                 @add-web-app-group="handleAddWebAppGroup">
             </WebAppGroupHandler>
