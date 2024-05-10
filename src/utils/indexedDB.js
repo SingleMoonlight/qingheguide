@@ -128,6 +128,7 @@ export class IndexedDB {
 // 目前仅有图片放在indexed数据库中，以下接口不在另分文件
 import { useSettingStore } from '@/stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
+import { useWebAppStore } from '@/stores/webAppStore'
 import { printLog } from '@/utils/common'
 import { defaultBackgroundUrl } from '@/utils/constant'
 
@@ -139,6 +140,7 @@ export function initImageDB() {
     });
     imageDB.initDB().then(res => {
         getBackgroundImg();
+        getWebAppIconImg();
         printLog('result', 'initDB', res);
     }).catch((err) => {
         printLog('error', 'initDB', err);
@@ -202,3 +204,38 @@ export function deleteBackgroundImg() {
     });
 }
 
+export function setWebAppIconImg(webAppId, imageData) {
+    let data = { 'name': webAppId, 'data': imageData };
+
+    imageDB.updateData(data).then(res => {
+        printLog('result', 'updateData', res);
+    }).catch((err) => {
+        printLog('error', 'updateData', err);
+    });
+}
+
+export function getWebAppIconImg() {
+    const webAppStore = useWebAppStore();
+
+    webAppStore.$state.app.forEach(group => {
+        group.groupApps.forEach(app => {
+            if (app.iconSource === 'custom') {
+                imageDB.getDataByKey(app.id).then(res => {
+                    // 创建指向图片文件的url并保存
+                    let imgURL = window.URL.createObjectURL(res.data);
+                    app.icon = imgURL;
+                }).catch((err) => {
+                    printLog('error', 'getDataByKey', err);
+                });
+            }
+        })
+    });
+}
+
+export function deleteWebAppIconImg(webAppId) {
+    imageDB.deleteData(webAppId).then(res => {
+        printLog('result', 'deleteData', res);
+    }).catch((err) => {
+        printLog('error', 'deleteData', err);
+    });
+}

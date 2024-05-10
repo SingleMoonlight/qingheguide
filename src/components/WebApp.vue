@@ -1,15 +1,31 @@
 <script setup>
+import { onMounted, ref, watch } from 'vue';
+
 const props = defineProps({
     name: String,
     icon: String,
+    defaultIcon: String,
     showName: Boolean,
+})
+const webAppIconRef = ref()
+
+function handleWebAppIconLoadError() {
+    webAppIconRef.value.src = props.defaultIcon;
+}
+
+watch(() => props.icon, (newValue) => {
+    webAppIconRef.value.src = newValue;
+})
+
+onMounted(() => {
+    webAppIconRef.value.src = props.icon;
 })
 
 </script>
 
 <template>
     <div class="web-app">
-        <img class="web-app-icon" :src="props.icon">
+        <img class="web-app-icon" ref="webAppIconRef" @error="handleWebAppIconLoadError">
         <div class="web-app-name" v-show="props.showName">
             {{ props.name }}
         </div>

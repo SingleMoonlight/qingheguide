@@ -16,8 +16,13 @@ import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
 import { useWebAppStore } from '@/stores/webAppStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
-import { otherMenuList, webAppMenuList, webAppGroupMenuList } from '@/utils/constant'
+import { useFlagStore } from '@/stores/flagStore'
+import {
+    otherMenuList, webAppMenuList, webAppGroupMenuList,
+    defaultImgPlaceHolder
+} from '@/utils/constant'
 import { generateUID } from '@/utils/common'
+import { setWebAppIconImg, deleteWebAppIconImg } from '@/utils/indexedDB'
 import { getWeatherInfo } from '@/api/weather'
 import { onMounted, ref } from 'vue'
 
@@ -37,13 +42,14 @@ const weatherStore = useWeatherStore()
 const settingStore = useSettingStore()
 const webAppStore = useWebAppStore()
 const messageBoxStore = useMessageBoxStore()
+const flagStore = useFlagStore()
 const webAppGroup = ref([])
 const webAppTransition = ref('')
-let webAppGroupLeft = 0;
-let webAppGroupRight = 0;
-let webAppNearLeftTime = 0;
-let webAppNearRightTime = 0;
-let checkedWebApp = null;
+const checkedWebApp = ref(null)
+let webAppGroupLeft = 0
+let webAppGroupRight = 0
+let webAppNearLeftTime = 0
+let webAppNearRightTime = 0
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -150,7 +156,7 @@ function handleRightClickWebApp(app, event) {
         showWebAppMenu.value = true;
     })
 
-    checkedWebApp = app;
+    checkedWebApp.value = app;
 }
 
 function handleRightClickWebAppGroup(group, event) {
@@ -189,16 +195,113 @@ function closeWebAppHandler() {
     webAppHandlerType.value = 'edit';
 }
 
-function handleDeleteWebApp(deleteNotice) {
-    settingStore.$state.deleteWebAppNotice = deleteNotice;
+function handleGetWebAppIcon(state) {
+    if (state === 'URLInvalid') {
+        messageBoxStore.openMessageBox('warn', '提示', '您输入的App网址异常，无法自动获取图标，请重新输入或者选择自定义图标。',
+            {
+                okBtnText: '确定',
+            }
+        );
+    } else if (state === 'Getting') {
+        flagStore.setShowGlobalLoading(true);
+    } else if (state === 'Success') {
+        flagStore.setShowGlobalLoading(false);
+    } else if (state === 'Error') {
+        flagStore.setShowGlobalLoading(false);
+        messageBoxStore.openMessageBox('warn', '提示', '自动获取图标失败，请重试或者选择自定义图标。',
+            {
+                okBtnText: '确定',
+            }
+        );
+    }
+}
 
-    if (checkedWebApp === null) {
+function checkWebAppValid(webApp) {
+    if (webApp.name === '') {
+        messageBoxStore.openMessageBox('warn', '提示', '请输入App名称。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return false;
+    } else if (webApp.url === '') {
+        messageBoxStore.openMessageBox('warn', '提示', '请输入App网址。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return false;
+    } else if (webApp.iconSource === 'none') {
+        messageBoxStore.openMessageBox('warn', '提示', '请设置App图标。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return false;
+    }
+    return true;
+}
+
+function handleEditWebApp(oldApp, newWebApp) {
+    if (!checkWebAppValid(newWebApp)) {
         return;
     }
+
+    let uid = oldApp.id;
+    if (newWebApp.iconSource === 'custom') {
+        // 保存图标至indexed DB
+        setWebAppIconImg(uid, newWebApp.iconFile);
+    } else if (newWebApp.iconSource === 'auto') {
+        // 删除原有的图标
+        deleteWebAppIconImg(uid);
+    }
+
+    oldApp.id = uid;
+    oldApp.name = newWebApp.name;
+    oldApp.url = newWebApp.url;
+    oldApp.iconSource = newWebApp.iconSource;
+    oldApp.icon = newWebApp.iconUrl;
+
+    closeWebAppHandler();
+}
+
+function handleAddWebApp(webApp) {
+    if (!checkWebAppValid(webApp)) {
+        return;
+    }
+
+    let uid = generateUID();
+    let savedWebApp = {
+        id: uid,
+        name: webApp.name,
+        url: webApp.url,
+        iconSource: webApp.iconSource,
+        icon: webApp.iconUrl,
+    }
+    if (webApp.iconSource === 'custom') {
+        // 保存图标至indexed DB
+        setWebAppIconImg(uid, webApp.iconFile);
+    }
+    webAppStore.$state.app[settingStore.$state.webAppGroupIndex].groupApps.push(savedWebApp);
+
+    closeWebAppHandler();
+}
+
+function handleDeleteWebApp(webApp, deleteNotice) {
+    settingStore.$state.deleteWebAppNotice = deleteNotice;
+
+    if (webApp === null) {
+        return;
+    }
+
     let groupApps = webAppStore.$state.app[settingStore.$state.webAppGroupIndex].groupApps;
-    let appIndex = groupApps.findIndex(item => item.id === checkedWebApp.id);
+    let appIndex = groupApps.findIndex(item => item.id === webApp.id);
     if (appIndex < 0) {
         return;
+    }
+
+    if (webApp.iconSource === 'custom') {
+        deleteWebAppIconImg(webApp.id);
     }
 
     // 指定过渡动画，删除后其他元素顺序过渡
@@ -206,7 +309,6 @@ function handleDeleteWebApp(deleteNotice) {
     groupApps.splice(appIndex, 1);
 
     requestAnimationFrame(() => {
-        checkedWebApp = null;
         webAppTransition.value = '';
     });
     closeWebAppHandler();
@@ -346,7 +448,7 @@ onMounted(() => {
                                 <div class="web-app-container"
                                     v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps" :key="app">
                                     <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
-                                        @click="handleClickWebApp(app.url)"
+                                        :default-icon="defaultImgPlaceHolder" @click="handleClickWebApp(app.url)"
                                         @contextmenu="handleRightClickWebApp(app, $event)">
                                     </WebApp>
                                 </div>
@@ -404,15 +506,16 @@ onMounted(() => {
         </div>
         <Transition mode="out-in" name="fade">
             <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
-                @close-web-app-handler="closeWebAppHandler" @delete-web-app="handleDeleteWebApp">
+                :icon-placeholder="defaultImgPlaceHolder" @close-web-app-handler="closeWebAppHandler"
+                @delete-web-app="handleDeleteWebApp" @get-web-app-icon="handleGetWebAppIcon"
+                @edit-web-app="handleEditWebApp" @add-web-app="handleAddWebApp">
             </WebAppHandler>
         </Transition>
         <Transition mode="out-in" name="fade">
             <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
                 :group-name="webAppGroup[settingStore.webAppGroupIndex].name"
-                @close-web-app-group-handler="closeWebAppGroupHandler"
-                @delete-web-app-group="handleDeleteWebAppGroup" @edit-web-app-group="handleEditWebAppGroup"
-                @add-web-app-group="handleAddWebAppGroup">
+                @close-web-app-group-handler="closeWebAppGroupHandler" @delete-web-app-group="handleDeleteWebAppGroup"
+                @edit-web-app-group="handleEditWebAppGroup" @add-web-app-group="handleAddWebAppGroup">
             </WebAppGroupHandler>
         </Transition>
     </div>

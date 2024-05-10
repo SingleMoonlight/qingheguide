@@ -3,15 +3,75 @@ import { ref, onMounted } from 'vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import CheckBox from '@/components/CheckBox.vue'
+import CardContainer from '@/components/CardContainer.vue'
+import { isValidURL } from '@/utils/common'
 
-const emit = defineEmits(['closeWebAppHandler', 'deleteWebApp'])
+const emit = defineEmits(['closeWebAppHandler', 'deleteWebApp', 'getWebAppIcon', 'editWebApp', 'addWebApp'])
 const props = defineProps({
     type: String,
     app: Object,
+    iconPlaceholder: String,
 })
 
+const webAppNameInputRef = ref()
+const webAppUrlInputRef = ref()
+const webAppIconImgRef = ref()
+const webAppIconInputRef = ref()
 const showHandler = ref(false)
 const deleteNotice = ref(false)
+let isAutoGetWebAppIcon = false
+let webAppIconSource = 'none'
+let webAppIconFile = null
+
+function setCustomWebAppIcon(e) {
+    let imgFile = e.target.files[0];
+    if (imgFile) {
+        webAppIconImgRef.value.src = window.URL.createObjectURL(imgFile);
+        isAutoGetWebAppIcon = false;
+        webAppIconFile = imgFile;
+        webAppIconSource = 'custom';
+    }
+}
+
+function handleGetWebAppIconSuccess() {
+    if (isAutoGetWebAppIcon) {
+        webAppIconSource = 'auto';
+    }
+    emit('getWebAppIcon', 'Success');
+}
+
+function handleGetWebAppIconError() {
+    webAppIconImgRef.value.src = props.iconPlaceholder;
+
+    webAppIconSource = 'none';
+    emit('getWebAppIcon', 'Error');
+}
+
+function autoGetWebAppIcon() {
+    let webAppUrlInputDom = webAppUrlInputRef.value;
+    let webAppUrlInputValue = webAppUrlInputDom.value.trim();
+
+    if (!isValidURL(webAppUrlInputValue)) {
+        emit('getWebAppIcon', 'URLInvalid');
+        return;
+    }
+
+    let regex = new RegExp('/' + '+$');
+    let iconUrl = webAppUrlInputValue.replace(regex, '') + "/favicon.ico";
+
+    webAppIconImgRef.value.src = iconUrl;
+    isAutoGetWebAppIcon = true;
+
+    emit('getWebAppIcon', 'Getting');
+}
+
+function uploadCustomWebAppIcon() {
+    webAppIconImgRef.value.src = props.iconPlaceholder;
+    webAppIconSource = 'none';
+
+    let webAppIconInputDom = webAppIconInputRef.value;
+    webAppIconInputDom.click();
+}
 
 function handleCancelBtnClick() {
     emit('closeWebAppHandler');
@@ -19,12 +79,36 @@ function handleCancelBtnClick() {
 
 function handleOkBtnClick() {
     if (props.type === 'delete') {
-        emit('deleteWebApp', !deleteNotice.value);
+        emit('deleteWebApp', props.app, !deleteNotice.value);
+    } else if (props.type === 'edit') {
+        emit('editWebApp', props.app, {
+            name: webAppNameInputRef.value.value,
+            url: webAppUrlInputRef.value.value,
+            iconSource: webAppIconSource,
+            iconUrl: webAppIconImgRef.value.src,
+            iconFile: webAppIconFile,
+        });
+    } else if (props.type === 'add') {
+        emit('addWebApp', {
+            name: webAppNameInputRef.value.value,
+            url: webAppUrlInputRef.value.value,
+            iconSource: webAppIconSource,
+            iconUrl: webAppIconImgRef.value.src,
+            iconFile: webAppIconFile,
+        });
     }
 }
 
 onMounted(() => {
-    showHandler.value = true
+    if (props.type === 'edit') {
+        webAppNameInputRef.value.value = props.app.name;
+        webAppUrlInputRef.value.value = props.app.url;
+        webAppIconImgRef.value.src = props.app.icon;
+        webAppIconSource = props.app.iconSource;
+    } else if (props.type === 'add') {
+        webAppIconImgRef.value.src = props.iconPlaceholder;
+    }
+    showHandler.value = true;
 })
 
 </script>
@@ -53,6 +137,37 @@ onMounted(() => {
                             </CheckBox>
                         </div>
                     </div>
+                    <div v-else>
+                        <CardContainer :card-name="'名称'">
+                            <div class="web-app-handler-input-container">
+                                <input ref="webAppNameInputRef" class="web-app-handler-input" type="text"
+                                    placeholder="请输入App名称" />
+                            </div>
+                        </CardContainer>
+                        <CardContainer :card-name="'网址'" :card-des="'App网址应以http://或https://开头。'">
+                            <div class="web-app-handler-input-container">
+                                <input ref="webAppUrlInputRef" class="web-app-handler-input" type="text"
+                                    placeholder="请输入App网址" @input="handleWebAppUrlInputChange" />
+                            </div>
+                        </CardContainer>
+                        <CardContainer :card-name="'图标'">
+                        </CardContainer>
+                        <div class="web-app-icon-container">
+                            <img ref="webAppIconImgRef" class="web-app-icon" @load="handleGetWebAppIconSuccess"
+                                @error="handleGetWebAppIconError">
+                            <div class="web-app-icon-handle-btn">
+                                <ButtonWrap :type="'text'" :text="'自动获取'" @click="autoGetWebAppIcon">
+                                </ButtonWrap>
+                                <div style="width: 10px;"></div>
+                                <ButtonWrap :type="'text'" :text="'自定义'" @click="uploadCustomWebAppIcon">
+                                </ButtonWrap>
+                            </div>
+                            <div v-show="false">
+                                <input ref="webAppIconInputRef" type="file" accept="image/*"
+                                    @change="setCustomWebAppIcon" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="web-app-handler-btn">
                         <ButtonWrap :type="'text'" :text="'取消'" @click="handleCancelBtnClick">
                         </ButtonWrap>
@@ -73,8 +188,8 @@ onMounted(() => {
     overflow: hidden;
     margin: 0;
     position: absolute;
-    background-color: var(--common-background-color);
-    backdrop-filter: var(--common-backdrop-filter);
+    background-color: transparent;
+    backdrop-filter: blur(10px);
 }
 
 .web-app-handler {
@@ -136,5 +251,46 @@ onMounted(() => {
 .web-app-handler-btn {
     display: flex;
     justify-content: flex-end;
+}
+
+.web-app-handler-input-container {
+    width: 100%;
+    height: 30px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.web-app-handler-input {
+    width: 100%;
+    height: 100%;
+    min-width: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: var(--primary-font-color);
+    background-color: transparent;
+}
+
+.web-app-icon-container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    margin-top: -20px;
+}
+
+.web-app-icon {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: var(--common-box-shadow);
+}
+
+.web-app-icon-handle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: end;
 }
 </style>
