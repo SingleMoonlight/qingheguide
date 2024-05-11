@@ -206,6 +206,7 @@ onMounted(() => {
     max-width: 80%;
     max-height: 80%;
     color: var(--primary-font-color);
+    background-color: var(--common-background-color);
     box-shadow: var(--common-box-shadow);
     transition: .25s ease;
     overflow: hidden;

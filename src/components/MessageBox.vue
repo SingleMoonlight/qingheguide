@@ -81,10 +81,10 @@ function handleOkBtnClick() {
     padding: 20px;
     border-radius: 10px;
     box-sizing: border-box;
+    color: var(--primary-font-color);
     background: var(--common-background-color);
     backdrop-filter: var(--common-backdrop-filter);
-    box-shadow: var(--common-box-shadow);
-    color: var(--primary-font-color);
+    box-shadow: var(--box-shadow-on-frosted-glass);
     overflow: hidden;
 }
 

@@ -1,6 +1,6 @@
 <script setup>
 import ButtonWrap from '@/components/ButtonWrap.vue'
-import CheckedIcon from './icons/CheckedIcon.vue'
+import EnsureIcon from './icons/EnsureIcon.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { onMounted, ref, watch } from 'vue'
 
@@ -32,7 +32,7 @@ function handleSelectPage(index) {
     } else {
         transitionEffectName.value = props.flippingEffect;
     }
-    
+
     curActivePageIndex.value = index;
     pageName.value = props.pageList[curActivePageIndex.value].name;
     showPageName.value = true;
@@ -222,7 +222,7 @@ watch(() => props.pageList, (newValue) => {
             <div v-if="showPageThumbnail" class="pagination-thumbnail-check-button-container">
                 <ButtonWrap :type="'icon'" :hover-color="'rgba(255, 255, 255, 0.1)'"
                     :active-color="'rgba(255, 255, 255, 0.2)'" @click="handleClickThumbnailCheckBtn">
-                    <CheckedIcon></CheckedIcon>
+                    <EnsureIcon></EnsureIcon>
                 </ButtonWrap>
             </div>
             <div v-else class="pagination-bar-container" v-longpress="handleLongPressBar">
@@ -262,6 +262,10 @@ watch(() => props.pageList, (newValue) => {
     overflow-x: hidden;
 }
 
+.pagination-thumbnail-page-container::-webkit-scrollbar {
+    display: none;
+}
+
 .pagination-thumbnail-page {
     display: flex;
     justify-content: center;
@@ -271,8 +275,8 @@ watch(() => props.pageList, (newValue) => {
     height: 160px;
     border-radius: 10px;
     background-color: transparent;
-    box-shadow: 2px 2px 6px rgba(255, 255, 255, 0.05) inset,
-        2px 2px 6px rgba(0, 0, 0, 0.1);
+    color: rgb(255, 255, 255);
+    box-shadow: var(--box-shadow-on-frosted-glass);
     backdrop-filter: blur(10px);
 }
 
@@ -328,8 +332,7 @@ watch(() => props.pageList, (newValue) => {
 }
 
 .pagination-bar-container:hover {
-    box-shadow: 2px 2px 6px rgba(255, 255, 255, 0.05) inset,
-        2px 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-on-frosted-glass);
     backdrop-filter: blur(10px);
 }
 

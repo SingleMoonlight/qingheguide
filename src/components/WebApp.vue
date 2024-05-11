@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
     name: String,
@@ -47,7 +47,7 @@ onMounted(() => {
 }
 
 .web-app-name {
-    color: var(--primary-font-color);
+    color: rgb(255, 255, 255);
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
