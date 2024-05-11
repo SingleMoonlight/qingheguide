@@ -37,7 +37,7 @@ function handleGetWebAppIconSuccess() {
     if (isAutoGetWebAppIcon) {
         webAppIconSource = 'auto';
     }
-    emit('getWebAppIcon', 'LoadIconSuccess');
+    emit('getIcon', 'LoadIconSuccess');
 }
 
 function handleGetWebAppIconError() {
@@ -45,9 +45,9 @@ function handleGetWebAppIconError() {
     webAppIconSource = 'none';
 
     if (isAutoGetWebAppIcon) {
-        emit('getWebAppIcon', 'AutoGetIconError');
+        emit('getIcon', 'AutoGetIconError');
     } else {
-        emit('getWebAppIcon', 'CustomIconLoadError');
+        emit('getIcon', 'CustomIconLoadError');
     }
 }
 
@@ -56,7 +56,7 @@ function autoGetWebAppIcon() {
     let webAppUrlInputValue = webAppUrlInputDom.value.trim();
 
     if (!isValidURL(webAppUrlInputValue)) {
-        emit('getWebAppIcon', 'URLInvalid');
+        emit('getIcon', 'URLInvalid');
         return;
     }
 
@@ -66,7 +66,7 @@ function autoGetWebAppIcon() {
     webAppIconImgRef.value.src = iconUrl;
     isAutoGetWebAppIcon = true;
 
-    emit('getWebAppIcon', 'AutoGetIcon');
+    emit('getIcon', 'AutoGetIcon');
 }
 
 function uploadCustomWebAppIcon() {
