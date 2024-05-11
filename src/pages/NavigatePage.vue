@@ -355,6 +355,14 @@ function handleDeleteWebAppGroup(deleteNotice) {
     }
 
     let groupIndex = settingStore.$state.webAppGroupIndex;
+    let group = webAppStore.$state.app[groupIndex];
+
+    // 删除分组时，同步删除自定义图标
+    group.groupApps.forEach(webApp => {
+        if (webApp.iconSource === 'custom') {
+            deleteWebAppIconImg(webApp.id);
+        }
+    })
 
     showWebAppGroup.value = false;
 
@@ -402,6 +410,8 @@ function handleAddWebAppGroup(groupName) {
         groupName: groupName,
         groupApps: [],
     })
+    // 自动跳转到新增分组
+    settingStore.$state.webAppGroupIndex = webAppStore.$state.app.length - 1;
     updateWebAppGroup();
     closeWebAppGroupHandler();
 }
