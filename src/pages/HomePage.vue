@@ -32,8 +32,9 @@ function handleSearchBarInputUpdate(value) {
 
     getSearchSuggest(value).then(res => {
         suggest.value = [...res];
+        printLog('result', 'handleSearchBarInputUpdate getSearchSuggest', res)
     }).catch(err => {
-        printLog('error', 'getSearchSuggest', err)
+        printLog('error', 'handleSearchBarInputUpdate getSearchSuggest', err)
     })
 }
 

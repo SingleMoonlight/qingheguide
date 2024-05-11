@@ -10,11 +10,11 @@ export function getCurrentLocation() {
                     resolve(res[0]);
                 }).catch(err => {
                     reject(new Error('获取定位失败，请重试或者手动选择位置。'));
-                    printLog('error', 'getCurrentPosition', err);
+                    printLog('error', 'getCurrentPosition searchLocation', err);
                 });
             }, (err) => {
                 reject(new Error('获取定位失败，请确认浏览器已允许本网站获取定位，若仍然失败请重试或者手动选择位置。'));
-                printLog('error', 'getCurrentPosition', err);
+                printLog('error', 'getCurrentPosition searchLocation', err);
             }, {
                 timeout: 3000,
             });
@@ -111,9 +111,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.nowWeather.icon = res.icon;
             weatherStoreState.nowWeather.text = res.text;
 
-            printLog('result', 'getNowWeather', res);
+            printLog('result', 'getWeatherInfo getNowWeather', res);
         }).catch(err => {
-            printLog('error', 'getNowWeather', err);
+            printLog('error', 'getWeatherInfo getNowWeather', err);
         })
     }
     if (focusUpdate || (weatherStoreState.lastNowAirUpdateTime === null ||
@@ -124,9 +124,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             weatherStoreState.nowAir.aqi = res.now.aqi;
             weatherStoreState.airReferSources = res.refer.sources;
 
-            printLog('result', 'getNowAir', res);
+            printLog('result', 'getWeatherInfo getNowAir', res);
         }).catch(err => {
-            printLog('error', 'getNowAir', err);
+            printLog('error', 'getWeatherInfo getNowAir', err);
         });
 
     }
@@ -143,9 +143,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
                 })
             )
 
-            printLog('result', 'getFutureWeather', res);
+            printLog('result', 'getWeatherInfo getFutureWeather', res);
         }).catch(err => {
-            printLog('error', 'getFutureWeather', err);
+            printLog('error', 'getWeatherInfo getFutureWeather', err);
         });
     }
     if (focusUpdate || (weatherStoreState.lastFutureAirUpdateTime === null ||
@@ -159,9 +159,9 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
                 })
             );
 
-            printLog('result', 'getFutureAir', res);
+            printLog('result', 'getWeatherInfo getFutureAir', res);
         }).catch(err => {
-            printLog('error', 'getFutureAir', err);
+            printLog('error', 'getWeatherInfo getFutureAir', err);
         });
     }
 }

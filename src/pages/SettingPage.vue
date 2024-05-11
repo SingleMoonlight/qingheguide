@@ -186,7 +186,7 @@ function searchWeatherLocation(input) {
         )
 
         flagStore.setShowGlobalLoading(false);
-        printLog('result', 'searchLocation', res);
+        printLog('result', 'searchWeatherLocation searchLocation', res);
     }).catch(err => {
         showWeatherLocationList.value = false;
         flagStore.setShowGlobalLoading(false);
@@ -195,7 +195,7 @@ function searchWeatherLocation(input) {
                 okBtnText: '好的',
             }
         );
-        printLog('error', 'searchLocation', err);
+        printLog('error', 'searchWeatherLocation searchLocation', err);
     })
 }
 
