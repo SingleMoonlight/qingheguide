@@ -5,7 +5,7 @@ import CloseIcon from '@/components/icons/CloseIcon.vue'
 import CheckBox from '@/components/CheckBox.vue'
 import CardContainer from '@/components/CardContainer.vue'
 
-const emit = defineEmits(['closeWebAppGroupHandler', 'deleteWebAppGroup', 'editWebAppGroup', 'addWebAppGroup'])
+const emit = defineEmits(['close', 'delete', 'edit', 'add'])
 const props = defineProps({
     type: String,
     groupName: String,
@@ -15,16 +15,16 @@ const showHandler = ref(false)
 const deleteNotice = ref(false)
 
 function handleCancelBtnClick() {
-    emit('closeWebAppGroupHandler');
+    emit('close');
 }
 
 function handleOkBtnClick() {
     if (props.type === 'delete') {
-        emit('deleteWebAppGroup', !deleteNotice.value);
+        emit('delete', !deleteNotice.value);
     } else if (props.type === 'edit') {
-        emit('editWebAppGroup', webAppGroupNameInputRef.value.value);
+        emit('edit', webAppGroupNameInputRef.value.value);
     } else if (props.type === 'add') {
-        emit('addWebAppGroup', webAppGroupNameInputRef.value.value);
+        emit('add', webAppGroupNameInputRef.value.value);
     }
 }
 
@@ -47,7 +47,7 @@ onMounted(() => {
                         <div v-if="props.type === 'add'">添加分组</div>
                         <div v-if="props.type === 'delete'">删除分组</div>
                     </div>
-                    <ButtonWrap :type="'icon'" @click="emit('closeWebAppGroupHandler')">
+                    <ButtonWrap :type="'icon'" @click="emit('close')">
                         <CloseIcon></CloseIcon>
                     </ButtonWrap>
                 </div>

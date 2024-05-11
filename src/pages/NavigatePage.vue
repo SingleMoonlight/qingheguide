@@ -9,8 +9,8 @@ import PaginationContainer from '@/components/PaginationContainer.vue'
 import WebApp from '@/components/WebApp.vue'
 import WebAppMenuIcon from '@/components/icons/WebAppMenuIcon.vue'
 import WebAppGroupMenuIcon from '@/components/icons/WebAppGroupMenuIcon.vue'
-import WebAppHandler from '@/components/WebAppHandler.vue'
-import WebAppGroupHandler from '@/components/WebAppGroupHandler.vue'
+import WebAppHandleForm from '@/components/WebAppHandleForm.vue'
+import WebAppGroupHandleForm from '@/components/WebAppGroupHandleForm.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useSettingStore } from '@/stores/settingStore'
@@ -454,8 +454,8 @@ onMounted(() => {
                             @drag="handleWebAppDrag" @click="handleClickWebAppGroup"
                             @contextmenu="handleRightClickWebAppGroup(group, $event)">
                             <TransitionGroup :css="false" :name="webAppTransition">
-                                <div class="web-app-container"
-                                    v-for="app in webAppStore.app[groupIndex].groupApps" :key="app">
+                                <div class="web-app-container" v-for="app in webAppStore.app[groupIndex].groupApps"
+                                    :key="app">
                                     <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
                                         :default-icon="defaultImgPlaceHolder" @click="handleClickWebApp(app.url)"
                                         @contextmenu="handleRightClickWebApp(app, $event)">
@@ -514,18 +514,16 @@ onMounted(() => {
             </SelectList>
         </div>
         <Transition mode="out-in" name="fade">
-            <WebAppHandler v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
-                :icon-placeholder="defaultImgPlaceHolder" @close-web-app-handler="closeWebAppHandler"
-                @delete-web-app="handleDeleteWebApp" @get-web-app-icon="handleGetWebAppIcon"
-                @edit-web-app="handleEditWebApp" @add-web-app="handleAddWebApp">
-            </WebAppHandler>
+            <WebAppHandleForm v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
+                :icon-placeholder="defaultImgPlaceHolder" @close="closeWebAppHandler" @delete="handleDeleteWebApp"
+                @edit="handleEditWebApp" @add="handleAddWebApp" @get-icon="handleGetWebAppIcon" >
+            </WebAppHandleForm>
         </Transition>
         <Transition mode="out-in" name="fade">
-            <WebAppGroupHandler v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
-                :group-name="webAppGroup[settingStore.webAppGroupIndex].name"
-                @close-web-app-group-handler="closeWebAppGroupHandler" @delete-web-app-group="handleDeleteWebAppGroup"
-                @edit-web-app-group="handleEditWebAppGroup" @add-web-app-group="handleAddWebAppGroup">
-            </WebAppGroupHandler>
+            <WebAppGroupHandleForm v-if="showWebAppGroupHandler" :type="webAppGroupHandlerType"
+                :group-name="webAppGroup[settingStore.webAppGroupIndex].name" @close="closeWebAppGroupHandler"
+                @delete="handleDeleteWebAppGroup" @edit="handleEditWebAppGroup" @add="handleAddWebAppGroup">
+            </WebAppGroupHandleForm>
         </Transition>
     </div>
 </template>

@@ -6,7 +6,7 @@ import CheckBox from '@/components/CheckBox.vue'
 import CardContainer from '@/components/CardContainer.vue'
 import { isValidURL } from '@/utils/common'
 
-const emit = defineEmits(['closeWebAppHandler', 'deleteWebApp', 'getWebAppIcon', 'editWebApp', 'addWebApp'])
+const emit = defineEmits(['close', 'delete', 'edit', 'add', 'getIcon'])
 const props = defineProps({
     type: String,
     app: Object,
@@ -78,14 +78,14 @@ function uploadCustomWebAppIcon() {
 }
 
 function handleCancelBtnClick() {
-    emit('closeWebAppHandler');
+    emit('close');
 }
 
 function handleOkBtnClick() {
     if (props.type === 'delete') {
-        emit('deleteWebApp', props.app, !deleteNotice.value);
+        emit('delete', props.app, !deleteNotice.value);
     } else if (props.type === 'edit') {
-        emit('editWebApp', props.app, {
+        emit('edit', props.app, {
             name: webAppNameInputRef.value.value,
             url: webAppUrlInputRef.value.value,
             iconSource: webAppIconSource,
@@ -93,7 +93,7 @@ function handleOkBtnClick() {
             iconFile: webAppIconFile,
         });
     } else if (props.type === 'add') {
-        emit('addWebApp', {
+        emit('add', {
             name: webAppNameInputRef.value.value,
             url: webAppUrlInputRef.value.value,
             iconSource: webAppIconSource,
@@ -127,7 +127,7 @@ onMounted(() => {
                         <div v-if="props.type === 'add'">添加App</div>
                         <div v-if="props.type === 'delete'">删除App</div>
                     </div>
-                    <ButtonWrap :type="'icon'" @click="emit('closeWebAppHandler')">
+                    <ButtonWrap :type="'icon'" @click="emit('close')">
                         <CloseIcon></CloseIcon>
                     </ButtonWrap>
                 </div>
