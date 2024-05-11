@@ -202,13 +202,20 @@ function handleGetWebAppIcon(state) {
                 okBtnText: '确定',
             }
         );
-    } else if (state === 'Getting') {
+    } else if (state === 'AutoGetIcon') {
         flagStore.setShowGlobalLoading(true);
-    } else if (state === 'Success') {
+    } else if (state === 'LoadIconSuccess') {
         flagStore.setShowGlobalLoading(false);
-    } else if (state === 'Error') {
+    } else if (state === 'AutoGetIconError') {
         flagStore.setShowGlobalLoading(false);
         messageBoxStore.openMessageBox('warn', '提示', '自动获取图标失败，请重试或者选择自定义图标。',
+            {
+                okBtnText: '确定',
+            }
+        );
+    } else if (state === 'CustomIconLoadError') {
+        flagStore.setShowGlobalLoading(false);
+        messageBoxStore.openMessageBox('warn', '提示', '自定义图标加载失败，请尝试刷新页面或者重新选择自定义图标。',
             {
                 okBtnText: '确定',
             }

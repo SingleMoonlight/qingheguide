@@ -37,14 +37,18 @@ function handleGetWebAppIconSuccess() {
     if (isAutoGetWebAppIcon) {
         webAppIconSource = 'auto';
     }
-    emit('getWebAppIcon', 'Success');
+    emit('getWebAppIcon', 'LoadIconSuccess');
 }
 
 function handleGetWebAppIconError() {
     webAppIconImgRef.value.src = props.iconPlaceholder;
-
     webAppIconSource = 'none';
-    emit('getWebAppIcon', 'Error');
+
+    if (isAutoGetWebAppIcon) {
+        emit('getWebAppIcon', 'AutoGetIconError');
+    } else {
+        emit('getWebAppIcon', 'CustomIconLoadError');
+    }
 }
 
 function autoGetWebAppIcon() {
@@ -62,7 +66,7 @@ function autoGetWebAppIcon() {
     webAppIconImgRef.value.src = iconUrl;
     isAutoGetWebAppIcon = true;
 
-    emit('getWebAppIcon', 'Getting');
+    emit('getWebAppIcon', 'AutoGetIcon');
 }
 
 function uploadCustomWebAppIcon() {
