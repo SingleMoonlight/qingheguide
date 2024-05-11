@@ -387,7 +387,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'背景'">
+                <CardContainer :card-name="'背景'" :card-des="'当进入网站自定义背景加载失败时，网站会临时使用默认背景。'">
                     <SettingItem v-for="(item, index) in bgSourceList" :key="index" :type="'list'" :label="item.name"
                         :checked="getBgSourceIndex(settingStore.backgroundSource) === index"
                         @checked-list-item="selectBgSource(index)">
