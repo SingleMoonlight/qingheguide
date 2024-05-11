@@ -19,7 +19,7 @@ import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { useFlagStore } from '@/stores/flagStore'
 import {
     otherMenuList, webAppMenuList, webAppGroupMenuList,
-    defaultImgPlaceHolder
+    defaultImgPlaceHolder, flippingInterval
 } from '@/utils/constant'
 import { generateUID } from '@/utils/common'
 import { setWebAppIconImg, deleteWebAppIconImg } from '@/utils/indexedDB'
@@ -48,8 +48,6 @@ const webAppTransition = ref('')
 const checkedWebApp = ref(null)
 let webAppGroupLeft = 0
 let webAppGroupRight = 0
-let webAppNearLeftTime = 0
-let webAppNearRightTime = 0
 
 function closeNavigate(e) {
     if (e.currentTarget !== e.target) {
@@ -110,19 +108,12 @@ function handleWebAppDragStart(event) {
 function handleWebAppDrag(event) {
     let isOnLeftEdge = event.clientX < webAppGroupLeft;
     let isOnRightEdge = event.clientX > webAppGroupRight;
-    let nowTime = new Date().valueOf();
 
     if (isOnLeftEdge) {
-        if (nowTime - webAppNearLeftTime > 1000) {
-            paginationContainerRef.value.slideRight();
-            webAppNearLeftTime = nowTime;
-        }
+        paginationContainerRef.value.slideRight();
     }
     if (isOnRightEdge) {
-        if (nowTime - webAppNearRightTime > 1000) {
-            paginationContainerRef.value.slideLeft();
-            webAppNearRightTime = nowTime;
-        }
+        paginationContainerRef.value.slideLeft();
     }
 }
 
@@ -453,8 +444,9 @@ onMounted(() => {
             <div class="web-app-group-container" v-if="showWebAppGroup">
                 <PaginationContainer ref="paginationContainerRef" :page-count="webAppGroup.length"
                     :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
-                    :flipping-effect="settingStore.flippingEffect" :page-list="webAppGroup"
-                    @change-active-page="updateDefaultWebAppGroup" @change-page-order="updateWebAppGroupOrder">
+                    :flipping-effect="settingStore.flippingEffect" :flipping-interval="flippingInterval"
+                    :page-list="webAppGroup" @change-active-page="updateDefaultWebAppGroup"
+                    @change-page-order="updateWebAppGroupOrder">
                     <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
                         :key="groupIndex">
                         <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps"

@@ -11,6 +11,7 @@ const props = defineProps({
     activePageIndex: Number,
     circularSliding: Boolean,
     flippingEffect: String,
+    flippingInterval: Number,
 })
 const pageName = ref('')
 const showPageName = ref(false)
@@ -19,6 +20,7 @@ const curActivePageIndex = ref(0)
 const transitionEffectName = ref('')
 const originalPageRef = ref()
 const pageNameListForDrag = ref(null)
+let lastPageSlideTime = 0
 
 function handleSelectPage(index) {
     if (props.flippingEffect !== 'fade') {
@@ -52,6 +54,12 @@ function handleMouseLeaveBarDot(index) {
 }
 
 function slideLeft() {
+    let nowTime = new Date().valueOf();
+    if (nowTime - lastPageSlideTime < props.flippingInterval) {
+        return;
+    }
+    lastPageSlideTime = nowTime;
+
     if (props.flippingEffect !== 'fade') {
         transitionEffectName.value = props.flippingEffect + '-left';
     } else {
@@ -73,6 +81,12 @@ function slideLeft() {
 }
 
 function slideRight() {
+    let nowTime = new Date().valueOf();
+    if (nowTime - lastPageSlideTime < props.flippingInterval) {
+        return;
+    }
+    lastPageSlideTime = nowTime;
+
     if (props.flippingEffect !== 'fade') {
         transitionEffectName.value = props.flippingEffect + '-right';
     } else {

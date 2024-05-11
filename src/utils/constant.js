@@ -63,6 +63,7 @@ export const webAppOpenModeList = [
     { mode: 'new', name: '新标签页' },
 ]
 
+export const flippingInterval = 500
 export const flippingEffectList = [
     { effect: 'fade', name: '渐隐' },
     { effect: 'slide', name: '滑动' },
