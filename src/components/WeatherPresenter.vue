@@ -44,16 +44,16 @@ function openWeatherCard() {
             </div>
             <div class="divide-line"></div>
             <div class="weather-future-list" v-for="i in props.futureWeather.length" :key="i">
-                <div>
+                <div class="weather-future-list-day">
                     {{ futureDays[i - 1] }}
                 </div>
-                <div>
+                <div class="weather-future-list-icon">
                     <i :class="'qi-' + props.futureWeather[i - 1].icon + '-fill'" class="weather-outline-icon"></i>
                 </div>
-                <div>
+                <div class="weather-future-list-temp">
                     {{ props.futureWeather[i - 1].tempMin + '°' + '/' + props.futureWeather[i - 1].tempMax + '°' }}
                 </div>
-                <div>
+                <div class="weather-future-list-air">
                     {{ props.futureAir[i - 1].category }}
                 </div>
             </div>
@@ -95,7 +95,6 @@ function openWeatherCard() {
 
 .weather-now-second-row {
     display: flex;
-    justify-content: end;
 }
 
 .weather-now-temp {
@@ -108,11 +107,12 @@ function openWeatherCard() {
 
 .weather-now-text {
     font-size: 14px;
-    margin-right: 98px;
+    margin-left: 55px;
 }
 
 .weather-now-air {
     font-size: 14px;
+    margin-left: auto;
 }
 
 .divide-line {
@@ -126,5 +126,24 @@ function openWeatherCard() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.weather-future-list-day {
+    width: 28px;
+}
+
+.weather-future-list-icon {
+    width: 24px;
+}
+
+.weather-future-list-temp {
+    width: 50px;
+}
+
+.weather-future-list-air {
+    width: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: right;
 }
 </style>
