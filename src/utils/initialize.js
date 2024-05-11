@@ -9,8 +9,9 @@ import {
 import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useWebAppStore } from '@/stores/webAppStore'
+import { initImageDB } from '@/utils/indexedDB'
 
-export function checkUpdate() {
+function checkUpdate() {
     const settingStore = useSettingStore();
 
     // 开发环境持续更新设置
@@ -29,7 +30,7 @@ export function checkUpdate() {
 }
 
 
-export function loadConfig() {
+function loadConfig() {
     const settingStore = useSettingStore();
     const searchHistoryStore = useSearchHistoryStore();
     const flagStore = useFlagStore();
@@ -78,7 +79,7 @@ export function loadConfig() {
     }
 }
 
-export function printWebsiteInfo() {
+function printWebsiteInfo() {
     const year = new Date().getFullYear();
 
     console.log("%c欢迎使用青何导航, 马上开始简单纯粹的搜索之旅吧! \n\n" +
@@ -87,7 +88,7 @@ export function printWebsiteInfo() {
         "color: #ffffff");
 }
 
-export function globalKeyDown() {
+function globalKeyDown() {
     document.onkeydown = (e) => {
         if (!e) {
             return false;
@@ -114,4 +115,12 @@ export function globalKeyDown() {
         // 禁用鼠标右键
         return false;
     }
+}
+
+export function initialize() {
+    initImageDB();
+    printWebsiteInfo();
+    globalKeyDown();
+    checkUpdate();
+    loadConfig();
 }
