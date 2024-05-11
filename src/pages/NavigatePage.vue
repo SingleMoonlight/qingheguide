@@ -455,7 +455,7 @@ onMounted(() => {
                             @contextmenu="handleRightClickWebAppGroup(group, $event)">
                             <TransitionGroup :css="false" :name="webAppTransition">
                                 <div class="web-app-container"
-                                    v-for="(app, appIndex) in webAppStore.app[groupIndex].groupApps" :key="app">
+                                    v-for="app in webAppStore.app[groupIndex].groupApps" :key="app">
                                     <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
                                         :default-icon="defaultImgPlaceHolder" @click="handleClickWebApp(app.url)"
                                         @contextmenu="handleRightClickWebApp(app, $event)">

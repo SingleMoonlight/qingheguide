@@ -83,28 +83,28 @@ export const useWebAppStore = defineStore('webAppStore', {
                 groupName: '设计',
                 groupApps: [
                     {
-                        icon: '9',
+                        id: '9',
                         name: '即时设计',
                         url: 'https://js.design/',
                         iconSource: 'auto',
                         icon: 'https://cdn.ifback.com/website/websiteIcon/js-design.svg',
                     },
                     {
-                        icon: '10',
+                        id: '10',
                         name: '稿定设计',
                         url: 'https://www.gaoding.com/',
                         iconSource: 'auto',
                         icon: 'https://cdn.ifback.com/website/websiteIcon/gaoding.svg',
                     },
                     {
-                        icon: '11',
+                        id: '11',
                         name: 'Unsplash',
                         url: 'https://unsplash.com/',
                         iconSource: 'auto',
                         icon: 'https://cdn.ifback.com/website/websiteIcon/unsplash.svg',
                     },
                     {
-                        icon: '12',
+                        id: '12',
                         name: 'Iconfont',
                         url: 'https://www.iconfont.cn/',
                         iconSource: 'auto',
