@@ -139,9 +139,6 @@ function handleThumbnailPageAfterEnter(el) {
 
 function handleClickThumbnailCheckBtn() {
     showPageThumbnail.value = false;
-}
-
-function handleUpdatePageOrder() {
     emit('changePageOrder', pageNameListForDrag.value);
 }
 
@@ -182,11 +179,10 @@ watch(() => props.pageList, (newValue) => {
     <div class="pagination-container">
         <Transition mode="out-in" name="fade">
             <VueDraggable v-model="pageNameListForDrag" v-if="showPageThumbnail"
-                class="pagination-thumbnail-page-container" :animation="150" :scroll="true"
-                @update="handleUpdatePageOrder">
+                class="pagination-thumbnail-page-container" :animation="150" :scroll="true">
                 <TransitionGroup appear :css="false" @enter="handleThumbnailPageEnter"
                     @after-enter="handleThumbnailPageAfterEnter">
-                    <div v-for="(item, index) in pageNameListForDrag" :key="item" :data-index="index"
+                    <div v-for="(item, index) in pageNameListForDrag" :key="item" :data-index="index + 1"
                         class="pagination-thumbnail-page">
                         {{ item.name }}
                     </div>
