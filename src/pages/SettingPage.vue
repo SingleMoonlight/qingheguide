@@ -19,6 +19,8 @@ import {
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
 import { setClassForElement, isValidURL, printLog } from '@/utils/common'
+import { clearLocalStorage } from '@/utils/localStorage'
+import { deleteImageDB } from '@/utils/indexedDB'
 import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['closeSetting'])
@@ -40,6 +42,7 @@ const weatherLocationSettingPaneRef = ref()
 const showWeatherSettingPaneRef = ref()
 const webAppOpenModeSettingPaneRef = ref()
 const flippingEffectSettingPaneRef = ref()
+const resetSettingPaneRef = ref()
 const weatherLocationList = ref([])
 const showWeatherLocationList = ref(false)
 const showSettingPane = ref(false)
@@ -231,6 +234,32 @@ function selectFlippingEffect(index) {
     settingStore.$state.flippingEffect = flippingEffectList[index].effect;
 }
 
+function resetAllSetting() {
+    messageBoxStore.openMessageBox('warn', '提示', '您确定要恢复到默认状态吗？恢复后将自动刷新页面并重新进入网站。',
+        {
+            okBtnText: '确定',
+            cancelBtnText: '取消',
+            okHandler: () => {
+                clearLocalStorage();
+                deleteImageDB();
+                location.reload();
+            },
+        }
+    );
+}
+
+function resetCustomSetting() {
+    messageBoxStore.openMessageBox('warn', '提示', '您确定要重置自定义设置吗？',
+        {
+            okBtnText: '确定',
+            cancelBtnText: '取消',
+            okHandler: () => {
+                settingStore.$reset();
+            },
+        }
+    );
+}
+
 function goToNext(cur, next) {
     if (cur === null || cur === undefined) return;
     if (next === null || next === undefined) return;
@@ -354,6 +383,11 @@ onMounted(() => {
                         <SettingItem :label="'分组翻页效果'" :type="'next'"
                             :next-value="getFlippingEffectName(settingStore.flippingEffect)"
                             @open-next="goToNext(mainSettingPaneRef, flippingEffectSettingPaneRef)">
+                        </SettingItem>
+                    </CardContainer>
+                    <CardContainer :card-name="'重置'">
+                        <SettingItem :label="'重置'" :type="'next'"
+                            @open-next="goToNext(mainSettingPaneRef, resetSettingPaneRef)">
                         </SettingItem>
                     </CardContainer>
                 </div>
@@ -612,6 +646,26 @@ onMounted(() => {
                     <SettingItem v-for="(item, index) in flippingEffectList" :key="index" :type="'list'"
                         :label="item.name" :checked="getFlippingEffectIndex(settingStore.flippingEffect) === index"
                         @checked-list-item="selectFlippingEffect(index)">
+                    </SettingItem>
+                </CardContainer>
+            </div>
+        </div>
+        <div ref="resetSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(resetSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'重置设置'" :card-des="'重置自定义设置，保留导航分组和图标。'">
+                    <SettingItem :type="'none'" :label="'重置'" @click="resetCustomSetting">
+                    </SettingItem>
+                </CardContainer>
+                <CardContainer :card-name="'恢复默认'" :card-des="'重置自定义设置、导航分组和图标，恢复为默认状态。'">
+                    <SettingItem :type="'none'" :label="'恢复'" @click="resetAllSetting">
                     </SettingItem>
                 </CardContainer>
             </div>

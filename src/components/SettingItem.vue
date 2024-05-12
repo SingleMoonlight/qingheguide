@@ -5,7 +5,7 @@ import CheckedIcon from './icons/CheckedIcon.vue'
 import ButtonWrap from './ButtonWrap.vue'
 import { ref } from 'vue'
 
-const emit = defineEmits(['turnSwitch', 'openNext', 'checkedListItem', 'ensureInput'])
+const emit = defineEmits(['turnSwitch', 'openNext', 'checkedListItem', 'ensureInput', 'click'])
 const props = defineProps({
     label: String,
     type: String,
@@ -23,6 +23,8 @@ function clickSettingItem() {
         emit('openNext');
     } else if (props.type === 'list') {
         emit('checkedListItem');
+    } else if (props.type === 'none') {
+        emit('click');
     }
 }
 

@@ -37,3 +37,7 @@ export function getLocalWebApp() {
 export function setLocalWebApp(webApp) {
     localStorage.setItem('webApp', JSON.stringify(webApp));
 }
+
+export function clearLocalStorage() {
+    localStorage.clear();
+}
