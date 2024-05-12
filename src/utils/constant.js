@@ -83,6 +83,13 @@ export const webAppGroupMenuList = [
     { iconName: 'deleteGroup', name: '删除分组' },
 ]
 
+export const backupFileName = 'QingheGuideBackup.json'
+export const backupOptionList = [
+    { option: '自定义设置', name: 'setting', value: true },
+    { option: '导航分组和图标', name: 'webApp', value: true },
+    { option: '天气地理位置', name: 'weather', value: true },
+]
+
 // 顺序：fix opt add del
 export const updateHistory = [
     {

@@ -7,6 +7,7 @@ import BackgroundImage from '@/components/BackgroundImage.vue'
 import ButtonWrap from '@/components/ButtonWrap.vue'
 import SelectList from '@/components/SelectList.vue'
 import SelectItem from '@/components/SelectItem.vue'
+import CheckBox from '@/components/CheckBox.vue'
 import { useSettingStore } from '@/stores/settingStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { useFlagStore } from '@/stores/flagStore'
@@ -15,10 +16,10 @@ import { setBackgroundImg, deleteBackgroundImg } from '@/utils/indexedDB'
 import {
     defaultBackgroundUrl, themeList, bgSourceList, timeFontWeightList,
     searchOpenModeList, weatherLocationModeList, webAppOpenModeList,
-    flippingEffectList
+    flippingEffectList, backupOptionList, backupFileName
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
-import { setClassForElement, isValidURL, printLog } from '@/utils/common'
+import { setClassForElement, isValidURL, printLog, downloadFile } from '@/utils/common'
 import { clearLocalStorage } from '@/utils/localStorage'
 import { deleteImageDB } from '@/utils/indexedDB'
 import { ref, onMounted } from 'vue'
@@ -31,7 +32,6 @@ const weatherStore = useWeatherStore()
 const mainSettingPaneRef = ref()
 const themeSettingPaneRef = ref()
 const bgSettingPaneRef = ref()
-const settingBgInputRef = ref()
 const timeFontWeightSettingPaneRef = ref()
 const blurBackgroundSettingPaneRef = ref()
 const copyrightSettingPaneRef = ref()
@@ -42,8 +42,12 @@ const weatherLocationSettingPaneRef = ref()
 const showWeatherSettingPaneRef = ref()
 const webAppOpenModeSettingPaneRef = ref()
 const flippingEffectSettingPaneRef = ref()
+const backupSettingPaneRef = ref()
 const resetSettingPaneRef = ref()
+const settingBgInputRef = ref()
+const settingBackupInputRef = ref()
 const weatherLocationList = ref([])
+const backupList = ref([])
 const showWeatherLocationList = ref(false)
 const showSettingPane = ref(false)
 
@@ -234,6 +238,73 @@ function selectFlippingEffect(index) {
     settingStore.$state.flippingEffect = flippingEffectList[index].effect;
 }
 
+function backupSettingToLocal() {
+    let data = {};
+    let i = 0;
+
+    backupList.value.forEach(obj => {
+        if (obj.value) {
+            i++;
+            data[obj.name] = JSON.parse(localStorage.getItem(obj.name));
+        }
+    });
+
+    if (i === 0) {
+        messageBoxStore.openMessageBox('warn', '提示', '请先选择您希望备份的数据。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        return;
+    }
+
+    let blob = new Blob([JSON.stringify(data)], { type: 'text/json' });
+    downloadFile(backupFileName, blob);
+}
+
+function selectBackupFromLocal() {
+    let fileInputDom = settingBackupInputRef.value;
+    fileInputDom.click();
+}
+
+function recoverySettingFromLocal(e) {
+    let backupFile = e.target.files[0];
+    if (!backupFile) {
+        return;
+    }
+
+    let reader = new FileReader();
+    reader.readAsText(backupFile);
+
+    reader.onload = function (e) {
+        try {
+            let json = JSON.parse(e.target.result);
+            backupList.value.forEach(obj => {
+                if (json[obj.name]) {
+                    localStorage.setItem(obj.name, JSON.stringify(json[obj.name]));
+                }
+            });
+            location.reload();
+            printLog('result', 'recoverySettingFromLocal readAsText', json);
+        } catch (err) {
+            messageBoxStore.openMessageBox('error', '错误', '文件解析错误，请确认备份文件选择正确。',
+                {
+                    okBtnText: '确定',
+                }
+            );
+            printLog('error', 'recoverySettingFromLocal JSON.parse', err);
+        }
+    };
+    reader.onerror = function (err) {
+        messageBoxStore.openMessageBox('error', '错误', '文件读取异常，请重试。',
+            {
+                okBtnText: '确定',
+            }
+        );
+        printLog('error', 'recoverySettingFromLocal readAsText', err);
+    };
+}
+
 function resetAllSetting() {
     messageBoxStore.openMessageBox('warn', '提示', '您确定要恢复到默认状态吗？恢复后将自动刷新页面并重新进入网站。',
         {
@@ -283,7 +354,9 @@ function backToPrev(cur, prev) {
 }
 
 onMounted(() => {
-    showSettingPane.value = true
+    showSettingPane.value = true;
+
+    backupList.value = backupOptionList;
 })
 
 </script>
@@ -384,6 +457,17 @@ onMounted(() => {
                             :next-value="getFlippingEffectName(settingStore.flippingEffect)"
                             @open-next="goToNext(mainSettingPaneRef, flippingEffectSettingPaneRef)">
                         </SettingItem>
+                    </CardContainer>
+                    <CardContainer :card-name="'备份与恢复'">
+                        <SettingItem :label="'备份到本地'" :type="'next'"
+                            @open-next="goToNext(mainSettingPaneRef, backupSettingPaneRef)">
+                        </SettingItem>
+                        <SettingItem :label="'从本地恢复备份'" :type="'none'" @click="selectBackupFromLocal">
+                        </SettingItem>
+                        <div v-show="false">
+                            <input ref="settingBackupInputRef" type="file" accept=".json"
+                                @change="recoverySettingFromLocal" />
+                        </div>
                     </CardContainer>
                     <CardContainer :card-name="'重置'">
                         <SettingItem :label="'重置'" :type="'next'"
@@ -650,6 +734,31 @@ onMounted(() => {
                 </CardContainer>
             </div>
         </div>
+        <div ref="backupSettingPaneRef" class="setting-pane setting-pane-before-enter">
+            <div class="setting-pane-header setting-pane-child-header">
+                <div class="setting-pane-back-btn" @click="backToPrev(backupSettingPaneRef, mainSettingPaneRef)">
+                    <BackIcon></BackIcon>
+                </div>
+                <div class="setting-pane-title">
+                    设置
+                </div>
+            </div>
+            <div class="setting-pane-body">
+                <CardContainer :card-name="'备份数据'"></CardContainer>
+                <div class="backup-option-list-container">
+                    <div class="backup-option-list" v-for="(backupOption, index) in backupList">
+                        <CheckBox :checked="backupOption.value" :label="backupOption.option" :key="index"
+                            @change="backupOption.value = !backupOption.value">
+                        </CheckBox>
+                    </div>
+                </div>
+                <CardContainer
+                    :card-des="'选择需要备份的数据保存至本地。由于自定义上传的背景与图标保存在本地浏览器中，备份数据时仅保存链接，因此向其他设备或者浏览器导入备份时会因为链接失效而恢复默认，需要您重新设置。'">
+                    <SettingItem :type="'none'" :label="'备份'" @click="backupSettingToLocal">
+                    </SettingItem>
+                </CardContainer>
+            </div>
+        </div>
         <div ref="resetSettingPaneRef" class="setting-pane setting-pane-before-enter">
             <div class="setting-pane-header setting-pane-child-header">
                 <div class="setting-pane-back-btn" @click="backToPrev(resetSettingPaneRef, mainSettingPaneRef)">
@@ -660,11 +769,11 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'重置设置'" :card-des="'重置自定义设置，保留导航分组和图标。'">
+                <CardContainer :card-name="'重置设置'" :card-des="'重置自定义设置，保留导航分组和图标、天气地理位置。'">
                     <SettingItem :type="'none'" :label="'重置'" @click="resetCustomSetting">
                     </SettingItem>
                 </CardContainer>
-                <CardContainer :card-name="'恢复默认'" :card-des="'重置自定义设置、导航分组和图标，恢复为默认状态。'">
+                <CardContainer :card-name="'恢复默认'" :card-des="'重置自定义设置、导航分组和图标、天气地理位置，恢复为默认状态。'">
                     <SettingItem :type="'none'" :label="'恢复'" @click="resetAllSetting">
                     </SettingItem>
                 </CardContainer>
@@ -750,7 +859,8 @@ onMounted(() => {
     width: 100%;
     height: calc(100% - 72px - 20px);
     box-sizing: border-box;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .weather-location-list {
@@ -762,5 +872,16 @@ onMounted(() => {
     padding-left: 10px;
     font-size: 12px;
     color: var(--secondary-font-color);
+}
+
+.backup-option-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: -20px;
+}
+
+.backup-option-list {
+    margin-bottom: 10px;
 }
 </style>

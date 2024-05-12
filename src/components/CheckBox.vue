@@ -33,8 +33,8 @@ function changeChecked() {
 
 .checkbox-container .checkmark {
     cursor: pointer;
-    width: 12px;
-    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
     background-color: transparent;
     margin-right: 8px;
     border-radius: 12px;

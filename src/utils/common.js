@@ -10,6 +10,16 @@ export function setClassForElement(elementId, className) {
     document.getElementById(elementId).setAttribute("class", className);
 }
 
+export function downloadFile(fileName, fileBlob) {
+    let url = URL.createObjectURL(fileBlob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 export function isValidURL(url) {
     const urlRegex = /^(http|https):\/\/[a-z0-9-]+(\.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i;
 
