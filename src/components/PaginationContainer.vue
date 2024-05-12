@@ -4,7 +4,7 @@ import EnsureIcon from './icons/EnsureIcon.vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import { onMounted, ref, watch } from 'vue'
 
-const emit = defineEmits(['changeActivePage', 'changePageOrder'])
+const emit = defineEmits(['changeActivePage', 'changePageOrder', 'longpressBar'])
 const props = defineProps({
     pageCount: Number,
     pageList: Array,
@@ -159,6 +159,7 @@ function handleClickThumbnailCheckBtn() {
 function handleLongPressBar() {
     showPageName.value = false;
     showPageThumbnail.value = !showPageThumbnail.value;
+    emit('longpressBar');
 }
 
 defineExpose({

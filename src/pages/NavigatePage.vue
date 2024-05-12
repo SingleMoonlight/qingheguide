@@ -67,6 +67,11 @@ function selectOtherMenuItem(index) {
     emit(otherMenuList[index].emit);
 }
 
+function closeContextMenu() {
+    showWebAppMenu.value = false;
+    showWebAppGroupMenu.value = false;
+}
+
 function getOriginPageSlotName(index) {
     return 'originalPage' + index.toString();
 }
@@ -446,7 +451,7 @@ onMounted(() => {
                     :active-page-index="settingStore.webAppGroupIndex" :circular-sliding="settingStore.circularSliding"
                     :flipping-effect="settingStore.flippingEffect" :flipping-interval="flippingInterval"
                     :page-list="webAppGroup" @change-active-page="updateDefaultWebAppGroup"
-                    @change-page-order="updateWebAppGroupOrder">
+                    @change-page-order="updateWebAppGroupOrder" @longpress-bar="closeContextMenu">
                     <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
                         :key="groupIndex">
                         <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps"
@@ -516,7 +521,7 @@ onMounted(() => {
         <Transition mode="out-in" name="fade">
             <WebAppHandleForm v-if="showWebAppHandler" :type="webAppHandlerType" :app="checkedWebApp"
                 :icon-placeholder="defaultImgPlaceHolder" @close="closeWebAppHandler" @delete="handleDeleteWebApp"
-                @edit="handleEditWebApp" @add="handleAddWebApp" @get-icon="handleGetWebAppIcon" >
+                @edit="handleEditWebApp" @add="handleAddWebApp" @get-icon="handleGetWebAppIcon">
             </WebAppHandleForm>
         </Transition>
         <Transition mode="out-in" name="fade">
