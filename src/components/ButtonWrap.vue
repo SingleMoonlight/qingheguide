@@ -86,6 +86,7 @@ function handelMouseUp(event) {
 
 .icon-btn:active {
     background-color: var(--icon-button-active-background-color);
+    transform: scale(0.95);
 }
 
 .text-btn {
@@ -106,5 +107,6 @@ function handelMouseUp(event) {
 
 .text-btn:active {
     background-color: var(--text-button-active-background-color);
+    transform: scale(0.95);
 }
 </style>

@@ -63,7 +63,7 @@ watch(() => props.focus, (newValue) => {
 
 .select-item:active {
     background: var(--item-active-background-color);
-    transform: scale(0.99, 0.99);
+    transform: scale(0.95);
     transition: .25s;
 }
 
