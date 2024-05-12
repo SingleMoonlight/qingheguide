@@ -111,7 +111,7 @@ function selectSearchOpenMode(index) {
 }
 
 function getOnoffName(onoff) {
-    return onoff ? '打开' : '关闭';
+    return onoff ? '开启' : '关闭';
 }
 
 function updateCustomSearchEngineUrl(url) {
@@ -281,7 +281,6 @@ onMounted(() => {
                             @open-next="goToNext(mainSettingPaneRef, bgSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'背景遮罩'" :type="'next'"
-                            :next-value="getOnoffName(settingStore.blurBackground)"
                             @open-next="goToNext(mainSettingPaneRef, blurBackgroundSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'备案信息'" :type="'next'"
@@ -323,7 +322,7 @@ onMounted(() => {
                         <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
                             @turn-switch="settingStore.openSuggest = !settingStore.openSuggest">
                         </SettingItem>
-                        <SettingItem :label="'自动聚焦搜索框'" :type="'next'"
+                        <SettingItem :label="'搜索框聚焦'" :type="'next'"
                             :next-value="getOnoffName(settingStore.autoFocusSearchInput)"
                             @open-next="goToNext(mainSettingPaneRef, autoFocusSearchInputSettingPaneRef)">
                         </SettingItem>
@@ -432,9 +431,13 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'背景遮罩'" :card-des="'关闭后搜索、导航、设置和关于页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。'">
-                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.blurBackground"
-                        @turn-switch="settingStore.blurBackground = !settingStore.blurBackground">
+                <CardContainer :card-name="'背景遮罩'"
+                    :card-des="'毛玻璃遮罩默认开启，关闭后页面背景不显示毛玻璃效果，组件毛玻璃效果不受影响。亮度遮罩默认关闭，如果自定义背景影响文字等内容显示，可以尝试开启亮度遮罩。'">
+                    <SettingItem :label="'毛玻璃'" :type="'switch'" :onoff="settingStore.showBgBlurMask"
+                        @turn-switch="settingStore.showBgBlurMask = !settingStore.showBgBlurMask">
+                    </SettingItem>
+                    <SettingItem :label="'亮度'" :type="'switch'" :onoff="settingStore.showBgBrightnessMask"
+                        @turn-switch="settingStore.showBgBrightnessMask = !settingStore.showBgBrightnessMask">
                     </SettingItem>
                 </CardContainer>
             </div>
@@ -450,7 +453,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'备案信息'" :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
-                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.showCopyright"
+                    <SettingItem :label="'显示备案信息'" :type="'switch'" :onoff="settingStore.showCopyright"
                         @turn-switch="settingStore.showCopyright = !settingStore.showCopyright">
                     </SettingItem>
                 </CardContainer>
@@ -504,8 +507,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'自动聚焦搜索框'" :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
-                    <SettingItem :label="'开关'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
+                <CardContainer :card-name="'搜索框聚焦'" :card-des="'开启后，在进入页面时搜索框将直接处于输入状态。'">
+                    <SettingItem :label="'自动聚焦搜索框'" :type="'switch'" :onoff="settingStore.autoFocusSearchInput"
                         @turn-switch="settingStore.autoFocusSearchInput = !settingStore.autoFocusSearchInput">
                     </SettingItem>
                 </CardContainer>
