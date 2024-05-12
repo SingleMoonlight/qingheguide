@@ -148,10 +148,10 @@ export function initImageDB() {
 }
 
 export function deleteImageDB() {
-    imageDB.deleteDatabase().then(res => {
-        printLog('result', 'deleteImageDB deleteDatabase', res);
+    imageDB.deleteDBAll().then(res => {
+        printLog('result', 'deleteImageDB deleteDBAll', res);
     }).catch((err) => {
-        printLog('error', 'deleteImageDB deleteDatabase', err);
+        printLog('error', 'deleteImageDB deleteDBAll', err);
     });
 }
 
