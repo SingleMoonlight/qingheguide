@@ -56,65 +56,65 @@ function setBackground(e) {
     if (imgFile) {
         // 将图片保存至indexedDB
         setBackgroundImg(imgFile);
-        settingStore.$state.backgroundSource = 'custom';
+        settingStore.$state.bgSource = 'custom';
     }
 }
 
 function getThemeName(theme) {
-    return themeList.filter(obj => obj.theme === theme)[0].name;
+    return themeList.filter(obj => obj.settingValue === theme)[0].name;
 }
 
 function getThemeIndex(theme) {
-    return themeList.findIndex(obj => obj.theme === theme);
+    return themeList.findIndex(obj => obj.settingValue === theme);
 }
 
 function selectTheme(index) {
-    settingStore.$state.theme = themeList[index].theme;
+    settingStore.$state.theme = themeList[index].settingValue;
     setClassForElement('qinghe-guide', settingStore.$state.theme);
 }
 
 function getBgSourceName(source) {
-    return bgSourceList.filter(obj => obj.source === source)[0].name;
+    return bgSourceList.filter(obj => obj.settingValue === source)[0].name;
 }
 
 function getBgSourceIndex(source) {
-    return bgSourceList.findIndex(obj => obj.source === source);
+    return bgSourceList.findIndex(obj => obj.settingValue === source);
 }
 
 function selectBgSource(index) {
-    if (bgSourceList[index].source === 'custom') {
+    if (bgSourceList[index].settingValue === 'custom') {
         let bgInputDom = settingBgInputRef.value;
         bgInputDom.click();
-    } else if (bgSourceList[index].source === 'default') {
-        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
-        settingStore.$state.backgroundSource = 'default';
+    } else if (bgSourceList[index].settingValue === 'default') {
+        settingStore.$state.bgUrl = defaultBackgroundUrl;
+        settingStore.$state.bgSource = 'default';
 
         deleteBackgroundImg();
     }
 }
 
 function getTimeFontWeightName(weight) {
-    return timeFontWeightList.filter(obj => obj.weight === weight)[0].name;
+    return timeFontWeightList.filter(obj => obj.settingValue === weight)[0].name;
 }
 
 function getTimeFontWeightIndex(weight) {
-    return timeFontWeightList.findIndex(obj => obj.weight === weight);
+    return timeFontWeightList.findIndex(obj => obj.settingValue === weight);
 }
 
 function selectTimeFontWeight(index) {
-    settingStore.$state.timeFontWeight = timeFontWeightList[index].weight;
+    settingStore.$state.timeFontWeight = timeFontWeightList[index].settingValue;
 }
 
 function getSearchOpenModeName(mode) {
-    return searchOpenModeList.filter(obj => obj.mode === mode)[0].name;
+    return searchOpenModeList.filter(obj => obj.settingValue === mode)[0].name;
 }
 
 function getSearchOpenModeIndex(mode) {
-    return searchOpenModeList.findIndex(obj => obj.mode === mode);
+    return searchOpenModeList.findIndex(obj => obj.settingValue === mode);
 }
 
 function selectSearchOpenMode(index) {
-    settingStore.$state.searchOpenMode = searchOpenModeList[index].mode;
+    settingStore.$state.searchOpenMode = searchOpenModeList[index].settingValue;
 }
 
 function getOnoffName(onoff) {
@@ -138,15 +138,15 @@ function updateCustomSearchEngineUrl(url) {
 }
 
 function getWeatherLocationModeName(mode) {
-    return weatherLocationModeList.filter(obj => obj.mode === mode)[0].name;
+    return weatherLocationModeList.filter(obj => obj.settingValue === mode)[0].name;
 }
 
 function getWeatherLocationModeIndex(mode) {
-    return weatherLocationModeList.findIndex(obj => obj.mode === mode);
+    return weatherLocationModeList.findIndex(obj => obj.settingValue === mode);
 }
 
 function selectWeatherLocationMode(index) {
-    if (weatherLocationModeList[index].mode === 'auto') {
+    if (weatherLocationModeList[index].settingValue === 'auto') {
         flagStore.setShowGlobalLoading(true);
         getCurrentLocation().then(res => {
             weatherStore.$state.location.id = res.id;
@@ -164,7 +164,7 @@ function selectWeatherLocationMode(index) {
                 }
             )
         })
-    } else if (weatherLocationModeList[index].mode === 'custom') {
+    } else if (weatherLocationModeList[index].settingValue === 'custom') {
         settingStore.$state.weatherLocationMode = 'custom';
     }
 }
@@ -215,27 +215,27 @@ function selectWeatherLocation(index) {
 }
 
 function getWebAppOpenModeName(mode) {
-    return webAppOpenModeList.filter(obj => obj.mode === mode)[0].name;
+    return webAppOpenModeList.filter(obj => obj.settingValue === mode)[0].name;
 }
 
 function getWebAppOpenModeIndex(mode) {
-    return webAppOpenModeList.findIndex(obj => obj.mode === mode);
+    return webAppOpenModeList.findIndex(obj => obj.settingValue === mode);
 }
 
 function selectWebAppOpenMode(index) {
-    settingStore.$state.webAppOpenMode = webAppOpenModeList[index].mode;
+    settingStore.$state.webAppOpenMode = webAppOpenModeList[index].settingValue;
 }
 
 function getFlippingEffectName(effect) {
-    return flippingEffectList.filter(obj => obj.effect === effect)[0].name;
+    return flippingEffectList.filter(obj => obj.settingValue === effect)[0].name;
 }
 
 function getFlippingEffectIndex(effect) {
-    return flippingEffectList.findIndex(obj => obj.effect === effect);
+    return flippingEffectList.findIndex(obj => obj.settingValue === effect);
 }
 
 function selectFlippingEffect(index) {
-    settingStore.$state.flippingEffect = flippingEffectList[index].effect;
+    settingStore.$state.flippingEffect = flippingEffectList[index].settingValue;
 }
 
 function backupSettingToLocal() {
@@ -378,8 +378,7 @@ onMounted(() => {
                         <SettingItem :label="'主题'" :type="'next'" :next-value="getThemeName(settingStore.theme)"
                             @open-next="goToNext(mainSettingPaneRef, themeSettingPaneRef)">
                         </SettingItem>
-                        <SettingItem :label="'背景'" :type="'next'"
-                            :next-value="getBgSourceName(settingStore.backgroundSource)"
+                        <SettingItem :label="'背景'" :type="'next'" :next-value="getBgSourceName(settingStore.bgSource)"
                             @open-next="goToNext(mainSettingPaneRef, bgSettingPaneRef)">
                         </SettingItem>
                         <SettingItem :label="'背景遮罩'" :type="'next'"
@@ -506,12 +505,12 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <CardContainer :card-name="'背景'" :card-des="'当进入网站自定义背景加载失败时，网站会临时使用默认背景。'">
                     <SettingItem v-for="(item, index) in bgSourceList" :key="index" :type="'list'" :label="item.name"
-                        :checked="getBgSourceIndex(settingStore.backgroundSource) === index"
+                        :checked="getBgSourceIndex(settingStore.bgSource) === index"
                         @checked-list-item="selectBgSource(index)">
                     </SettingItem>
                 </CardContainer>
                 <CardContainer :card-name="'预览'">
-                    <BackgroundImage :background-url="settingStore.$state.backgroundUrl">
+                    <BackgroundImage :background-url="settingStore.bgUrl">
                     </BackgroundImage>
                 </CardContainer>
                 <div v-show="false">
@@ -746,8 +745,8 @@ onMounted(() => {
             <div class="setting-pane-body">
                 <CardContainer :card-name="'备份数据'"></CardContainer>
                 <div class="backup-option-list-container">
-                    <div class="backup-option-list" v-for="(backupOption, index) in backupList">
-                        <CheckBox :checked="backupOption.value" :label="backupOption.option" :key="index"
+                    <div class="backup-option-list" v-for="(backupOption, index) in backupList" :key="index">
+                        <CheckBox :checked="backupOption.value" :label="backupOption.option"
                             @change="backupOption.value = !backupOption.value">
                         </CheckBox>
                     </div>

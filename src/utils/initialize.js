@@ -6,36 +6,62 @@ import {
     setLocalHistory, getLocalHistory, getLocalWeather, setLocalWeather,
     getLocalWebApp, setLocalWebApp
 } from './localStorage'
+import {
+    themeList, bgSourceList, timeFontWeightList, searchOpenModeList,
+    weatherLocationModeList, webAppOpenModeList, flippingEffectList,
+    searchEngineList
+} from '@/utils/constant'
 import { useSearchHistoryStore } from '@/stores/searchHistoryStore'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useWebAppStore } from '@/stores/webAppStore'
 import { initImageDB } from '@/utils/indexedDB'
+import { mergeObjects } from '@/utils/common'
 
 function checkUpdate() {
-    const settingStore = useSettingStore();
-
-    // 开发环境持续更新设置
-    if (!import.meta.env.PROD) {
-        const newSetting = Object.assign(settingStore.$state, getLocalSetting());
-        setLocalSetting(newSetting);
-    }
-
     // 检查版本更新
     if (!getLocalVersion() || getLocalVersion() !== config.version) {
         setLocalVersion(config.version);
-        // 合并新增设置
-        const newSetting = Object.assign(settingStore.$state, getLocalSetting());
-        setLocalSetting(newSetting);
     }
 }
 
+function checkSetting(setting) {
+    const webAppStore = useWebAppStore();
+
+    if (!searchEngineList.map(obj => obj.settingValue).includes(setting['searchEngine'])) {
+        setting['searchEngine'] = 'baidu';
+    }
+    if (!themeList.map(obj => obj.settingValue).includes(setting['theme'])) {
+        setting['theme'] = 'default';
+    }
+    if (!bgSourceList.map(obj => obj.settingValue).includes(setting['bgSource'])) {
+        setting['bgSource'] = 'default';
+    }
+    if (!timeFontWeightList.map(obj => obj.settingValue).includes(setting['timeFontWeight'])) {
+        setting['timeFontWeight'] = 'normal';
+    }
+    if (!searchOpenModeList.map(obj => obj.settingValue).includes(setting['searchOpenMode'])) {
+        setting['searchOpenMode'] = 'current';
+    }
+    if (!weatherLocationModeList.map(obj => obj.settingValue).includes(setting['weatherLocationMode'])) {
+        setting['weatherLocationMode'] = 'auto';
+    }
+    if (!webAppOpenModeList.map(obj => obj.settingValue).includes(setting['webAppOpenMode'])) {
+        setting['webAppOpenMode'] = 'current';
+    }
+    if (!flippingEffectList.map(obj => obj.settingValue).includes(setting['flippingEffect'])) {
+        setting['flippingEffect'] = 'slide';
+    }
+    if (setting['webAppGroupIndex'] < 0 || setting['webAppGroupIndex'] >= webAppStore.$state.app.length) {
+        setting['webAppGroupIndex'] = 0;
+    }
+}
 
 function loadConfig() {
     const settingStore = useSettingStore();
     const searchHistoryStore = useSearchHistoryStore();
     const flagStore = useFlagStore();
     const weatherStore = useWeatherStore();
-    const webAppStore = useWebAppStore()
+    const webAppStore = useWebAppStore();
 
     settingStore.$subscribe((mutation, state) => {
         // 每当状态发生变化时，将整个 state 持久化到本地存储
@@ -43,11 +69,18 @@ function loadConfig() {
     }, {
         // 组件卸载依旧生效订阅
         detached: true
-    });
-
+    })
     // pinia同步本地设置
-    if (getLocalSetting()) {
-        settingStore.$patch(getLocalSetting());
+    let localSetting = getLocalSetting();
+    if (localSetting) {
+        // 将本地设置合并到默认设置中
+        let newSetting = mergeObjects(settingStore.$state, localSetting);
+        // 校验setting属性合法性，并进行修正
+        checkSetting(newSetting);
+        settingStore.$patch(newSetting);
+        flagStore.$state.settingIsPatched = true;
+    } else {
+        settingStore.$reset();
         flagStore.$state.settingIsPatched = true;
     }
 
@@ -56,8 +89,11 @@ function loadConfig() {
     }, {
         detached: true
     });
-    if (getLocalHistory()) {
-        searchHistoryStore.$patch(getLocalHistory());
+    let localHistory = getLocalHistory();
+    if (localHistory) {
+        searchHistoryStore.$patch(localHistory);
+    } else {
+        searchHistoryStore.$reset();
     }
 
     weatherStore.$subscribe((mutation, state) => {
@@ -65,8 +101,11 @@ function loadConfig() {
     }, {
         detached: true
     });
-    if (getLocalWeather()) {
-        weatherStore.$patch(getLocalWeather());
+    let localWeather = getLocalWeather();
+    if (localWeather) {
+        weatherStore.$patch(localWeather);
+    } else {
+        weatherStore.$reset();
     }
 
     webAppStore.$subscribe((mutation, state) => {
@@ -74,8 +113,11 @@ function loadConfig() {
     }, {
         detached: true
     });
-    if (getLocalWeather()) {
-        webAppStore.$patch(getLocalWebApp());
+    let localWebApp = getLocalWebApp();
+    if (localWebApp) {
+        webAppStore.$patch(localWebApp);
+    } else {
+        webAppStore.$reset();
     }
 }
 

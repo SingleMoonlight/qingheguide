@@ -36,6 +36,20 @@ export function generateUID() {
     return uid;
 }
 
+export function mergeObjects(a, b) {
+    const aCopy = { ...a }; // 创建对象A的副本
+    Object.keys(b).forEach(key => {
+        if (Object.hasOwn(aCopy, key)) {
+            // 属性存在于B中，则覆盖
+            aCopy[key] = b[key];
+        } else {
+            // 属性不存在于B中，则删除
+            delete aCopy[key];
+        }
+    });
+    return aCopy;
+}
+
 export function printLog(type, func, data) {
     if (!import.meta.env.PROD) {
         console.log(type + ": " + func);

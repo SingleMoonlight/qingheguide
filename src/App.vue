@@ -130,8 +130,8 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 
 <template>
   <div class="background-container">
-    <BackgroundImage v-if="flagStore.$state.bgImgIsGot" @loaded="handleBgLoaded"
-      :background-url="settingStore.$state.backgroundUrl" :background-blur="backgroundBlur"
+    <BackgroundImage v-if="flagStore.bgImgIsGot" @loaded="handleBgLoaded"
+      :background-url="settingStore.bgUrl" :background-blur="backgroundBlur"
       :background-scale="backgroundScale">
     </BackgroundImage>
     <div ref="bgLoadingMaskRef" class="background-loading-mask"></div>

@@ -162,11 +162,11 @@ export function setBackgroundImg(imageData) {
     imageDB.updateData(data).then(res => {
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(imageData);
-        settingStore.$state.backgroundUrl = imgURL;
+        settingStore.$state.bgUrl = imgURL;
 
         printLog('result', 'setBackgroundImg updateData', res);
     }).catch((err) => {
-        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
+        settingStore.$state.bgUrl = defaultBackgroundUrl;
 
         printLog('error', 'setBackgroundImg updateData', err);
     });
@@ -176,7 +176,7 @@ export function getBackgroundImg() {
     const settingStore = useSettingStore();
     const flagStore = useFlagStore();
 
-    if (settingStore.$state.backgroundSource === 'default') {
+    if (settingStore.$state.bgSource === 'default') {
         flagStore.$state.bgImgIsGot = true;
         return;
     }
@@ -184,12 +184,12 @@ export function getBackgroundImg() {
     imageDB.getDataByKey('background').then(res => {
         // 创建指向图片文件的url并保存
         let imgURL = window.URL.createObjectURL(res.data);
-        settingStore.$state.backgroundUrl = imgURL;
+        settingStore.$state.bgUrl = imgURL;
         flagStore.$state.bgImgIsGot = true;
 
         printLog('result', 'getBackgroundImg getDataByKey', res);
     }).catch((err) => {
-        settingStore.$state.backgroundUrl = defaultBackgroundUrl;
+        settingStore.$state.bgUrl = defaultBackgroundUrl;
         flagStore.$state.bgImgIsGot = true;
 
         printLog('error', 'getBackgroundImg getDataByKey', err);

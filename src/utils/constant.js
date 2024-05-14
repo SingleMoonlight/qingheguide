@@ -13,10 +13,10 @@ export const copyrightInfo = {
 
 export const searchHistoryNum = 10
 export const searchEngineList = [
-    { iconName: 'baidu', engine: 'baidu', name: '百度', url: 'https://www.baidu.com/s?ie=utf-8&wd=' },
-    { iconName: 'bing', engine: 'bing', name: '必应', url: 'https://www.bing.com/search?q=' },
-    { iconName: 'google', engine: 'google', name: '谷歌', url: 'https://www.google.com/search?q=' },
-    { iconName: 'custom', engine: 'custom', name: '自定义', url: '' }
+    { iconName: 'baidu', settingValue: 'baidu', name: '百度', url: 'https://www.baidu.com/s?ie=utf-8&wd=' },
+    { iconName: 'bing', settingValue: 'bing', name: '必应', url: 'https://www.bing.com/search?q=' },
+    { iconName: 'google', settingValue: 'google', name: '谷歌', url: 'https://www.google.com/search?q=' },
+    { iconName: 'custom', settingValue: 'custom', name: '自定义', url: '' }
 ]
 
 // 天气数据获取刷新间隔，单位分钟
@@ -28,8 +28,8 @@ export const weatherUpdateInterval = {
 }
 
 export const weatherLocationModeList = [
-    { mode: 'auto', name: '自动定位' },
-    { mode: 'custom', name: '自定义' },
+    { settingValue: 'auto', name: '自动定位' },
+    { settingValue: 'custom', name: '自定义' },
 ]
 
 export const otherMenuList = [
@@ -38,37 +38,37 @@ export const otherMenuList = [
 ]
 
 export const themeList = [
-    { theme: 'default', name: '默认' },
-    { theme: 'dark', name: '深色' },
-    { theme: 'light', name: '浅色' },
+    { settingValue: 'default', name: '默认' },
+    { settingValue: 'dark', name: '深色' },
+    { settingValue: 'light', name: '浅色' },
 ]
 
 export const bgSourceList = [
-    { source: 'default', name: '默认' },
-    { source: 'custom', name: '自定义' },
+    { settingValue: 'default', name: '默认' },
+    { settingValue: 'custom', name: '自定义' },
 ]
 
 export const timeFontWeightList = [
-    { weight: 'normal', name: '粗体' },
-    { weight: 'light', name: '细体' },
+    { settingValue: 'normal', name: '粗体' },
+    { settingValue: 'light', name: '细体' },
 ]
 
 export const searchOpenModeList = [
-    { mode: 'current', name: '当前标签页' },
-    { mode: 'new', name: '新标签页' },
+    { settingValue: 'current', name: '当前标签页' },
+    { settingValue: 'new', name: '新标签页' },
 ]
 
 export const webAppOpenModeList = [
-    { mode: 'current', name: '当前标签页' },
-    { mode: 'new', name: '新标签页' },
+    { settingValue: 'current', name: '当前标签页' },
+    { settingValue: 'new', name: '新标签页' },
 ]
 
 export const flippingInterval = 500
 export const flippingEffectList = [
-    { effect: 'fade', name: '渐隐' },
-    { effect: 'slide', name: '滑动' },
-    { effect: 'toggle', name: '弹性' },
-    { effect: 'windmill', name: '风车' },
+    { settingValue: 'fade', name: '渐隐' },
+    { settingValue: 'slide', name: '滑动' },
+    { settingValue: 'toggle', name: '弹性' },
+    { settingValue: 'windmill', name: '风车' },
 ]
 
 export const webAppMenuList = [

@@ -39,7 +39,7 @@ function handleSearchBarInputUpdate(value) {
 }
 
 function handleSearchEngineUpdate(index) {
-    settingStore.$state.searchEngine = searchEngineList[index].engine;
+    settingStore.$state.searchEngine = searchEngineList[index].settingValue;
 }
 
 function clearSearchHistory() {
@@ -55,7 +55,7 @@ function startSearch(value) {
     if (settingStore.$state.searchEngine === 'custom') {
         searchUrl = settingStore.$state.customSearchEngineUrl;
     } else {
-        searchUrl = searchEngineList.filter(obj => obj.engine === settingStore.$state.searchEngine)[0].url;
+        searchUrl = searchEngineList.filter(obj => obj.settingValue === settingStore.$state.searchEngine)[0].url;
     }
 
     if (searchUrl === '') {
@@ -70,22 +70,21 @@ function startSearch(value) {
 <template>
     <div class="home-container" @click="closeSearch" @contextmenu="emit('openNavigate')">
         <div class="time-container" @click="emit('openNavigate')">
-            <CurrentTime :show-time="settingStore.$state.showTime" :show-second="settingStore.$state.showSecond"
-                :blink-time-separator="settingStore.$state.blinkTimeSeparator"
-                :font-weight="settingStore.$state.timeFontWeight">
+            <CurrentTime :show-time="settingStore.showTime" :show-second="settingStore.showSecond"
+                :blink-time-separator="settingStore.blinkTimeSeparator" :font-weight="settingStore.timeFontWeight">
             </CurrentTime>
         </div>
         <div class="date-container">
-            <TodayDate :show-date="settingStore.$state.showDate"></TodayDate>
+            <TodayDate :show-date="settingStore.showDate"></TodayDate>
         </div>
         <div class="search-bar-container">
             <SearchBar @focus-input="emit('openSearch')" @blur-input="emit('closeSearch')"
                 @update-input="handleSearchBarInputUpdate" @start-search="startSearch"
                 @update-search-engine="handleSearchEngineUpdate" @clear-search-history="clearSearchHistory"
-                :auto-focus="settingStore.$state.autoFocusSearchInput" :close-search="flagStore.$state.closeSearch"
-                :search-engine="settingStore.$state.searchEngine" :search-engine-list="searchEngineList"
-                :open-history="settingStore.$state.openHistory" :history-list="searchHistoryStore.$state.history"
-                :open-suggest="settingStore.$state.openSuggest" :suggest-list="suggest">
+                :auto-focus="settingStore.autoFocusSearchInput" :close-search="flagStore.closeSearch"
+                :search-engine="settingStore.searchEngine" :search-engine-list="searchEngineList"
+                :open-history="settingStore.openHistory" :history-list="searchHistoryStore.history"
+                :open-suggest="settingStore.openSuggest" :suggest-list="suggest">
             </SearchBar>
         </div>
         <div class="copyright-container">

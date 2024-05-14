@@ -115,14 +115,14 @@ function selectSearchEngine(index) {
 }
 
 function getSearchEngineIconName(searchEngine) {
-    return props.searchEngineList.filter(obj => obj.engine === searchEngine)[0].iconName;
+    return props.searchEngineList.filter(obj => obj.settingValue === searchEngine)[0].iconName;
 }
 
 function getNextSearchEngineIndex(currentSearchEngine) {
     let index = 0;
 
     props.searchEngineList.forEach((obj, i) => {
-        if (obj.engine === currentSearchEngine) {
+        if (obj.settingValue === currentSearchEngine) {
             index = (i + 1) % (props.searchEngineList.length);
         }
     });

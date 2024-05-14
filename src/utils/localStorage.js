@@ -7,7 +7,12 @@ export function setLocalVersion(version) {
 }
 
 export function getLocalSetting() {
-    return JSON.parse(localStorage.getItem('setting'));
+    try {
+        let json = JSON.parse(localStorage.getItem('setting'));
+        return json;
+    } catch (err) {
+        return null;
+    }
 }
 
 export function setLocalSetting(setting) {
@@ -15,7 +20,12 @@ export function setLocalSetting(setting) {
 }
 
 export function getLocalHistory() {
-    return JSON.parse(localStorage.getItem('searchHistory'));
+    try {
+        let json = JSON.parse(localStorage.getItem('searchHistory'));
+        return json;
+    } catch (err) {
+        return null;
+    }
 }
 
 export function setLocalHistory(searchHistory) {
@@ -23,7 +33,12 @@ export function setLocalHistory(searchHistory) {
 }
 
 export function getLocalWeather() {
-    return JSON.parse(localStorage.getItem('weather'));
+    try {
+        let json = JSON.parse(localStorage.getItem('weather'));
+        return json;
+    } catch (err) {
+        return null;
+    }
 }
 
 export function setLocalWeather(searchHistory) {
@@ -31,7 +46,12 @@ export function setLocalWeather(searchHistory) {
 }
 
 export function getLocalWebApp() {
-    return JSON.parse(localStorage.getItem('webApp'));
+    try {
+        let json = JSON.parse(localStorage.getItem('webApp'));
+        return json;
+    } catch (err) {
+        return null;
+    }
 }
 
 export function setLocalWebApp(webApp) {

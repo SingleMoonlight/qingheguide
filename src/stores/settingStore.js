@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useSettingStore = defineStore('setting', {
     state: () => ({
-        backgroundUrl: 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg',
-        backgroundSource: 'default',
+        bgUrl: 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg',
+        bgSource: 'default',
         theme: 'default',
         showTime: true,
         showSecond: false,
@@ -27,6 +27,6 @@ export const useSettingStore = defineStore('setting', {
         webAppOpenMode: 'new',
         showWebAppName: true,
         deleteWebAppNotice: true,
-        deleteWebAppGroupNotice: true
+        deleteWebAppGroupNotice: true,
     })
 })
