@@ -45,14 +45,14 @@ function openSearch() {
   backgroundScale.value = 1.1;
   setBgBlurMask(10);
 
-  flagStore.$state.closeSearch = false;
+  flagStore.$state.searchIsClose = false;
 }
 
 function closeSearch() {
   setBgBlurMask(0);
   backgroundScale.value = 1;
 
-  flagStore.$state.closeSearch = true;
+  flagStore.$state.searchIsClose = true;
 }
 
 function openSettingPage() {

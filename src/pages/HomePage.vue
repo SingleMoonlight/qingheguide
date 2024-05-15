@@ -82,7 +82,7 @@ function startSearch(value) {
                 @update-input="handleSearchBarInputUpdate" @start-search="startSearch"
                 @update-search-engine="handleSearchEngineUpdate" @clear-search-history="clearSearchHistory"
                 :auto-focus="settingStore.autoFocusSearchInput" :auto-clean="settingStore.autoCleanSearchInput"
-                :close-search="flagStore.closeSearch" :search-engine="settingStore.searchEngine"
+                :close-search="flagStore.searchIsClose" :search-engine="settingStore.searchEngine"
                 :search-engine-list="searchEngineList" :open-history="settingStore.openHistory"
                 :history-list="searchHistoryStore.history" :open-suggest="settingStore.openSuggest"
                 :suggest-list="suggest">

@@ -187,7 +187,9 @@ function keyHandler(e) {
     } else if (e.code === 'Escape') {
         blurInput();
     } else if (e.code === 'Tab') {
-        selectSearchEngine(getNextSearchEngineIndex(props.searchEngine));
+        if (!props.closeSearch) {
+            selectSearchEngine(getNextSearchEngineIndex(props.searchEngine));
+        }
     } else if (e.code === 'ArrowUp') {
         e.preventDefault();
         handleArrowUp();
