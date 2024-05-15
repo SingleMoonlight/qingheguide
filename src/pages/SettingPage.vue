@@ -425,6 +425,9 @@ onMounted(() => {
                         <SettingItem :label="'搜索建议'" :type="'switch'" :onoff="settingStore.openSuggest"
                             @turn-switch="settingStore.openSuggest = !settingStore.openSuggest">
                         </SettingItem>
+                        <SettingItem :label="'自动清空搜索框'" :type="'switch'" :onoff="settingStore.autoCleanSearchInput"
+                            @turn-switch="settingStore.autoCleanSearchInput = !settingStore.autoCleanSearchInput">
+                        </SettingItem>
                         <SettingItem :label="'搜索框聚焦'" :type="'next'"
                             :next-value="getOnoffName(settingStore.autoFocusSearchInput)"
                             @open-next="goToNext(mainSettingPaneRef, autoFocusSearchInputSettingPaneRef)">

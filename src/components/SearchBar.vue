@@ -10,6 +10,7 @@ import { watch, ref, onMounted, onUnmounted } from 'vue'
 const emit = defineEmits(['focusInput', 'blurInput', 'updateInput', 'startSearch', 'updateSearchEngine', 'clearSearchHistory'])
 const props = defineProps({
     autoFocus: Boolean,
+    autoClean: Boolean,
     closeSearch: Boolean,
     searchEngine: String,
     searchEngineList: Object,
@@ -91,6 +92,10 @@ function clearSearchHistory() {
 function handleSearchBtnClick() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
+
+    if (props.autoClean) {
+        searchInputDom.value = '';
+    }
 
     emit('startSearch', value);
 }

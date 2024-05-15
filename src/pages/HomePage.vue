@@ -81,10 +81,11 @@ function startSearch(value) {
             <SearchBar @focus-input="emit('openSearch')" @blur-input="emit('closeSearch')"
                 @update-input="handleSearchBarInputUpdate" @start-search="startSearch"
                 @update-search-engine="handleSearchEngineUpdate" @clear-search-history="clearSearchHistory"
-                :auto-focus="settingStore.autoFocusSearchInput" :close-search="flagStore.closeSearch"
-                :search-engine="settingStore.searchEngine" :search-engine-list="searchEngineList"
-                :open-history="settingStore.openHistory" :history-list="searchHistoryStore.history"
-                :open-suggest="settingStore.openSuggest" :suggest-list="suggest">
+                :auto-focus="settingStore.autoFocusSearchInput" :auto-clean="settingStore.autoCleanSearchInput"
+                :close-search="flagStore.closeSearch" :search-engine="settingStore.searchEngine"
+                :search-engine-list="searchEngineList" :open-history="settingStore.openHistory"
+                :history-list="searchHistoryStore.history" :open-suggest="settingStore.openSuggest"
+                :suggest-list="suggest">
             </SearchBar>
         </div>
         <div class="copyright-container">
