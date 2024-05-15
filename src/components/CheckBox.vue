@@ -38,7 +38,7 @@ function changeChecked() {
     background-color: transparent;
     margin-right: 8px;
     border-radius: 12px;
-    border: 1px solid rgb(255, 255, 255);
+    border: 1px solid var(--check-box-background-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,7 +47,7 @@ function changeChecked() {
 
 .checkbox-container .checkmark:after {
     content: "";
-    background: rgb(255, 255, 255);
+    background: var(--check-box-background-color);
     width: 8px;
     height: 8px;
     border-radius: 8px;
