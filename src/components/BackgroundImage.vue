@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 
-const emit = defineEmits(['loaded'])
+const emit = defineEmits(['mounted', 'loadSuccess', 'loadFail'])
 const props = defineProps({
     backgroundUrl: String,
     backgroundBlur: Number,
@@ -9,9 +9,12 @@ const props = defineProps({
 })
 const bgImgRef = ref()
 
-function failLoadBackground(target) {
-    // 防止onerror无限触发
-    target.srcElement.onerror = '';
+function failLoadBackground() {
+    emit('loadFail');
+}
+
+function successLoadBackground() {
+    emit('loadSuccess');
 }
 
 watch(() => props.backgroundBlur, (newValue) => {
@@ -31,13 +34,14 @@ watch(() => props.backgroundScale, (newValue) => {
 })
 
 onMounted(() => {
-    emit('loaded');
+    emit('mounted');
 })
 
 </script>
 
 <template>
-    <img ref="bgImgRef" class="background-image" :src="props.backgroundUrl" :onerror="failLoadBackground">
+    <img ref="bgImgRef" class="background-image" :src="props.backgroundUrl" @error="failLoadBackground"
+        @load="successLoadBackground">
 </template>
 
 <style scpoed>

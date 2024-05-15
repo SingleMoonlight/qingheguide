@@ -57,6 +57,8 @@ function setBackground(e) {
         // 将图片保存至indexedDB
         setBackgroundImg(imgFile);
         settingStore.$state.bgSource = 'custom';
+        // 防止重新选择相同图片不触发change事件
+        e.target.value = '';
     }
 }
 

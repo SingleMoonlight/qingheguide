@@ -167,6 +167,7 @@ export function setBackgroundImg(imageData) {
         printLog('result', 'setBackgroundImg updateData', res);
     }).catch((err) => {
         settingStore.$state.bgUrl = defaultBackgroundUrl;
+        settingStore.$state.bgSource = 'default';
 
         printLog('error', 'setBackgroundImg updateData', err);
     });
@@ -190,6 +191,7 @@ export function getBackgroundImg() {
         printLog('result', 'getBackgroundImg getDataByKey', res);
     }).catch((err) => {
         settingStore.$state.bgUrl = defaultBackgroundUrl;
+        settingStore.$state.bgSource = 'default';
         flagStore.$state.bgImgIsGot = true;
 
         printLog('error', 'getBackgroundImg getDataByKey', err);

@@ -11,6 +11,7 @@ import { useSettingStore } from './stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
 import { useMessageBoxStore } from '@/stores/messageBoxStore'
 import { setClassForElement } from '@/utils/common'
+import { defaultBackgroundUrl } from '@/utils/constant'
 import { onMounted, ref, watch } from 'vue'
 
 const settingStore = useSettingStore()
@@ -74,7 +75,7 @@ function closeMessageBox() {
   messageBoxStore.$state.show = false;
 }
 
-function handleBgLoaded() {
+function handleBgMounted() {
   if (settingStore.$state.autoFocusSearchInput) {
     setBgBlurMask(0);
 
@@ -84,6 +85,15 @@ function handleBgLoaded() {
       setBgBlurMask(10);
     })
   }
+}
+
+function handleBgLoadSuccess() {
+  bgLoadingMaskRef.value.style.opacity = 0;
+}
+
+function handleBgLoadFail() {
+  settingStore.$state.bgUrl = defaultBackgroundUrl;
+  settingStore.$state.bgSource = 'default';
 }
 
 onMounted(() => {
@@ -96,6 +106,10 @@ onMounted(() => {
   } else {
     bgBrightnessMaskRef.value.style.opacity = 0;
   }
+})
+
+watch(() => settingStore.$state.bgUrl, () => {
+  bgLoadingMaskRef.value.style.opacity = 1;
 })
 
 watch(() => settingStore.$state.showBgBlurMask, (newValue) => {
@@ -114,12 +128,6 @@ watch(() => settingStore.$state.showBgBrightnessMask, (newValue) => {
   }
 })
 
-watch(() => flagStore.$state.bgImgIsGot, (newValue) => {
-  if (newValue) {
-    bgLoadingMaskRef.value.style.opacity = 0;
-  }
-})
-
 watch(() => flagStore.$state.settingIsPatched, (newValue) => {
   if (newValue) {
     setClassForElement('qinghe-guide', settingStore.$state.theme);
@@ -130,8 +138,8 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
 
 <template>
   <div class="background-container">
-    <BackgroundImage v-if="flagStore.bgImgIsGot" @loaded="handleBgLoaded"
-      :background-url="settingStore.bgUrl" :background-blur="backgroundBlur"
+    <BackgroundImage v-if="flagStore.bgImgIsGot" @mounted="handleBgMounted" @load-success="handleBgLoadSuccess"
+      @load-fail="handleBgLoadFail" :background-url="settingStore.bgUrl" :background-blur="backgroundBlur"
       :background-scale="backgroundScale">
     </BackgroundImage>
     <div ref="bgLoadingMaskRef" class="background-loading-mask"></div>
