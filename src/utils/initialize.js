@@ -40,13 +40,13 @@ function checkSetting(setting) {
         setting['timeFontWeight'] = 'normal';
     }
     if (!searchOpenModeList.map(obj => obj.settingValue).includes(setting['searchOpenMode'])) {
-        setting['searchOpenMode'] = 'current';
+        setting['searchOpenMode'] = 'new';
     }
     if (!weatherLocationModeList.map(obj => obj.settingValue).includes(setting['weatherLocationMode'])) {
         setting['weatherLocationMode'] = 'auto';
     }
     if (!webAppOpenModeList.map(obj => obj.settingValue).includes(setting['webAppOpenMode'])) {
-        setting['webAppOpenMode'] = 'current';
+        setting['webAppOpenMode'] = 'new';
     }
     if (!flippingEffectList.map(obj => obj.settingValue).includes(setting['flippingEffect'])) {
         setting['flippingEffect'] = 'slide';
