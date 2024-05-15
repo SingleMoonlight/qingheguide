@@ -95,6 +95,7 @@ function openWeatherCard() {
 
 .weather-now-second-row {
     display: flex;
+    text-align: right;
 }
 
 .weather-now-temp {
@@ -107,12 +108,12 @@ function openWeatherCard() {
 
 .weather-now-text {
     font-size: 14px;
-    margin-left: 55px;
+    width: 65px;
 }
 
 .weather-now-air {
     font-size: 14px;
-    margin-left: auto;
+    width: 115px;
 }
 
 .divide-line {
