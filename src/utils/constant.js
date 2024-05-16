@@ -98,15 +98,17 @@ export const updateHistory = [
         des: '系统全面重构',
         item: [
             { type: 'fix', des: '修复拼音输入时点击搜索建议，搜索输入框文字错误的问题' },
+            { type: 'fix', des: '修复App图标拖动时显示异常的问题' },
             { type: 'opt', des: '优化UI，修改部分页面动画、样式' },
-            { type: 'opt', des: '取消自定义背景的大小限制' },
+            { type: 'opt', des: '修改按键逻辑，首页按空格键自动聚焦搜索框，按Esc键取消聚焦搜索。在搜索建议或历史页面，按方向键上下切换搜索建议或历史，按Tab键切换搜索引擎' },
             { type: 'opt', des: '修改天气组件，支持自动定位和自定义地点' },
-            { type: 'opt', des: '修改按键逻辑，首页按空格键自动聚焦搜索框，按Esc键取消聚焦搜索。在搜索建议或历史页面，按方向键上下切换搜索建议或历史' },
             { type: 'opt', des: '修改导航页面分组切换方式，支持点击切换和鼠标滑动切换' },
             { type: 'opt', des: '修改导航页面拖拽逻辑，支持分组拖拽，支持图标跨分组拖拽' },
+            { type: 'opt', des: '取消自定义背景的文件大小限制' },
             { type: 'del', des: '移除智能推荐处理功能' },
             { type: 'del', des: '移除部分不常用的搜索引擎' },
-            { type: 'del', des: '移除部分不常用的图标' },
+            { type: 'del', des: '移除部分不常用的App图标' },
+            { type: 'del', des: '移除Docker栏功能' },
         ]
     },
     {
@@ -137,7 +139,7 @@ export const updateHistory = [
         time: '2023-5-3',
         version: 'V2.1.3',
         item: [
-            { type: 'fix', des: '修复添加图标后立即固定到Dock栏失败的问题' },
+            { type: 'fix', des: '修复添加图标后立即固定到Docker栏失败的问题' },
         ]
     },
     {
@@ -154,7 +156,7 @@ export const updateHistory = [
         version: 'V2.1.1',
         item: [
             { type: 'fix', des: '修复背景遮罩在部分比例下显示不全的问题' },
-            { type: 'add', des: '增加Dock栏自动隐藏设置项，一段时间没有操作后将自动隐藏Dock栏' },
+            { type: 'add', des: '增加Docker栏自动隐藏设置项，一段时间没有操作后将自动隐藏Docker栏' },
         ]
     },
     {
@@ -166,7 +168,7 @@ export const updateHistory = [
             { type: 'fix', des: '修改部分异常文案' },
             { type: 'opt', des: '优化设置项分组逻辑以及顺序，使其更符合逻辑' },
             { type: 'opt', des: '优化设置页面和关于页面弹出的动画效果' },
-            { type: 'add', des: '导航页底部增加Dock栏，可以将常用图标固定至Dock栏，便于快速打开' },
+            { type: 'add', des: '导航页底部增加Docker栏，可以将常用图标固定至Docker栏，便于快速打开' },
             { type: 'add', des: '增加按键控制，首页按下空格进入搜索，任意页面按下Esc按键退回上一级页面' },
             { type: 'del', des: '移除导航页首页的默认分组' },
         ]
