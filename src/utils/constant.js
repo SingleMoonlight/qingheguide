@@ -93,7 +93,7 @@ export const backupOptionList = [
 // 顺序：fix opt add del
 export const updateHistory = [
     {
-        time: '2024-6-1',
+        time: '2024-5-18',
         version: 'V3.0.0',
         des: '系统全面重构',
         item: [
