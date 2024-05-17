@@ -1,12 +1,21 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import viteCompression from 'vite-plugin-compression'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 10240,
+      algorithm: 'gzip',
+      ext: '.gz',
+      deleteOriginFile: false,
+    })
   ],
   resolve: {
     alias: {
@@ -14,7 +23,17 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist/qingheGuide'
+    outDir: 'dist/qingheGuide',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            // 将外部依赖单独打包
+            return 'vendor';
+          }
+        }
+      },
+    },
   },
   server: {
     host: 'localhost',
