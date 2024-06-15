@@ -93,6 +93,13 @@ export const backupOptionList = [
 // 顺序：fix opt add del
 export const updateHistory = [
     {
+        time: '2024-6-15',
+        version: 'V3.0.1',
+        item: [
+            { type: 'fix', des: '修复因天气图标加载过慢导致的首页长时间白屏问题' },
+        ]
+    },
+    {
         time: '2024-5-18',
         version: 'V3.0.0',
         des: '系统全面重构',
