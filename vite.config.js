@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import { weatherKey } from './key'
 import viteCompression from 'vite-plugin-compression'
 import vue from '@vitejs/plugin-vue'
 
@@ -47,27 +48,27 @@ export default defineConfig({
       '/geo': {
         target: 'https://geoapi.qweather.com/v2/city/lookup',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/geo\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+        rewrite: (path) => path.replace(/^\/geo\//, '?key=' + weatherKey + '&location='), 
       },
       '/nowWeather': {
         target: 'https://devapi.qweather.com/v7/weather/now',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/nowWeather\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+        rewrite: (path) => path.replace(/^\/nowWeather\//, '?key=' + weatherKey + '&location='), 
       },
       '/nowAir': {
         target: 'https://devapi.qweather.com/v7/air/now',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/nowAir\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+        rewrite: (path) => path.replace(/^\/nowAir\//, '?key=' + weatherKey + '&location='), 
       },
       '/futureWeather': {
         target: 'https://devapi.qweather.com/v7/weather/3d',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/futureWeather\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='), 
+        rewrite: (path) => path.replace(/^\/futureWeather\//, '?key=' + weatherKey + '&location='), 
       },
       '/futureAir': {
         target: 'https://devapi.qweather.com/v7/air/5d',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/futureAir\//, '?key=30dbaa3ee3ae47519eafc7904999f3f3&location='),
+        rewrite: (path) => path.replace(/^\/futureAir\//, '?key=' + weatherKey + '&location='),
       },
     },
   },
