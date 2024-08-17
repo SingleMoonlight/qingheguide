@@ -122,5 +122,6 @@ onMounted(() => {
 
 .update-history-item-des {
     margin-left: 5px;
+    flex: 1;
 }
 </style>

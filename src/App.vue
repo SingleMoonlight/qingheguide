@@ -174,6 +174,7 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
   height: 100%;
   margin: 0;
   position: absolute;
+  overflow: hidden;
 }
 
 .background-loading-mask {

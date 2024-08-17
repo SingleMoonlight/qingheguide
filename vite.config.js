@@ -37,7 +37,7 @@ export default defineConfig({
     },
   },
   server: {
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 8000,
     proxy: {                // 这里设置代理仅对开发环境生效，生产环境需要单独设置，如nginx
       '/sug': {

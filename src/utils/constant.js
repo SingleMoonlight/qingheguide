@@ -93,6 +93,15 @@ export const backupOptionList = [
 // 顺序：fix opt add del
 export const updateHistory = [
     {
+        time: '2024-8-17',
+        version: 'V3.0.2',
+        item: [
+            { type: 'fix', des: '修复移动端进入导航等二级页面时背景显示异常的问题' },
+            { type: 'fix', des: '修复更新标签在Safari浏览器中显示异常的问题' },
+            { type: 'opt', des: '移除移动端触屏点击元素时显示的默认背景' },
+        ]
+    },
+    {
         time: '2024-6-15',
         version: 'V3.0.1',
         item: [
