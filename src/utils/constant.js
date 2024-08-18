@@ -90,9 +90,19 @@ export const backupOptionList = [
     { option: '天气地理位置', name: 'weather', value: true },
 ]
 
+export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
+
 // 顺序：fix opt add del
 // 同步修改package.json的version
 export const updateHistory = [
+    {
+        time: '2024-8-18',
+        version: 'V3.0.3',
+        item: [
+            { type: 'fix', des: '修复设置子页面在未进入时可被意外点击的问题' },
+            { type: 'add', des: '关于页面添加帮助与反馈链接，提供帮助文档和反馈通道' },
+        ]
+    },
     {
         time: '2024-8-17',
         version: 'V3.0.2',

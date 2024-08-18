@@ -24,7 +24,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist/qingheGuide',
+    outDir: 'dist',
     rollupOptions: {
       output: {
         manualChunks(id) {

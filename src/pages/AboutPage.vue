@@ -5,7 +5,7 @@ import ButtonWrap from '@/components/ButtonWrap.vue'
 import TimeLine from '@/components/TimeLine.vue'
 import TimeLineItem from '@/components/TimeLineItem.vue'
 import UpdateTag from '@/components/UpdateTag.vue'
-import { updateHistory } from '@/utils/constant'
+import { updateHistory, helpLink } from '@/utils/constant'
 import { onMounted, ref } from 'vue'
 
 const emit = defineEmits(['closeAbout'])
@@ -33,6 +33,9 @@ onMounted(() => {
                     <CardContainer :card-name="'简介'">
                         <div class="about-introduce">
                             这是一个可以随便搜搜的导航网站，简约、美观、实用。马上自定义您的设置，然后开始简单纯粹的搜索之旅吧！
+                        </div>
+                        <div class="about-help">
+                            <a :href="helpLink" underline="none" target="_blank">帮助与反馈</a>
                         </div>
                     </CardContainer>
                     <CardContainer :card-name="'更新'">
@@ -112,6 +115,12 @@ onMounted(() => {
 .about-introduce {
     padding: 10px;
     font-size: 14px;
+    line-height: 20px;
+}
+
+.about-help {
+    padding: 10px;
+    font-size: 12px;
     line-height: 20px;
 }
 
