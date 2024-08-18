@@ -783,6 +783,7 @@ onMounted(() => {
                 </CardContainer>
             </div>
         </div>
+        <div class="setting-pane setting-pane-before-enter"></div>
     </div>
 </template>
 
