@@ -91,6 +91,7 @@ export const backupOptionList = [
 ]
 
 // 顺序：fix opt add del
+// 同步修改package.json的version
 export const updateHistory = [
     {
         time: '2024-8-17',
