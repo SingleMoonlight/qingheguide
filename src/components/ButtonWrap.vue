@@ -57,12 +57,12 @@ function handelMouseUp(event) {
 </script>
 
 <template>
-    <button ref="buttonWrapRef" v-if="props.type === 'icon'" class="icon-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
-        @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click')">
+    <button ref="buttonWrapRef" v-if="props.type === 'icon'" class="icon-btn" @mouseenter="handelMouseEnter"
+        @mouseleave="handelMouseLeave" @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click')">
         <slot></slot>
     </button>
-    <button ref="buttonWrapRef" v-if="props.type === 'text'" class="text-btn" @mouseenter="handelMouseEnter" @mouseleave="handelMouseLeave"
-        @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click');">
+    <button ref="buttonWrapRef" v-if="props.type === 'text'" class="text-btn" @mouseenter="handelMouseEnter"
+        @mouseleave="handelMouseLeave" @mousedown="handelMouseDown" @mouseup="handelMouseUp" @click="emit('click');">
         {{ props.text }}
     </button>
 </template>

@@ -43,27 +43,27 @@ export default defineConfig({
       '/sug': {
         target: 'https://www.baidu.com/sugrec',
         changeOrigin: true, // 允许跨域
-        rewrite: (path) => path.replace(/^\/sug/, ''), 
+        rewrite: (path) => path.replace(/^\/sug/, ''),
       },
       '/geo': {
         target: 'https://geoapi.qweather.com/v2/city/lookup',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/geo\//, '?key=' + weatherKey + '&location='), 
+        rewrite: (path) => path.replace(/^\/geo\//, '?key=' + weatherKey + '&location='),
       },
       '/nowWeather': {
         target: 'https://devapi.qweather.com/v7/weather/now',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/nowWeather\//, '?key=' + weatherKey + '&location='), 
+        rewrite: (path) => path.replace(/^\/nowWeather\//, '?key=' + weatherKey + '&location='),
       },
       '/nowAir': {
         target: 'https://devapi.qweather.com/v7/air/now',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/nowAir\//, '?key=' + weatherKey + '&location='), 
+        rewrite: (path) => path.replace(/^\/nowAir\//, '?key=' + weatherKey + '&location='),
       },
       '/futureWeather': {
         target: 'https://devapi.qweather.com/v7/weather/3d',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/futureWeather\//, '?key=' + weatherKey + '&location='), 
+        rewrite: (path) => path.replace(/^\/futureWeather\//, '?key=' + weatherKey + '&location='),
       },
       '/futureAir': {
         target: 'https://devapi.qweather.com/v7/air/5d',

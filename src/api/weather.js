@@ -6,7 +6,7 @@ export function getCurrentLocation() {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                searchLocation(position.coords.longitude.toFixed(2)  + ',' + position.coords.latitude.toFixed(2)).then(res => {
+                searchLocation(position.coords.longitude.toFixed(2) + ',' + position.coords.latitude.toFixed(2)).then(res => {
                     resolve(res[0]);
                 }).catch(err => {
                     reject(new Error('获取定位失败，请重试或者手动选择位置。'));

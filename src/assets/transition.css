@@ -38,47 +38,55 @@
   opacity: 0;
 }
 
-.toggle-left-enter-active{
+.toggle-left-enter-active {
   animation: toggle-left 0.5s ease;
 }
+
 .toggle-left-leave-active {
   transform: translateX(-100%);
   transition: 0.25s ease;
 }
 
-.toggle-left-enter-from{
+.toggle-left-enter-from {
   transform: translateX(100%);
   opacity: 0;
 }
-.toggle-left-enter-to{
+
+.toggle-left-enter-to {
   transform: translateX(0);
 }
-.toggle-left-leave-from{
+
+.toggle-left-leave-from {
   transform: translateX(0);
 }
+
 .toggle-left-leave-to {
   transform: translateX(-100%);
   opacity: 0;
 }
 
-.toggle-right-enter-active{
+.toggle-right-enter-active {
   animation: toggle-right 0.5s ease;
 }
+
 .toggle-right-leave-active {
   transform: translateX(100%);
   opacity: 0;
 }
 
-.toggle-right-enter-from{
+.toggle-right-enter-from {
   transform: translateX(-100%);
   opacity: 0;
 }
-.toggle-right-enter-to{
+
+.toggle-right-enter-to {
   transform: translateX(0);
 }
-.toggle-right-leave-from{
+
+.toggle-right-leave-from {
   transform: translateX(0);
 }
+
 .toggle-right-leave-to {
   transform: translateX(100%);
   opacity: 0;
@@ -90,16 +98,19 @@
   transition: 0.25s ease;
 }
 
-.slide-left-enter-from{
+.slide-left-enter-from {
   transform: translateX(100%);
   opacity: 0;
 }
-.slide-left-enter-to{
+
+.slide-left-enter-to {
   transform: translateX(0);
 }
-.slide-left-leave-from{
+
+.slide-left-leave-from {
   transform: translateX(0);
 }
+
 .slide-left-leave-to {
   transform: translateX(-100%);
   opacity: 0;
@@ -111,16 +122,19 @@
   transition: 0.25s ease;
 }
 
-.slide-right-enter-from{
+.slide-right-enter-from {
   transform: translateX(-100%);
   opacity: 0;
 }
-.slide-right-enter-to{
+
+.slide-right-enter-to {
   transform: translateX(0);
 }
-.slide-right-leave-from{
+
+.slide-right-leave-from {
   transform: translateX(0);
 }
+
 .slide-right-leave-to {
   transform: translateX(100%);
   opacity: 0;
@@ -132,16 +146,19 @@
   transition: 0.25s ease;
 }
 
-.windmill-left-enter-from{
+.windmill-left-enter-from {
   transform: rotate3d(0, 1, 0, -90deg);
   opacity: 0;
 }
-.windmill-left-enter-to{
+
+.windmill-left-enter-to {
   transform: translateX(0);
 }
-.windmill-left-leave-from{
+
+.windmill-left-leave-from {
   transform: translateX(0);
 }
+
 .windmill-left-leave-to {
   transform: rotate3d(0, 1, 0, 90deg);
   opacity: 0;
@@ -153,16 +170,19 @@
   transition: 0.25s ease;
 }
 
-.windmill-right-enter-from{
+.windmill-right-enter-from {
   transform: rotate3d(0, 1, 0, 90deg);
   opacity: 0;
 }
-.windmill-right-enter-to{
+
+.windmill-right-enter-to {
   transform: translateX(0);
 }
-.windmill-right-leave-from{
+
+.windmill-right-leave-from {
   transform: translateX(0);
 }
+
 .windmill-right-leave-to {
   transform: rotate3d(0, 1, 0, -90deg);
   opacity: 0;

@@ -44,8 +44,8 @@ function handleOkBtnClick() {
                     </div>
                     <div class="message-box-content">{{ props.content }}</div>
                     <div class="message-box-btn">
-                        <ButtonWrap v-if="props.cancelBtnText !== '' && props.cancelBtnText !== undefined" :type="'text'"
-                            :text="props.cancelBtnText" @click="handleCancelBtnClick">
+                        <ButtonWrap v-if="props.cancelBtnText !== '' && props.cancelBtnText !== undefined"
+                            :type="'text'" :text="props.cancelBtnText" @click="handleCancelBtnClick">
                         </ButtonWrap>
                         <div style="width: 10px;"></div>
                         <ButtonWrap v-if="props.okBtnText !== '' && props.okBtnText !== undefined" :type="'text'"
