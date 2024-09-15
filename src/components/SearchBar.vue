@@ -26,6 +26,10 @@ const showEngine = ref(false)
 const searchSuggestIndex = ref(-1)
 const searchHistoryIndex = ref(-1)
 
+function checkInputIsFocused() {
+    return document.activeElement === searchBarInputRef.value;
+}
+
 function focusInput() {
     let searchInputDom = searchBarInputRef.value;
     let value = searchInputDom.value.trim();
@@ -182,7 +186,10 @@ function handleArrowDown() {
 }
 
 function keyHandler(e) {
-    if (e.code === 'Space') {
+    if (e.code === 'Space') {  
+        if (!checkInputIsFocused()) {
+            e.preventDefault();
+        }
         focusInput();
     } else if (e.code === 'Escape') {
         blurInput();

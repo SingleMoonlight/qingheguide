@@ -96,6 +96,13 @@ export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
 // 同步修改package.json的version
 export const updateHistory = [
     {
+        time: '2024-9-13',
+        version: 'V3.0.4',
+        item: [
+            { type: 'fix', des: '修复按下空格按键聚焦搜索框时，空格字符被同时输入的问题' },
+        ]
+    },
+    {
         time: '2024-8-18',
         version: 'V3.0.3',
         item: [
