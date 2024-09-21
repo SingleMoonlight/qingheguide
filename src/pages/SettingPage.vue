@@ -682,7 +682,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面左上角查看当前位置或者指定位置的天气信息。'">
-                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather" :disabled="true"
+                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="false" :disabled="true"
                         @turn-switch="settingStore.showWeather = !settingStore.showWeather">
                     </SettingItem>
                 </CardContainer>
