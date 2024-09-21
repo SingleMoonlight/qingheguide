@@ -1,39 +1,28 @@
-import axios from "axios"
+import { useJsonpRequest } from './jsonp.js'
 
-let searchRequestCancel = null
 let suggestResult = []
 
-export function getSearchSuggest(keyword) {
+export const getSearchSuggest = async (keyword) => {
     return new Promise((resolve, reject) => {
-        if (searchRequestCancel !== null) {
-            searchRequestCancel();
-        }
-        axios.get('/sug', {
-            params: {
-                prod: "pc",
-                wd: keyword
-            },
-            cancelToken: new axios.CancelToken((cancel) => {
-                // 这里cancel就是取消当前请求的方法
-                searchRequestCancel = cancel;
-            })
-        }).then(res => {
+        const { fetchJsonp } = useJsonpRequest(
+            'https://www.baidu.com/sugrec', // 确保这个 URL 支持 JSONP
+            'jsonpCallback', // 这里指定的前缀会被用来生成回调函数名称
+            { prod: "pc", wd: keyword }
+        );
+
+        fetchJsonp().then(data => {
             suggestResult.splice(0, suggestResult.length);
-            if (res.data.g !== undefined) {
-                res.data.g.forEach(element => {
+            if (data.g !== undefined) {
+                data.g.forEach(element => {
                     suggestResult.push(element.q)
                 });
             }
-            resolve(suggestResult);
+            resolve(suggestResult)
         }).catch(err => {
-            if (axios.isCancel(err)) {
-                // 请求被取消
-            } else {
-                reject(err.data);
-            }
+            reject(err.data);
         })
     })
-}
+};
 
 export function doSearch(url, value, mode) {
     if (mode === 'current') {

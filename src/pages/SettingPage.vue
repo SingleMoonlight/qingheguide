@@ -681,8 +681,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面右上角查看当前位置或者指定位置的天气信息。'">
-                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather"
+                <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面左上角查看当前位置或者指定位置的天气信息。'">
+                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather" :disabled="true"
                         @turn-switch="settingStore.showWeather = !settingStore.showWeather">
                     </SettingItem>
                 </CardContainer>
@@ -696,6 +696,10 @@ onMounted(() => {
                         <a v-for="(item, index) in weatherStore.airReferSources" :key="index">
                             {{ item + ' ' }}
                         </a>
+                    </div>
+                    <br>
+                    <div>
+                        由于服务迁移，目前天气功能无法使用。
                     </div>
                 </div>
             </div>

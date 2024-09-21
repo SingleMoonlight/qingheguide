@@ -25,28 +25,16 @@ jobs:
         with:
           # 选择要使用的 node 版本
           node-version: 20
-
-      # 设置密钥
-      # Run the set secrets script
-      - name: Set secrets
-        env:
-          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
-        run: |
-          touch key.js
-          echo "export const WEATHER_KEY = '$WEATHER_KEY';" >> key.js
       
       # 安装依赖
       # Install dependencies
       - name: Install Dependencies
         run: npm ci
 
-
-
       # 运行构建脚本
       # Run the build script
       - name: Build site
         run: npm run build
-
 
       # 查看 workflow 的文档来获取更多信息
       # @see https://github.com/crazy-max/ghaction-github-pages

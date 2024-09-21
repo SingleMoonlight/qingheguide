@@ -20,7 +20,7 @@ export const useSettingStore = defineStore('setting', {
         searchOpenMode: 'new',
         autoFocusSearchInput: false,
         autoCleanSearchInput: false,
-        showWeather: true,
+        showWeather: false,
         weatherLocationMode: 'custom',
         webAppGroupIndex: 0,
         circularSliding: true,

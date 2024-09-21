@@ -15,6 +15,7 @@ const props = defineProps({
     checked: Boolean,
     inputValue: String,
     textValue: String,
+    disabled: Boolean,
 })
 const settingInputRef = ref()
 
@@ -40,7 +41,7 @@ function ensureSettingInput() {
     <div class="setting-item" @click="clickSettingItem">
         <div class="setting-item-label">{{ props.label }}</div>
         <div v-if="props.type === 'switch'" class="setting-switch">
-            <SwitchOnoff :onoff="props.onoff" @change="emit('turnSwitch')"></SwitchOnoff>
+            <SwitchOnoff :onoff="props.onoff" :disabled="props.disabled" @change="emit('turnSwitch')"></SwitchOnoff>
         </div>
         <div v-else-if="props.type === 'next'" class="setting-next">
             <div class="setting-next-value">{{ props.nextValue }}</div>
