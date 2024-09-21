@@ -29,11 +29,11 @@ jobs:
       # 设置密钥
       # Run the set secrets script
       - name: Set secrets
-      env:
-        WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
-      run: |
-        touch key.js
-        echo "export const WEATHER_KEY = $WEATHER_KEY;" >> key.js
+        env:
+          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
+        run: |
+          touch key.js
+          echo "export const WEATHER_KEY = $WEATHER_KEY;" >> key.js
       
       # 安装依赖
       # Install dependencies
