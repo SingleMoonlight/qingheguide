@@ -33,7 +33,7 @@ jobs:
           WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
         run: |
           touch key.js
-          echo "export const WEATHER_KEY = $WEATHER_KEY;" >> key.js
+          echo "export const WEATHER_KEY = '$WEATHER_KEY';" >> key.js
       
       # 安装依赖
       # Install dependencies
