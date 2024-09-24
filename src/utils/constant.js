@@ -2,13 +2,9 @@ export const defaultBackgroundUrl = 'https://cdn.ifback.com/website/qhGuide/guid
 export const defaultImgPlaceHolder = 'https://cdn.ifback.com/website/websiteIcon/default.svg'
 
 export const copyrightInfo = {
+    startYear: 2021,
     ownerInfo: 'ifback.com',
     ownerUrl: 'https://ifback.com/',
-    beianProvince: '豫',
-    gonanBeianNum: '41152402000212号',
-    gonanBeianUrl: 'http://www.beian.gov.cn/',
-    icpBeianNum: '2021014629号-2',
-    icpBeianUrl: 'https://beian.miit.gov.cn/',
 }
 
 export const searchHistoryNum = 10

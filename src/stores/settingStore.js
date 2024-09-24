@@ -10,7 +10,7 @@ export const useSettingStore = defineStore('setting', {
         blinkTimeSeparator: true,
         timeFontWeight: 'normal',
         showDate: true,
-        showCopyright: true,
+        showCopyright: false,
         showBgBlurMask: true,
         showBgBrightnessMask: false,
         searchEngine: 'baidu',

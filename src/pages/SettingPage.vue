@@ -386,7 +386,7 @@ onMounted(() => {
                         <SettingItem :label="'背景遮罩'" :type="'next'"
                             @open-next="goToNext(mainSettingPaneRef, blurBackgroundSettingPaneRef)">
                         </SettingItem>
-                        <SettingItem :label="'备案信息'" :type="'next'"
+                        <SettingItem :label="'首页网站信息'" :type="'next'"
                             :next-value="getOnoffName(settingStore.showCopyright)"
                             @open-next="goToNext(mainSettingPaneRef, copyrightSettingPaneRef)">
                         </SettingItem>
@@ -574,8 +574,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'备案信息'" :card-des="'根据国家有关法律规定，网站首页底部默认需要展示网站相关备案信息。'">
-                    <SettingItem :label="'显示备案信息'" :type="'switch'" :onoff="settingStore.showCopyright"
+                <CardContainer :card-name="'首页网站信息'">
+                    <SettingItem :label="'CopyRight'" :type="'switch'" :onoff="settingStore.showCopyright"
                         @turn-switch="settingStore.showCopyright = !settingStore.showCopyright">
                     </SettingItem>
                 </CardContainer>
