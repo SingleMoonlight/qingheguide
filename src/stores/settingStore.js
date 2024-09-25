@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useSettingStore = defineStore('setting', {
     state: () => ({
-        bgUrl: 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg',
+        bgUrl: '/image/guide_default_bg.jpg',
         bgSource: 'default',
         theme: 'default',
         showTime: true,
