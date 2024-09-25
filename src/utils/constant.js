@@ -1,5 +1,5 @@
-export const defaultBackgroundUrl = 'https://cdn.ifback.com/website/qhGuide/guide_default_bg.jpg'
-export const defaultImgPlaceHolder = 'https://cdn.ifback.com/website/websiteIcon/default.svg'
+export const defaultBackgroundUrl = '/image/guide_default_bg.jpg'
+export const defaultImgPlaceHolder = '/svg/default.svg'
 
 export const copyrightInfo = {
     startYear: 2021,

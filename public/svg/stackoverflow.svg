@@ -1,0 +1,15 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" fill="none">
+
+ <g>
+  <title>Layer 1</title>
+  <rect stroke="null" id="svg_12" height="128" width="128" y="-0.5" x="0" fill="#ffffff"/>
+  <g id="svg_11">
+   <path id="svg_3" fill="#C4C4C4" d="m41,73l-9,0l0,26l61,0l0,-26l-8,0l0,18l-44,0l0,-18z" clip-rule="evenodd" fill-rule="evenodd"/>
+   <path id="svg_4" fill="#E6853D" d="m47,78l33,0l0,7l-33,0l0,-7z"/>
+   <path id="svg_5" fill="#E6853D" d="m48.0425,65l32.632,4.9145l-1.0425,6.922l-32.632,-4.9146l1.0425,-6.9219z"/>
+   <path id="svg_6" fill="#E6853D" d="m53.85,49l30.141,13.4357l-2.85,6.3936l-30.141,-13.4357l2.85,-6.3936z"/>
+   <path id="svg_7" fill="#E6853D" d="m63.5747,35.6683l25.8412,20.524l-4.3536,5.4814l-25.8412,-20.5239l4.3536,-5.4815z"/>
+   <path id="svg_8" fill="#E6853D" d="m75.3135,25l21.4831,25.0495l-5.3136,4.557l-21.4831,-25.0495l5.3136,-4.557z"/>
+  </g>
+ </g>
+</svg>

@@ -1,0 +1,20 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <rect height="128" width="128" y="0" x="0" id="path_0"/>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g stroke="null" id="svg_1">
+   <mask stroke="null" fill="white" id="bg-mask">
+    <use stroke="null" xlink:href="#path_0"/>
+   </mask>
+   <g stroke="null" id="svg_3" mask="url(#bg-mask)">
+    <path stroke="null" fill="#FFFFFF" d="m0,126.99999l126.99999,0l0,-126.99999l-126.99999,0l0,126.99999z" fill-rule="evenodd" id="矩形 1"/>
+    <g stroke="null" id="svg_6" mask="url(#bg-mask)">
+      <path stroke="null" fill="#41B883" d="m87.9867,28.16572l-24.46867,42.418l-24.511,-42.418l-16.29833,0l40.80933,70.65433l40.767,-70.65433l-31.369,0l15.07067,0z" fill-rule="evenodd" id="路径 1"/>
+      <path stroke="null" fill="#34495E" d="m72.93419,28.17482l-9.44033,16.29833l-9.398,-16.29833l-15.07067,0l24.46867,42.37566l24.46867,-42.37566l-15.02833,0z" fill-rule="evenodd" id="路径 2"/>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
