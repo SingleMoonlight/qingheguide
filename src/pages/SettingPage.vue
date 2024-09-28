@@ -185,14 +185,7 @@ function searchWeatherLocation(input) {
 
     searchLocation(input).then(res => {
         showWeatherLocationList.value = true;
-        weatherLocationList.value = res.map(
-            item => ({
-                id: item.id,
-                name: item.name,
-                adm1: item.adm1,
-                adm2: item.adm2,
-            })
-        )
+        weatherLocationList.value = res;
 
         flagStore.setShowGlobalLoading(false);
         printLog('result', 'searchWeatherLocation searchLocation', res);
@@ -656,9 +649,7 @@ onMounted(() => {
                     </SettingItem>
                 </CardContainer>
                 <CardContainer :card-name="'地点'">
-                    <SettingItem :label="'省/市'" :type="'text'" :text-value="weatherStore.location.adm1"></SettingItem>
-                    <SettingItem :label="'市/区'" :type="'text'" :text-value="weatherStore.location.adm2"></SettingItem>
-                    <SettingItem :label="'区/县'" :type="'text'" :text-value="weatherStore.location.name"></SettingItem>
+                    <SettingItem :label="'位置'" :type="'text'" :text-value="weatherStore.location.path"></SettingItem>
                 </CardContainer>
                 <CardContainer :card-name="'搜索城市'" v-show="settingStore.weatherLocationMode === 'custom'">
                     <SettingItem :label="'请输入城市名'" :type="'input'" @ensure-input="searchWeatherLocation">
@@ -666,7 +657,7 @@ onMounted(() => {
                 </CardContainer>
                 <SelectList :show="showWeatherLocationList" :transition="'stretch'" class="weather-location-list">
                     <SelectItem v-for="(item, index) in weatherLocationList" :key="index" :index="index"
-                        :label="item.adm1 + ' ' + item.adm2 + ' ' + item.name" @select="selectWeatherLocation">
+                        :label="item.path" @select="selectWeatherLocation">
                     </SelectItem>
                 </SelectList>
             </div>
@@ -682,25 +673,16 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面左上角查看当前位置或者指定位置的天气信息。'">
-                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="false" :disabled="true"
+                    <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather"
                         @turn-switch="settingStore.showWeather = !settingStore.showWeather">
                     </SettingItem>
                 </CardContainer>
                 <div class="weather-info-des">
                     <div>
                         天气服务：
-                        <a :underline="false" href="https://www.qweather.com/" target="_blank">和风天气</a>
-                    </div>
-                    <div>
-                        空气质量数据来源：
-                        <a v-for="(item, index) in weatherStore.airReferSources" :key="index">
-                            {{ item + ' ' }}
-                        </a>
+                        <a :underline="false" href="https://www.seniverse.com/" target="_blank">心知天气</a>
                     </div>
                     <br>
-                    <div>
-                        由于服务迁移，目前天气功能无法使用。
-                    </div>
                 </div>
             </div>
         </div>

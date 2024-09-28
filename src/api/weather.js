@@ -1,6 +1,23 @@
-import axios from "axios"
+import { jsonpRequest } from './jsonp.js'
 import { printLog } from '@/utils/common'
 import { weatherUpdateInterval } from '@/utils/constant'
+import CryptoJS from "crypto-js"
+
+function generateRequestParamsString(params) {
+    // 先按照键的字典序升序排列所有的键值对
+    let entries = Object.entries(params).sort((a, b) => a[0].localeCompare(b[0]));
+    // 将键值对转换为 "key=value" 格式
+    let keyValuePairs = entries.map(([key, value]) => `${key}=${value}`);
+    // 将键值对连接成字符串
+    let paramsString = keyValuePairs.join('&');
+    // 生成签名
+    let sig = encodeURIComponent(
+        CryptoJS.HmacSHA1(paramsString, import.meta.env.VITE_APP_XINZHI_WEATHER_PRIVATE_KEY)
+            .toString(CryptoJS.enc.Base64));
+    paramsString += '&sig=' + sig;
+
+    return paramsString;
+}
 
 export function getCurrentLocation() {
     return new Promise((resolve, reject) => {
@@ -26,76 +43,81 @@ export function getCurrentLocation() {
 
 export function searchLocation(searchText) {
     return new Promise((resolve, reject) => {
-        axios.get('/geo/' + searchText
-        ).then(res => {
-            if (res.data.code === '200') {
-                resolve(res.data.location);
-            } else {
-                reject(res);
-            }
-        }).catch(err => {
-            reject(err);
-        })
+        let searchLocationUrl = 'https://api.seniverse.com/v3/location/search.json';
+        let callbackName = 'jsonpCallback_searchLocation';
+        let params = {
+            q: searchText,
+            public_key: import.meta.env.VITE_APP_XINZHI_WEATHER_PUBLIC_KEY,
+            ts: Date.now(),
+            ttl: 300,
+            callback: callbackName,
+        };
+        let paramsString = generateRequestParamsString(params);
+        searchLocationUrl += '?' + paramsString;
+        jsonpRequest(searchLocationUrl, callbackName)
+            .then(data => {
+                if (data.results.length > 0) {
+                    resolve(data.results);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
     })
 }
 
 export function getNowWeather(locationId) {
     return new Promise((resolve, reject) => {
-        axios.get('/nowWeather/' + locationId
-        ).then(res => {
-            if (res.data.code === '200') {
-                resolve(res.data.now);
-            } else {
-                reject(res);
-            }
-        }).catch(err => {
-            reject(err);
-        })
+        let searchLocationUrl = 'https://api.seniverse.com/v3/weather/now.json';
+        let callbackName = 'jsonpCallback_getNowWeather';
+        let params = {
+            location: locationId,
+            public_key: import.meta.env.VITE_APP_XINZHI_WEATHER_PUBLIC_KEY,
+            ts: Date.now(),
+            ttl: 300,
+            callback: callbackName,
+        };
+        let paramsString = generateRequestParamsString(params);
+        searchLocationUrl += '?' + paramsString;
+        jsonpRequest(searchLocationUrl, callbackName)
+        .then(data => {
+                if (data.results.length > 0) {
+                    resolve(data.results[0].now);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
     })
 }
-
-export function getNowAir(locationId) {
-    return new Promise((resolve, reject) => {
-        axios.get('/nowAir/' + locationId
-        ).then(res => {
-            if (res.data.code === '200') {
-                resolve(res.data);
-            } else {
-                reject(res);
-            }
-        }).catch(err => {
-            reject(err);
-        })
-    })
-}
-
 export function getFutureWeather(locationId) {
     return new Promise((resolve, reject) => {
-        axios.get('/futureWeather/' + locationId
-        ).then(res => {
-            if (res.data.code === '200') {
-                resolve(res.data.daily);
-            } else {
-                reject(res);
-            }
-        }).catch(err => {
-            reject(err);
-        })
-    })
-}
-
-export function getFutureAir(locationId) {
-    return new Promise((resolve, reject) => {
-        axios.get('/futureAir/' + locationId
-        ).then(res => {
-            if (res.data.code === '200') {
-                resolve(res.data.daily);
-            } else {
-                reject(res);
-            }
-        }).catch(err => {
-            reject(err);
-        })
+        let searchLocationUrl = 'https://api.seniverse.com/v3/weather/daily.json';
+        let callbackName = 'jsonpCallback_getFutureWeather';
+        let params = {
+            location: locationId,
+            public_key: import.meta.env.VITE_APP_XINZHI_WEATHER_PUBLIC_KEY,
+            ts: Date.now(),
+            ttl: 300,
+            callback: callbackName,
+        };
+        let paramsString = generateRequestParamsString(params);
+        searchLocationUrl += '?' + paramsString;
+        jsonpRequest(searchLocationUrl, callbackName)
+        .then(data => {
+                if (data.results.length > 0) {
+                    resolve(data.results[0].daily);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
     })
 }
 
@@ -107,8 +129,8 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
         (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather)) {
         getNowWeather(locationId).then((res) => {
             weatherStoreState.lastNowWeatherUpdateTime = nowTime;
-            weatherStoreState.nowWeather.temp = res.temp;
-            weatherStoreState.nowWeather.icon = res.icon;
+            weatherStoreState.nowWeather.temp = res.temperature;
+            weatherStoreState.nowWeather.icon = res.code;
             weatherStoreState.nowWeather.text = res.text;
 
             printLog('result', 'getWeatherInfo getNowWeather', res);
@@ -116,52 +138,23 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             printLog('error', 'getWeatherInfo getNowWeather', err);
         })
     }
-    if (focusUpdate || (weatherStoreState.lastNowAirUpdateTime === null ||
-        (nowTime - weatherStoreState.lastNowAirUpdateTime) / 60000 >= weatherUpdateInterval.nowAir)) {
-        getNowAir(locationId).then((res) => {
-            weatherStoreState.lastNowAirUpdateTime = nowTime;
-            weatherStoreState.nowAir.category = res.now.category;
-            weatherStoreState.nowAir.aqi = res.now.aqi;
-            weatherStoreState.airReferSources = res.refer.sources;
-
-            printLog('result', 'getWeatherInfo getNowAir', res);
-        }).catch(err => {
-            printLog('error', 'getWeatherInfo getNowAir', err);
-        });
-
-    }
+    
     if (focusUpdate || (weatherStoreState.lastFutureWeatherUpdateTime === null ||
         (nowTime - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather)) {
         getFutureWeather(locationId).then((res) => {
             weatherStoreState.lastFutureWeatherUpdateTime = nowTime;
             weatherStoreState.futureWeather = res.map(
                 item => ({
-                    tempMin: item.tempMin,
-                    tempMax: item.tempMax,
-                    icon: item.iconDay,
-                    text: item.textDay
+                    tempMin: item.low,
+                    tempMax: item.high,
+                    icon: item.code_day,
+                    text: item.text_day
                 })
             )
 
             printLog('result', 'getWeatherInfo getFutureWeather', res);
         }).catch(err => {
             printLog('error', 'getWeatherInfo getFutureWeather', err);
-        });
-    }
-    if (focusUpdate || (weatherStoreState.lastFutureAirUpdateTime === null ||
-        (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureAir)) {
-        getFutureAir(locationId).then((res) => {
-            weatherStoreState.lastFutureAirUpdateTime = nowTime;
-            weatherStoreState.futureAir = res.slice(0, 3).map(
-                item => ({
-                    category: item.category,
-                    aqi: item.aqi,
-                })
-            );
-
-            printLog('result', 'getWeatherInfo getFutureAir', res);
-        }).catch(err => {
-            printLog('error', 'getWeatherInfo getFutureAir', err);
         });
     }
 }

@@ -474,8 +474,7 @@ onMounted(() => {
         </Transition>
         <div class="weather-presenter-container" v-if="settingStore.showWeather">
             <WeatherPresenter :location-name="weatherStore.location.name" :now-weather="weatherStore.nowWeather"
-                :now-air="weatherStore.nowAir" :future-weather="weatherStore.futureWeather"
-                :future-air="weatherStore.futureAir">
+                :future-weather="weatherStore.futureWeather">
             </WeatherPresenter>
         </div>
         <div class="other-btn-container">

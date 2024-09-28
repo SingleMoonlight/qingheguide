@@ -1,42 +1,44 @@
-import { printLog } from '../utils/common'
-export function createJsonp(url, callbackName, params) {
+export function jsonpRequest(url, callbackName) {
     return new Promise((resolve, reject) => {
-        // Generate a unique ID for the script tag
-        const id = `jsonp_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-        // Define the callback function name
-        const uniqueCallbackName = `${callbackName}_${id}`;
+        // 检查 URL 是否已经包含 callback 参数
+        let urlAlreadyHasCallback = /[?&]callback=/.test(url);
+        let scriptSrc = url;
+        let actualCallbackName = callbackName;
 
-        // Add the callback function to the window object
-        window[uniqueCallbackName] = (response) => {
-            resolve(response);
-            // Remove the script tag and the callback from the window object
-            document.body.removeChild(script);
-            delete window[uniqueCallbackName];
+        if (!urlAlreadyHasCallback) {            
+            // 使用用户指定的 callbackName 或生成一个唯一的回调函数名
+            actualCallbackName = `${callbackName}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+        }
+
+        // 定义全局的回调函数
+        window[actualCallbackName] = function (data) {
+            // 调用对应的 resolve 函数
+            resolve(data);
+            // 移除回调函数
+            delete window[actualCallbackName];
+            // 移除 script 标签
+            let script = document.querySelector(`script[src*="${actualCallbackName}"]`);
+            if (script) {
+                document.body.removeChild(script);
+            }
         };
 
-        // Construct the URL with the callback parameter
-        let finalUrl = url + (url.includes('?') ? '&' : '?') + 'callback=' + uniqueCallbackName;
-        Object.keys(params).forEach(key => {
-            finalUrl += '&' + key + '=' + encodeURIComponent(params[key]);
-        });
+        if (!urlAlreadyHasCallback) {
+            scriptSrc = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + actualCallbackName;
+        }
 
-        // Create a script element and append it to the document
-        const script = document.createElement('script');
-        script.src = finalUrl;
-        script.id = id;
+        // 创建一个 script 标签
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = scriptSrc;
+        script.onerror = function () {
+            reject(new Error('JSONP request failed'));
+            // 移除回调函数
+            delete window[actualCallbackName];
+            document.body.removeChild(script);
+        };
+
+        // 添加 script 标签到文档中
         document.body.appendChild(script);
     });
-}
-export function useJsonpRequest(url, callbackName, params) {
-    const fetchJsonp = async () => {
-        try {
-            const response = await createJsonp(url, callbackName, params);
-            return response;
-        } catch (error) {
-            printLog('error', 'Error fetching JSONP:', error);
-            throw error;
-        }
-    };
-
-    return { fetchJsonp };
 }

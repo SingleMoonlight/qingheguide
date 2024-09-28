@@ -4,9 +4,7 @@ import { ref } from 'vue'
 const props = defineProps({
     locationName: String,
     nowWeather: Object,
-    nowAir: Object,
     futureWeather: Object,
-    futureAir: Object,
 })
 const showWeatherCard = ref(false)
 
@@ -21,7 +19,7 @@ function openWeatherCard() {
 <template>
     <div class="weather-outline" @click="openWeatherCard">
         {{ props.locationName }}
-        <i :class="'qi-' + props.nowWeather.icon + '-fill'" class="weather-outline-icon"></i>
+        <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"></img>
         {{ props.nowWeather.temp + '℃' }}
     </div>
     <Transition mode="out-in" name="extension-from-left-top">
@@ -31,15 +29,12 @@ function openWeatherCard() {
                     {{ props.nowWeather.temp + '°' }}
                 </div>
                 <div class="weather-now-icon">
-                    <i :class="'qi-' + props.nowWeather.icon + '-fill'" class="weather-outline-icon"></i>
+                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"></img>
                 </div>
             </div>
             <div class="weather-now-second-row">
                 <div class="weather-now-text">
                     {{ props.nowWeather.text }}
-                </div>
-                <div class="weather-now-air">
-                    {{ props.nowAir.category }}
                 </div>
             </div>
             <div class="divide-line"></div>
@@ -48,13 +43,13 @@ function openWeatherCard() {
                     {{ futureDays[i - 1] }}
                 </div>
                 <div class="weather-future-list-icon">
-                    <i :class="'qi-' + props.futureWeather[i - 1].icon + '-fill'" class="weather-outline-icon"></i>
+                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.futureWeather[i - 1].icon + '.svg'"></img>
                 </div>
                 <div class="weather-future-list-temp">
                     {{ props.futureWeather[i - 1].tempMin + '°' + '/' + props.futureWeather[i - 1].tempMax + '°' }}
                 </div>
-                <div class="weather-future-list-air">
-                    {{ props.futureAir[i - 1].category }}
+                <div class="weather-future-list-text">
+                    {{ props.futureWeather[i - 1].text }}
                 </div>
             </div>
         </div>
@@ -73,6 +68,8 @@ function openWeatherCard() {
 }
 
 .weather-outline-icon {
+    width: 16px;
+    height: 16px;
     margin: 0 6px;
 }
 
@@ -111,11 +108,6 @@ function openWeatherCard() {
     width: 65px;
 }
 
-.weather-now-air {
-    font-size: 14px;
-    width: 115px;
-}
-
 .divide-line {
     margin: 10px 0;
     height: 1px;
@@ -141,7 +133,7 @@ function openWeatherCard() {
     width: 50px;
 }
 
-.weather-future-list-air {
+.weather-future-list-text {
     width: 28px;
     white-space: nowrap;
     overflow: hidden;

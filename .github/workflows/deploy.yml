@@ -25,7 +25,18 @@ jobs:
         with:
           # 选择要使用的 node 版本
           node-version: 20
-      
+
+      # 设置环境变量
+      # Run the set secrets script
+      - name: Set secrets
+        env:
+          WEATHER_PUBLIC_KEY: ${{ secrets.WEATHER_PUBLIC_KEY }}
+          WEATHER_PRIVATE_KEY: ${{ secrets.WEATHER_PRIVATE_KEY }}
+        run: |
+          touch .env
+          echo "VITE_APP_XINZHI_WEATHER_PUBLIC_KEY = $WEATHER_PUBLIC_KEY;" >> .env
+          echo "VITE_APP_XINZHI_WEATHER_PRIVATE_KEY = $WEATHER_PRIVATE_KEY;" >> .env
+
       # 安装依赖
       # Install dependencies
       - name: Install Dependencies

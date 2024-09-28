@@ -2,23 +2,21 @@ import { defineStore } from 'pinia'
 
 export const useWeatherStore = defineStore('weatherStore', {
     state: () => ({
-        location: { id: 101010100, adm1: '北京市', adm2: '北京', name: '北京' },
-        nowWeather: { temp: 0, icon: 100, text: '晴' },
-        nowAir: { category: '优', aqi: 0 },
+        location: {
+            id: 'WX4FBXXFKE4F',
+            name: '北京',
+            country: 'CN',
+            path: '北京,北京,中国',
+            timezone: 'Asia/Shanghai',
+            timezone_offset: '+08:00'
+        },
+        nowWeather: { temp: 0, icon: 1, text: '晴' },
         futureWeather: [
-            { tempMin: 0, tempMax: 0, icon: 100, text: '晴' }, 
-            { tempMin: 0, tempMax: 0, icon: 100, text: '晴' }, 
-            { tempMin: 0, tempMax: 0, icon: 100, text: '晴' }, 
+            { tempMin: 0, tempMax: 0, icon: 1, text: '晴' },
+            { tempMin: 0, tempMax: 0, icon: 1, text: '晴' },
+            { tempMin: 0, tempMax: 0, icon: 1, text: '晴' },
         ],
-        futureAir: [
-            { category: '优', aqi: 0 }, 
-            { category: '优', aqi: 0 }, 
-            { category: '优', aqi: 0 }, 
-        ],
-        airReferSources: '',
         lastNowWeatherUpdateTime: 0,
-        lastNowAirUpdateTime: 0,
         lastFutureWeatherUpdateTime: 0,
-        lastFutureAirUpdateTime: 0,
     }),
 })

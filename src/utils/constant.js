@@ -18,9 +18,7 @@ export const searchEngineList = [
 // 天气数据获取刷新间隔，单位分钟
 export const weatherUpdateInterval = {
     nowWeather: 10,
-    nowAir: 30,
     futureWeather: 60,
-    futureAir: 8 * 60,
 }
 
 export const weatherLocationModeList = [
@@ -91,6 +89,14 @@ export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
 // 顺序：fix opt add del
 // 同步修改package.json的version
 export const updateHistory = [
+    {
+        time: '2024-9-28',
+        version: 'V3.0.5',
+        item: [
+            { type: 'opt', des: '完成服务迁移' },
+            { type: 'opt', des: '修改天气数据源，天气数据来自心知天气' },
+        ]
+    },
     {
         time: '2024-9-13',
         version: 'V3.0.4',
