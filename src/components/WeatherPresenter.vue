@@ -20,7 +20,7 @@ function openWeatherCard() {
 <template>
     <div class="weather-outline" @click="openWeatherCard">
         {{ props.locationName }}
-        <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"></img>
+        <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"/>
         {{ props.nowWeather.temp + '℃' }}
     </div>
     <Transition mode="out-in" name="extension-from-left-top">
@@ -30,7 +30,7 @@ function openWeatherCard() {
                     {{ props.nowWeather.temp + '°' }}
                 </div>
                 <div class="weather-now-icon">
-                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"></img>
+                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.nowWeather.icon + '.svg'"/>
                 </div>
             </div>
             <div class="weather-now-second-row">
@@ -47,7 +47,7 @@ function openWeatherCard() {
                     {{ futureDays[i - 1] }}
                 </div>
                 <div class="weather-future-list-icon">
-                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.futureWeather[i - 1].icon + '.svg'"></img>
+                    <img class="weather-outline-icon" :src="'https://cdn.sencdn.com/widget2/assets/img/chameleon/weather/' + props.futureWeather[i - 1].icon + '.svg'"/>
                 </div>
                 <div class="weather-future-list-temp">
                     {{ props.futureWeather[i - 1].tempMin + '°' + '/' + props.futureWeather[i - 1].tempMax + '°' }}
