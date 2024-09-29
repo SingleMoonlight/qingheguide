@@ -4,6 +4,7 @@ import { ref } from 'vue'
 const props = defineProps({
     locationName: String,
     nowWeather: Object,
+    suggestion: Object,
     futureWeather: Object,
 })
 const showWeatherCard = ref(false)
@@ -35,6 +36,9 @@ function openWeatherCard() {
             <div class="weather-now-second-row">
                 <div class="weather-now-text">
                     {{ props.nowWeather.text }}
+                </div>
+                <div class="weather-now-suggestion">
+                    {{ props.suggestion.dressing.brief }}
                 </div>
             </div>
             <div class="divide-line"></div>
@@ -106,6 +110,11 @@ function openWeatherCard() {
 .weather-now-text {
     font-size: 14px;
     width: 65px;
+}
+
+.weather-now-suggestion {
+    font-size: 14px;
+    width: 115px;
 }
 
 .divide-line {

@@ -18,7 +18,7 @@ import {
     searchOpenModeList, weatherLocationModeList, webAppOpenModeList,
     flippingEffectList, backupOptionList, backupFileName
 } from '@/utils/constant'
-import { searchLocation, getWeatherInfo, getCurrentLocation } from '@/api/weather'
+import { searchLocation, getWeatherInfoAsync, getCurrentLocation } from '@/api/weather'
 import { setClassForElement, isValidURL, printLog, downloadFile } from '@/utils/common'
 import { clearLocalStorage } from '@/utils/localStorage'
 import { deleteImageDB } from '@/utils/indexedDB'
@@ -202,8 +202,29 @@ function searchWeatherLocation(input) {
 }
 
 function selectWeatherLocation(index) {
-    weatherStore.$state.location = weatherLocationList.value[index];
-    getWeatherInfo(true, weatherStore);
+    let oldLocation = weatherStore.$state.location;
+    let newLocation = weatherLocationList.value[index];
+
+    weatherStore.$state.location = newLocation;
+    flagStore.setShowGlobalLoading(true);
+
+    getWeatherInfoAsync(weatherStore).then(res => {
+        flagStore.setShowGlobalLoading(false);
+        messageBoxStore.openMessageBox('warn', '提示', res.message,
+            {
+                okBtnText: '好的',
+            }
+        );
+
+        if (res.code !== 0) {
+            weatherStore.$state.location = oldLocation;
+        }
+        printLog('result', 'selectWeatherLocation getWeatherInfoAsync', res);
+    }).catch(err => {
+        flagStore.setShowGlobalLoading(false);
+        weatherStore.$state.location = oldLocation;
+        printLog('error', 'selectWeatherLocation getWeatherInfoAsync', err);
+    })
 
     showWeatherLocationList.value = false;
     weatherLocationList.value = [...[]];
@@ -641,7 +662,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'天气定位'"
-                    :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。使用自动定位功能需要浏览器支持，且需要您进行授权。自动定位可能存在误差，如果定位不准，请切换至自定义模式。'">
+                    :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。自动定位信息来自于浏览器，需要您进行授权。自动定位可能无法生效，如不生效，请切换至自定义模式。'">
                     <SettingItem v-for="(item, index) in weatherLocationModeList" :key="index" :type="'list'"
                         :label="item.name"
                         :checked="getWeatherLocationModeIndex(settingStore.weatherLocationMode) === index"
@@ -672,7 +693,8 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'天气'" :card-des="'开启时可以在导航页面左上角查看当前位置或者指定位置的天气信息。'">
+                <CardContainer :card-name="'天气'"
+                    :card-des="'开启时可以在导航页面左上角查看当前位置或者指定位置的天气信息，包括实时天气、生活指数、未来三天天气，当前仅支持国内370个主要城市。'">
                     <SettingItem :label="'显示天气'" :type="'switch'" :onoff="settingStore.showWeather"
                         @turn-switch="settingStore.showWeather = !settingStore.showWeather">
                     </SettingItem>

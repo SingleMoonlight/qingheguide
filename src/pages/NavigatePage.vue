@@ -435,7 +435,7 @@ function selectWebAppGroupMenuItem(index) {
 
 onMounted(() => {
     if (settingStore.$state.showWeather) {
-        getWeatherInfo(false, weatherStore);
+        getWeatherInfo(weatherStore);
     }
 
     updateWebAppGroup();
@@ -474,7 +474,7 @@ onMounted(() => {
         </Transition>
         <div class="weather-presenter-container" v-if="settingStore.showWeather">
             <WeatherPresenter :location-name="weatherStore.location.name" :now-weather="weatherStore.nowWeather"
-                :future-weather="weatherStore.futureWeather">
+                :suggestion="weatherStore.suggestion" :future-weather="weatherStore.futureWeather">
             </WeatherPresenter>
         </div>
         <div class="other-btn-container">

@@ -68,7 +68,7 @@ export function searchLocation(searchText) {
     })
 }
 
-export function getNowWeather(locationId) {
+function getNowWeather(locationId) {
     return new Promise((resolve, reject) => {
         let searchLocationUrl = 'https://api.seniverse.com/v3/weather/now.json';
         let callbackName = 'jsonpCallback_getNowWeather';
@@ -82,7 +82,7 @@ export function getNowWeather(locationId) {
         let paramsString = generateRequestParamsString(params);
         searchLocationUrl += '?' + paramsString;
         jsonpRequest(searchLocationUrl, callbackName)
-        .then(data => {
+            .then(data => {
                 if (data.results.length > 0) {
                     resolve(data.results[0].now);
                 } else {
@@ -94,7 +94,7 @@ export function getNowWeather(locationId) {
             });
     })
 }
-export function getFutureWeather(locationId) {
+function getFutureWeather(locationId) {
     return new Promise((resolve, reject) => {
         let searchLocationUrl = 'https://api.seniverse.com/v3/weather/daily.json';
         let callbackName = 'jsonpCallback_getFutureWeather';
@@ -108,7 +108,7 @@ export function getFutureWeather(locationId) {
         let paramsString = generateRequestParamsString(params);
         searchLocationUrl += '?' + paramsString;
         jsonpRequest(searchLocationUrl, callbackName)
-        .then(data => {
+            .then(data => {
                 if (data.results.length > 0) {
                     resolve(data.results[0].daily);
                 } else {
@@ -121,12 +121,39 @@ export function getFutureWeather(locationId) {
     })
 }
 
-export function getWeatherInfo(focusUpdate, weatherStoreState) {
+function getWeatherSuggestion(locationId) {
+    return new Promise((resolve, reject) => {
+        let searchLocationUrl = 'https://api.seniverse.com/v3/life/suggestion.json';
+        let callbackName = 'jsonpCallback_getWeatherSuggestion';
+        let params = {
+            location: locationId,
+            public_key: import.meta.env.VITE_APP_XINZHI_WEATHER_PUBLIC_KEY,
+            ts: Date.now(),
+            ttl: 300,
+            callback: callbackName,
+        };
+        let paramsString = generateRequestParamsString(params);
+        searchLocationUrl += '?' + paramsString;
+        jsonpRequest(searchLocationUrl, callbackName)
+            .then(data => {
+                if (data.results.length > 0) {
+                    resolve(data.results[0].suggestion);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+    })
+}
+
+export function getWeatherInfo(weatherStoreState) {
     let nowTime = new Date().valueOf();
     let locationId = weatherStoreState.location.id;
 
-    if (focusUpdate || (weatherStoreState.lastNowWeatherUpdateTime === null ||
-        (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather)) {
+    if (weatherStoreState.lastNowWeatherUpdateTime === null ||
+        (nowTime - weatherStoreState.lastNowWeatherUpdateTime) / 60000 >= weatherUpdateInterval.nowWeather) {
         getNowWeather(locationId).then((res) => {
             weatherStoreState.lastNowWeatherUpdateTime = nowTime;
             weatherStoreState.nowWeather.temp = res.temperature;
@@ -136,11 +163,19 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             printLog('result', 'getWeatherInfo getNowWeather', res);
         }).catch(err => {
             printLog('error', 'getWeatherInfo getNowWeather', err);
-        })
+        });
+
+        getWeatherSuggestion(locationId).then((res) => {
+            weatherStoreState.suggestion = res;
+
+            printLog('result', 'getWeatherInfo getWeatherSuggestion', res);
+        }).catch(err => {
+            printLog('error', 'getWeatherInfo getWeatherSuggestion', err);
+        });
     }
-    
-    if (focusUpdate || (weatherStoreState.lastFutureWeatherUpdateTime === null ||
-        (nowTime - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather)) {
+
+    if (weatherStoreState.lastFutureWeatherUpdateTime === null ||
+        (nowTime - weatherStoreState.lastFutureWeatherUpdateTime) / 60000 >= weatherUpdateInterval.futureWeather) {
         getFutureWeather(locationId).then((res) => {
             weatherStoreState.lastFutureWeatherUpdateTime = nowTime;
             weatherStoreState.futureWeather = res.map(
@@ -157,4 +192,49 @@ export function getWeatherInfo(focusUpdate, weatherStoreState) {
             printLog('error', 'getWeatherInfo getFutureWeather', err);
         });
     }
+}
+
+export async function getWeatherInfoAsync(weatherStoreState) {
+    let nowTime = new Date().valueOf();
+    let locationId = weatherStoreState.location.id;
+
+    try {
+        let res = await getNowWeather(locationId);
+        weatherStoreState.lastNowWeatherUpdateTime = nowTime;
+        weatherStoreState.nowWeather.temp = res.temperature;
+        weatherStoreState.nowWeather.icon = res.code;
+        weatherStoreState.nowWeather.text = res.text;
+        printLog('result', 'getWeatherInfoAsync getNowWeather', res);
+    } catch (err) {
+        printLog('error', 'getWeatherInfoAsync getNowWeather', err);
+        return { code: -1, message: '获取天气信息失败，请检查网络或者指定上一级城市重试。'};
+    };
+
+    try {
+        let res = await getWeatherSuggestion(locationId);
+        weatherStoreState.suggestion = res;
+        printLog('result', 'getWeatherInfoAsync getWeatherSuggestion', res);
+    } catch (err) {
+        printLog('error', 'getWeatherInfoAsync getWeatherSuggestion', err);
+        return { code: -1, message: '获取天气指数信息失败，请检查网络或者指定上一级城市重试。'};
+    };
+
+    try {
+        let res = await getFutureWeather(locationId);
+        weatherStoreState.lastFutureWeatherUpdateTime = nowTime;
+        weatherStoreState.futureWeather = res.map(
+            item => ({
+                tempMin: item.low,
+                tempMax: item.high,
+                icon: item.code_day,
+                text: item.text_day
+            })
+        )
+        printLog('result', 'getWeatherInfoAsync getFutureWeather', res);
+    } catch (err) {
+        printLog('error', 'getWeatherInfoAsync getFutureWeather', err);
+        return { code: -1, message: '获取未来天气信息失败，请检查网络或者指定上一级城市重试。'};
+    };
+
+    return { code: 0, message: '天气信息更新成功！'};
 }

@@ -31,8 +31,8 @@ export function jsonpRequest(url, callbackName) {
         let script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = scriptSrc;
-        script.onerror = function () {
-            reject(new Error('JSONP request failed'));
+        script.onerror = function (error) {
+            reject(error);
             // 移除回调函数
             delete window[actualCallbackName];
             document.body.removeChild(script);
