@@ -41,8 +41,8 @@ export function getLocalWeather() {
     }
 }
 
-export function setLocalWeather(searchHistory) {
-    localStorage.setItem('weather', JSON.stringify(searchHistory));
+export function setLocalWeather(localWeather) {
+    localStorage.setItem('weather', JSON.stringify(localWeather));
 }
 
 export function getLocalWebApp() {

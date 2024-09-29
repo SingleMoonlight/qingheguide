@@ -103,7 +103,8 @@ function loadConfig() {
     });
     let localWeather = getLocalWeather();
     if (localWeather) {
-        weatherStore.$patch(localWeather);
+        let newWeather = mergeObjects(weatherStore.$state, localWeather);
+        weatherStore.$patch(newWeather);
     } else {
         weatherStore.$reset();
     }
