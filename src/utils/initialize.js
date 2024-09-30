@@ -51,7 +51,7 @@ function checkSetting(setting) {
     if (!flippingEffectList.map(obj => obj.settingValue).includes(setting['flippingEffect'])) {
         setting['flippingEffect'] = 'slide';
     }
-    if (setting['webAppGroupIndex'] < 0 || setting['webAppGroupIndex'] >= webAppStore.$state.app.length) {
+    if (setting['webAppGroupIndex'] < 0 || setting['webAppGroupIndex'] >= webAppStore.$state.webAppGroups.length) {
         setting['webAppGroupIndex'] = 0;
     }
 }

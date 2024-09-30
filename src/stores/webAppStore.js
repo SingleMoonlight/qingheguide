@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useWebAppStore = defineStore('webAppStore', {
     state: () => ({
-        app: [
+        webAppGroups: [
             {
                 groupId: '50524eb2-c604-4f74-a0a2-a0b13aa8ef16',
                 groupName: '工具',

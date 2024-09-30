@@ -83,7 +83,7 @@ function updateDefaultWebAppGroup(index) {
 }
 
 function updateWebAppGroup() {
-    webAppGroup.value = webAppStore.$state.app.map(item => ({
+    webAppGroup.value = webAppStore.$state.webAppGroups.map(item => ({
         id: item.groupId,
         name: item.groupName,
     }));
@@ -93,12 +93,12 @@ function updateWebAppGroupOrder(list) {
     let newWebAppGroup = [];
     for (let i = 0; i < list.length; i++) {
         for (let j = 0; j < list.length; j++) {
-            if (list[i].id === webAppStore.$state.app[j].groupId) {
-                newWebAppGroup.push(webAppStore.$state.app[j]);
+            if (list[i].id === webAppStore.$state.webAppGroups[j].groupId) {
+                newWebAppGroup.push(webAppStore.$state.webAppGroups[j]);
             }
         }
     }
-    webAppStore.$state.app = newWebAppGroup;
+    webAppStore.$state.webAppGroups = newWebAppGroup;
     updateWebAppGroup();
 }
 
@@ -285,7 +285,7 @@ function handleAddWebApp(webApp) {
         // 保存图标至indexed DB
         setWebAppIconImg(uid, webApp.iconFile);
     }
-    webAppStore.$state.app[settingStore.$state.webAppGroupIndex].groupApps.push(savedWebApp);
+    webAppStore.$state.webAppGroups[settingStore.$state.webAppGroupIndex].groupApps.push(savedWebApp);
 
     closeWebAppHandler();
 }
@@ -297,7 +297,7 @@ function handleDeleteWebApp(webApp, deleteNotice) {
         return;
     }
 
-    let groupApps = webAppStore.$state.app[settingStore.$state.webAppGroupIndex].groupApps;
+    let groupApps = webAppStore.$state.webAppGroups[settingStore.$state.webAppGroupIndex].groupApps;
     let appIndex = groupApps.findIndex(item => item.id === webApp.id);
     if (appIndex < 0) {
         return;
@@ -340,7 +340,7 @@ function closeWebAppGroupHandler() {
 function handleDeleteWebAppGroup(deleteNotice) {
     settingStore.$state.deleteWebAppGroupNotice = deleteNotice;
 
-    let curGroupNum = webAppStore.$state.app.length;
+    let curGroupNum = webAppStore.$state.webAppGroups.length;
     if (curGroupNum === 1) {
         messageBoxStore.openMessageBox('warn', '提示', '当前仅剩一个分组，无法删除。',
             {
@@ -351,7 +351,7 @@ function handleDeleteWebAppGroup(deleteNotice) {
     }
 
     let groupIndex = settingStore.$state.webAppGroupIndex;
-    let group = webAppStore.$state.app[groupIndex];
+    let group = webAppStore.$state.webAppGroups[groupIndex];
 
     // 删除分组时，同步删除自定义图标
     group.groupApps.forEach(webApp => {
@@ -362,7 +362,7 @@ function handleDeleteWebAppGroup(deleteNotice) {
 
     showWebAppGroup.value = false;
 
-    webAppStore.$state.app.splice(groupIndex, 1);
+    webAppStore.$state.webAppGroups.splice(groupIndex, 1);
     settingStore.$state.webAppGroupIndex = groupIndex === curGroupNum - 1 ? 0 : groupIndex;
 
     updateWebAppGroup();
@@ -383,7 +383,7 @@ function handleEditWebAppGroup(newName) {
     }
 
     let groupIndex = settingStore.$state.webAppGroupIndex;
-    let group = webAppStore.$state.app[groupIndex];
+    let group = webAppStore.$state.webAppGroups[groupIndex];
 
     group.groupName = newName;
 
@@ -401,13 +401,13 @@ function handleAddWebAppGroup(groupName) {
         return;
     }
 
-    webAppStore.$state.app.push({
+    webAppStore.$state.webAppGroups.push({
         groupId: generateUID(),
         groupName: groupName,
         groupApps: [],
     })
     // 自动跳转到新增分组
-    settingStore.$state.webAppGroupIndex = webAppStore.$state.app.length - 1;
+    settingStore.$state.webAppGroupIndex = webAppStore.$state.webAppGroups.length - 1;
     updateWebAppGroup();
     closeWebAppGroupHandler();
 }
@@ -452,14 +452,14 @@ onMounted(() => {
                     :flipping-effect="settingStore.flippingEffect" :flipping-interval="flippingInterval"
                     :page-list="webAppGroup" @change-active-page="updateDefaultWebAppGroup"
                     @change-page-order="updateWebAppGroupOrder" @longpress-bar="closeContextMenu">
-                    <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.app"
+                    <template #[getOriginPageSlotName(groupIndex)] v-for="(group, groupIndex) in webAppStore.webAppGroups"
                         :key="groupIndex">
-                        <VueDraggable class="web-app-group" v-model="webAppStore.app[groupIndex].groupApps"
+                        <VueDraggable class="web-app-group" v-model="webAppStore.webAppGroups[groupIndex].groupApps"
                             :animation="150" :scroll="true" :group="'webApp'" @start="handleWebAppDragStart"
                             @drag="handleWebAppDrag" @click="handleClickWebAppGroup"
                             @contextmenu="handleRightClickWebAppGroup(group, $event)">
                             <TransitionGroup :css="false" :name="webAppTransition">
-                                <div class="web-app-container" v-for="app in webAppStore.app[groupIndex].groupApps"
+                                <div class="web-app-container" v-for="app in webAppStore.webAppGroups[groupIndex].groupApps"
                                     :key="app">
                                     <WebApp :name="app.name" :icon="app.icon" :show-name="settingStore.showWebAppName"
                                         :default-icon="defaultImgPlaceHolder" @click="handleClickWebApp(app.url)"

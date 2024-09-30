@@ -219,7 +219,7 @@ export function setWebAppIconImg(webAppId, imageData) {
 export function getWebAppIconImg() {
     const webAppStore = useWebAppStore();
 
-    webAppStore.$state.app.forEach(group => {
+    webAppStore.$state.webAppGroups.forEach(group => {
         group.groupApps.forEach(app => {
             if (app.iconSource === 'custom') {
                 imageDB.getDataByKey(app.id).then(res => {
