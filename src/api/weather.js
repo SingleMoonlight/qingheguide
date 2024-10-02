@@ -1,5 +1,5 @@
 import { jsonpRequest } from './jsonp.js'
-import { printLog } from '@/utils/common'
+import { printLog, LOG_ERROR, LOG_INFO } from '@/utils/common'
 import { weatherUpdateInterval } from '@/utils/constant'
 import CryptoJS from "crypto-js"
 
@@ -27,11 +27,11 @@ export function getCurrentLocation() {
                     resolve(res[0]);
                 }).catch(err => {
                     reject(new Error('获取定位失败，请重试或者手动选择位置。'));
-                    printLog('error', 'getCurrentPosition searchLocation', err);
+                    printLog(LOG_ERROR, err);
                 });
             }, (err) => {
                 reject(new Error('获取定位失败，请确认浏览器已允许本网站获取定位，若仍然失败请重试或者手动选择位置。'));
-                printLog('error', 'getCurrentPosition searchLocation', err);
+                printLog(LOG_ERROR, err);
             }, {
                 timeout: 3000,
             });
@@ -160,17 +160,17 @@ export function getWeatherInfo(weatherStoreState) {
             weatherStoreState.nowWeather.icon = res.code;
             weatherStoreState.nowWeather.text = res.text;
 
-            printLog('result', 'getWeatherInfo getNowWeather', res);
+            printLog(LOG_INFO, res);
         }).catch(err => {
-            printLog('error', 'getWeatherInfo getNowWeather', err);
+            printLog(LOG_ERROR, err);
         });
 
         getWeatherSuggestion(locationId).then((res) => {
             weatherStoreState.suggestion = res;
 
-            printLog('result', 'getWeatherInfo getWeatherSuggestion', res);
+            printLog(LOG_INFO, res);
         }).catch(err => {
-            printLog('error', 'getWeatherInfo getWeatherSuggestion', err);
+            printLog(LOG_ERROR, err);
         });
     }
 
@@ -187,9 +187,9 @@ export function getWeatherInfo(weatherStoreState) {
                 })
             )
 
-            printLog('result', 'getWeatherInfo getFutureWeather', res);
+            printLog(LOG_INFO, res);
         }).catch(err => {
-            printLog('error', 'getWeatherInfo getFutureWeather', err);
+            printLog(LOG_ERROR, err);
         });
     }
 }
@@ -204,18 +204,18 @@ export async function getWeatherInfoAsync(weatherStoreState) {
         weatherStoreState.nowWeather.temp = res.temperature;
         weatherStoreState.nowWeather.icon = res.code;
         weatherStoreState.nowWeather.text = res.text;
-        printLog('result', 'getWeatherInfoAsync getNowWeather', res);
+        printLog(LOG_INFO, res);
     } catch (err) {
-        printLog('error', 'getWeatherInfoAsync getNowWeather', err);
+        printLog(LOG_ERROR, err);
         return { code: -1, message: '获取天气信息失败，请检查网络或者指定上一级城市重试。'};
     };
 
     try {
         let res = await getWeatherSuggestion(locationId);
         weatherStoreState.suggestion = res;
-        printLog('result', 'getWeatherInfoAsync getWeatherSuggestion', res);
+        printLog(LOG_INFO, res);
     } catch (err) {
-        printLog('error', 'getWeatherInfoAsync getWeatherSuggestion', err);
+        printLog(LOG_ERROR, err);
         return { code: -1, message: '获取天气指数信息失败，请检查网络或者指定上一级城市重试。'};
     };
 
@@ -230,9 +230,9 @@ export async function getWeatherInfoAsync(weatherStoreState) {
                 text: item.text_day
             })
         )
-        printLog('result', 'getWeatherInfoAsync getFutureWeather', res);
+        printLog(LOG_INFO, res);
     } catch (err) {
-        printLog('error', 'getWeatherInfoAsync getFutureWeather', err);
+        printLog(LOG_ERROR, err);
         return { code: -1, message: '获取未来天气信息失败，请检查网络或者指定上一级城市重试。'};
     };
 

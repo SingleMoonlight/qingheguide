@@ -50,9 +50,11 @@ export function mergeObjects(a, b) {
     return aCopy;
 }
 
-export function printLog(type, func, data) {
+export const LOG_ERROR = 'ERROR';
+export const LOG_INFO = 'INFO';
+export function printLog(type, data) {
     if (!import.meta.env.PROD) {
-        console.log(type + ": " + func);
-        console.log(data);
+        let funcInfo = new Error().stack.split('\n')[2].trim();
+        console.log('[' + type + ']', funcInfo,data);
     }
 }

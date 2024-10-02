@@ -129,7 +129,7 @@ export class IndexedDB {
 import { useSettingStore } from '@/stores/settingStore'
 import { useFlagStore } from '@/stores/flagStore'
 import { useWebAppStore } from '@/stores/webAppStore'
-import { printLog } from '@/utils/common'
+import { printLog, LOG_ERROR, LOG_INFO } from '@/utils/common'
 import { defaultBackgroundUrl } from '@/utils/constant'
 
 let imageDB = null
@@ -141,17 +141,17 @@ export function initImageDB() {
     imageDB.initDB().then(res => {
         getBackgroundImg();
         getWebAppIconImg();
-        printLog('result', 'initImageDB initDB', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
-        printLog('error', 'initImageDB initDB', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
 export function deleteImageDB() {
     imageDB.deleteDBAll().then(res => {
-        printLog('result', 'deleteImageDB deleteDBAll', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
-        printLog('error', 'deleteImageDB deleteDBAll', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
@@ -164,12 +164,12 @@ export function setBackgroundImg(imageData) {
         let imgURL = window.URL.createObjectURL(imageData);
         settingStore.$state.bgUrl = imgURL;
 
-        printLog('result', 'setBackgroundImg updateData', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
         settingStore.$state.bgUrl = defaultBackgroundUrl;
         settingStore.$state.bgSource = 'default';
 
-        printLog('error', 'setBackgroundImg updateData', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
@@ -188,21 +188,21 @@ export function getBackgroundImg() {
         settingStore.$state.bgUrl = imgURL;
         flagStore.$state.bgImgIsGot = true;
 
-        printLog('result', 'getBackgroundImg getDataByKey', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
         settingStore.$state.bgUrl = defaultBackgroundUrl;
         settingStore.$state.bgSource = 'default';
         flagStore.$state.bgImgIsGot = true;
 
-        printLog('error', 'getBackgroundImg getDataByKey', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
 export function deleteBackgroundImg() {
     imageDB.deleteData('background').then(res => {
-        printLog('result', 'deleteBackgroundImg deleteData', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
-        printLog('error', 'deleteBackgroundImg deleteData', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
@@ -210,9 +210,9 @@ export function setWebAppIconImg(webAppId, imageData) {
     let data = { 'name': webAppId, 'data': imageData };
 
     imageDB.updateData(data).then(res => {
-        printLog('result', 'setWebAppIconImg updateData', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
-        printLog('error', 'setWebAppIconImg updateData', err);
+        printLog(LOG_ERROR, err);
     });
 }
 
@@ -226,9 +226,9 @@ export function getWebAppIconImg() {
                     // 创建指向图片文件的url并保存
                     let imgURL = window.URL.createObjectURL(res.data);
                     app.icon = imgURL;
-                    printLog('result', 'getWebAppIconImg getDataByKey', res);
+                    printLog(LOG_INFO, res);
                 }).catch((err) => {
-                    printLog('error', 'getWebAppIconImg getDataByKey', err);
+                    printLog(LOG_ERROR, err);
                 });
             }
         })
@@ -237,8 +237,8 @@ export function getWebAppIconImg() {
 
 export function deleteWebAppIconImg(webAppId) {
     imageDB.deleteData(webAppId).then(res => {
-        printLog('result', 'deleteWebAppIconImg deleteData', res);
+        printLog(LOG_INFO, res);
     }).catch((err) => {
-        printLog('error', 'deleteWebAppIconImg deleteData', err);
+        printLog(LOG_ERROR, err);
     });
 }

@@ -19,7 +19,7 @@ import {
     flippingEffectList, backupOptionList, backupFileName
 } from '@/utils/constant'
 import { searchLocation, getWeatherInfoAsync, getCurrentLocation } from '@/api/weather'
-import { setClassForElement, isValidURL, printLog, downloadFile } from '@/utils/common'
+import { setClassForElement, isValidURL, printLog, downloadFile, LOG_ERROR, LOG_INFO } from '@/utils/common'
 import { clearLocalStorage } from '@/utils/localStorage'
 import { deleteImageDB } from '@/utils/indexedDB'
 import { ref, onMounted } from 'vue'
@@ -188,7 +188,7 @@ function searchWeatherLocation(input) {
         weatherLocationList.value = res;
 
         flagStore.setShowGlobalLoading(false);
-        printLog('result', 'searchWeatherLocation searchLocation', res);
+        printLog(LOG_INFO, res);
     }).catch(err => {
         showWeatherLocationList.value = false;
         flagStore.setShowGlobalLoading(false);
@@ -197,7 +197,7 @@ function searchWeatherLocation(input) {
                 okBtnText: '好的',
             }
         );
-        printLog('error', 'searchWeatherLocation searchLocation', err);
+        printLog(LOG_ERROR, err);
     })
 }
 
@@ -219,11 +219,11 @@ function selectWeatherLocation(index) {
         if (res.code !== 0) {
             weatherStore.$state.location = oldLocation;
         }
-        printLog('result', 'selectWeatherLocation getWeatherInfoAsync', res);
+        printLog(LOG_INFO, res);
     }).catch(err => {
         flagStore.setShowGlobalLoading(false);
         weatherStore.$state.location = oldLocation;
-        printLog('error', 'selectWeatherLocation getWeatherInfoAsync', err);
+        printLog(LOG_ERROR, err);
     })
 
     showWeatherLocationList.value = false;
@@ -301,14 +301,14 @@ function recoverySettingFromLocal(e) {
                 }
             });
             location.reload();
-            printLog('result', 'recoverySettingFromLocal readAsText', json);
+            printLog(LOG_INFO, json);
         } catch (err) {
             messageBoxStore.openMessageBox('error', '错误', '文件解析错误，请确认备份文件选择正确。',
                 {
                     okBtnText: '确定',
                 }
             );
-            printLog('error', 'recoverySettingFromLocal JSON.parse', err);
+            printLog(LOG_ERROR, err);
         }
     };
     reader.onerror = function (err) {
@@ -317,7 +317,7 @@ function recoverySettingFromLocal(e) {
                 okBtnText: '确定',
             }
         );
-        printLog('error', 'recoverySettingFromLocal readAsText', err);
+        printLog(LOG_ERROR, err);
     };
 }
 
