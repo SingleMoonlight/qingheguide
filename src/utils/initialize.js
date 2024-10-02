@@ -56,6 +56,27 @@ function checkSetting(setting) {
     }
 }
 
+function checkWebApp(localWebApp) {
+    const defaultWebApp = useWebAppStore().$state.webAppGroups;
+
+    // 初始化默认webApp映射，便于查找
+    const defaultWebAppMap = new Map();
+    defaultWebApp.forEach(webAppGroup => {
+        webAppGroup.groupApps.forEach(webApp => {
+            defaultWebAppMap.set(webApp.id, webApp);
+        });
+    });
+
+    localWebApp.webAppGroups.forEach(webAppGroup => {
+        webAppGroup.groupApps.forEach(webApp => {
+            if (defaultWebAppMap.has(webApp.id) && webApp.iconSource === 'default') {
+                // 修改默认图标链接
+                webApp.icon = defaultWebAppMap.get(webApp.id).icon;
+            }
+        });
+    });
+}
+
 function loadConfig() {
     const settingStore = useSettingStore();
     const searchHistoryStore = useSearchHistoryStore();
@@ -116,6 +137,8 @@ function loadConfig() {
     });
     let localWebApp = getLocalWebApp();
     if (localWebApp) {
+        // 校验webApp属性合法性，并进行修正
+        checkWebApp(localWebApp);
         webAppStore.$patch(localWebApp);
     } else {
         webAppStore.$reset();

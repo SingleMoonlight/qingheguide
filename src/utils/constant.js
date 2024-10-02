@@ -93,8 +93,8 @@ export const updateHistory = [
         time: '2024-9-28',
         version: 'V3.0.5',
         item: [
-            { type: 'opt', des: '完成服务迁移' },
             { type: 'opt', des: '修改天气数据源，天气数据来自心知天气' },
+            { type: 'fix', des: '修复默认图标更新时，图标显示异常的问题' },
         ]
     },
     {
