@@ -78,6 +78,8 @@ function handelMouseUp(event) {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* 修复在Safari浏览器中背景显示不为圆的问题 */
+    padding: 0;
 }
 
 .icon-btn:hover {

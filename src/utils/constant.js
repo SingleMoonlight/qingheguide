@@ -93,6 +93,7 @@ export const updateHistory = [
         time: '2024-10-3',
         version: 'V3.0.5',
         item: [
+            { type: 'fix', des: '修复按钮图标背景在Safari浏览器中不显示为圆形的问题' },
             { type: 'fix', des: '修复默认图标更新时，图标显示异常的问题' },
             { type: 'opt', des: '修改天气数据源，天气数据来自心知天气' },
             { type: 'opt', des: '修改天气自动定位方式，改为通过IP进行定位，提高可用性' },
