@@ -36,19 +36,29 @@ onMounted(() => {
 .web-app {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     text-align: center;
 }
 
 .web-app-icon {
-    width: 70%;
-    height: 70%;
+    width: 60%;
+    height: 60%;
     border-radius: 10px;
+    transition: transform 0.25s ease-in-out;
+}
+
+.web-app-icon:hover {
+    transform: scale(1.1);
 }
 
 .web-app-name {
     color: rgb(255, 255, 255);
     font-size: 12px;
+    margin-top: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

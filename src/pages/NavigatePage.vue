@@ -606,8 +606,8 @@ onMounted(() => {
 }
 
 .web-app-container {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
 }
 
 .web-app-menu-container {
