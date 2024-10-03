@@ -18,7 +18,7 @@ import {
     searchOpenModeList, weatherLocationModeList, webAppOpenModeList,
     flippingEffectList, backupOptionList, backupFileName
 } from '@/utils/constant'
-import { searchLocation, getWeatherInfoAsync, getCurrentLocation } from '@/api/weather'
+import { searchLocation, getWeatherInfoAsync, getCurrentLocationAsync } from '@/api/weather'
 import { setClassForElement, isValidURL, printLog, downloadFile, LOG_ERROR, LOG_INFO } from '@/utils/common'
 import { clearLocalStorage } from '@/utils/localStorage'
 import { deleteImageDB } from '@/utils/indexedDB'
@@ -150,21 +150,44 @@ function getWeatherLocationModeIndex(mode) {
 function selectWeatherLocationMode(index) {
     if (weatherLocationModeList[index].settingValue === 'auto') {
         flagStore.setShowGlobalLoading(true);
-        getCurrentLocation().then(res => {
-            weatherStore.$state.location.id = res.id;
-            weatherStore.$state.location.name = res.name;
-            weatherStore.$state.location.adm1 = res.adm1;
-            weatherStore.$state.location.adm2 = res.adm2;
+        getCurrentLocationAsync().then(res => {
+            if (res !== null) {
+                weatherStore.$state.location = res;
+                getWeatherInfoAsync(weatherStore).then(res => {
+                    flagStore.setShowGlobalLoading(false);
+                    messageBoxStore.openMessageBox('warn', '提示', res.message,
+                        {
+                            okBtnText: '好的',
+                        }
+                    );
+
+                    if (res.code !== 0) {
+                        settingStore.$state.weatherLocationMode = 'custom';
+                    }
+                    printLog(LOG_INFO, res);
+                }).catch(err => {
+                    flagStore.setShowGlobalLoading(false);
+                    settingStore.$state.weatherLocationMode = 'custom';
+                    printLog(LOG_ERROR, err);
+                })
+            } else {
+                messageBoxStore.openMessageBox('warn', '提示', '自动定位失败，请重试或者选择自定义模式。',
+                    {
+                        okBtnText: '确定',
+                    }
+                );
+            }
 
             flagStore.setShowGlobalLoading(false);
             settingStore.$state.weatherLocationMode = 'auto';
         }).catch(err => {
             flagStore.setShowGlobalLoading(false);
-            messageBoxStore.openMessageBox('warn', '提示', err.message,
+            messageBoxStore.openMessageBox('warn', '提示', '自动定位失败，请重试或者选择自定义模式。',
                 {
                     okBtnText: '确定',
                 }
-            )
+            );
+            printLog(LOG_ERROR, err);
         })
     } else if (weatherLocationModeList[index].settingValue === 'custom') {
         settingStore.$state.weatherLocationMode = 'custom';
@@ -662,7 +685,7 @@ onMounted(() => {
             </div>
             <div class="setting-pane-body">
                 <CardContainer :card-name="'天气定位'"
-                    :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。自动定位信息来自于浏览器，需要您进行授权。自动定位可能无法生效，如不生效，请切换至自定义模式。'">
+                    :card-des="'默认使用自定义模式，首次使用请搜索城市并更新地点。自动定位通过IP地址定位，可能无法生效或者不准确，如不生效或者不准确，请切换至自定义模式。'">
                     <SettingItem v-for="(item, index) in weatherLocationModeList" :key="index" :type="'list'"
                         :label="item.name"
                         :checked="getWeatherLocationModeIndex(settingStore.weatherLocationMode) === index"

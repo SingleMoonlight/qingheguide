@@ -19,26 +19,16 @@ function generateRequestParamsString(params) {
     return paramsString;
 }
 
-export function getCurrentLocation() {
-    return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                searchLocation(position.coords.longitude.toFixed(2) + ',' + position.coords.latitude.toFixed(2)).then(res => {
-                    resolve(res[0]);
-                }).catch(err => {
-                    reject(new Error('获取定位失败，请重试或者手动选择位置。'));
-                    printLog(LOG_ERROR, err);
-                });
-            }, (err) => {
-                reject(new Error('获取定位失败，请确认浏览器已允许本网站获取定位，若仍然失败请重试或者手动选择位置。'));
-                printLog(LOG_ERROR, err);
-            }, {
-                timeout: 3000,
-            });
-        } else {
-            reject(new Error('浏览器不支持自动定位。'));
-        }
-    })
+export async function getCurrentLocationAsync() {
+    let getIPUrl = 'https://whois.pconline.com.cn/ipJson.jsp';
+    let callbackName = 'jsonpCallback_getIP';
+    let ipRes = '';
+    let locationRes = null;
+
+    ipRes = await jsonpRequest(getIPUrl, callbackName);
+    locationRes = await searchLocation(ipRes.ip);    
+    
+    return locationRes[0];
 }
 
 export function searchLocation(searchText) {
@@ -207,7 +197,7 @@ export async function getWeatherInfoAsync(weatherStoreState) {
         printLog(LOG_INFO, res);
     } catch (err) {
         printLog(LOG_ERROR, err);
-        return { code: -1, message: '获取天气信息失败，请检查网络或者指定上一级城市重试。'};
+        return { code: -1, message: '获取天气信息失败，请检查网络或者指定上一级城市重试。' };
     };
 
     try {
@@ -216,7 +206,7 @@ export async function getWeatherInfoAsync(weatherStoreState) {
         printLog(LOG_INFO, res);
     } catch (err) {
         printLog(LOG_ERROR, err);
-        return { code: -1, message: '获取天气指数信息失败，请检查网络或者指定上一级城市重试。'};
+        return { code: -1, message: '获取天气指数信息失败，请检查网络或者指定上一级城市重试。' };
     };
 
     try {
@@ -233,8 +223,8 @@ export async function getWeatherInfoAsync(weatherStoreState) {
         printLog(LOG_INFO, res);
     } catch (err) {
         printLog(LOG_ERROR, err);
-        return { code: -1, message: '获取未来天气信息失败，请检查网络或者指定上一级城市重试。'};
+        return { code: -1, message: '获取未来天气信息失败，请检查网络或者指定上一级城市重试。' };
     };
 
-    return { code: 0, message: '天气信息更新成功！'};
+    return { code: 0, message: '天气信息更新成功！' };
 }
