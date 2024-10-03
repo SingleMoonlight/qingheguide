@@ -20,7 +20,7 @@ function generateRequestParamsString(params) {
 }
 
 export async function getCurrentLocationAsync() {
-    let getIPUrl = 'https://whois.pconline.com.cn/ipJson.jsp';
+    let getIPUrl = 'https://ipinfo.io/json';
     let callbackName = 'jsonpCallback_getIP';
     let ipRes = '';
     let locationRes = null;
