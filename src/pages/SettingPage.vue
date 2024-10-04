@@ -481,16 +481,16 @@ onMounted(() => {
                         <SettingItem :label="'分组循环滑动'" :type="'switch'" :onoff="settingStore.circularSliding"
                             @turn-switch="settingStore.circularSliding = !settingStore.circularSliding">
                         </SettingItem>
-                        <SettingItem :label="'显示App名称'" :type="'switch'" :onoff="settingStore.showWebAppName"
+                        <SettingItem :label="'显示APP名称'" :type="'switch'" :onoff="settingStore.showWebAppName"
                             @turn-switch="settingStore.showWebAppName = !settingStore.showWebAppName">
                         </SettingItem>
-                        <SettingItem :label="'删除App时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppNotice"
+                        <SettingItem :label="'删除APP时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppNotice"
                             @turn-switch="settingStore.deleteWebAppNotice = !settingStore.deleteWebAppNotice">
                         </SettingItem>
                         <SettingItem :label="'删除分组时提示'" :type="'switch'" :onoff="settingStore.deleteWebAppGroupNotice"
                             @turn-switch="settingStore.deleteWebAppGroupNotice = !settingStore.deleteWebAppGroupNotice">
                         </SettingItem>
-                        <SettingItem :label="'App打开方式'" :type="'next'"
+                        <SettingItem :label="'APP打开方式'" :type="'next'"
                             :next-value="getWebAppOpenModeName(settingStore.webAppOpenMode)"
                             @open-next="goToNext(mainSettingPaneRef, webAppOpenModeSettingPaneRef)">
                         </SettingItem>
@@ -742,7 +742,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="setting-pane-body">
-                <CardContainer :card-name="'App打开方式'">
+                <CardContainer :card-name="'APP打开方式'">
                     <SettingItem v-for="(item, index) in webAppOpenModeList" :key="index" :type="'list'"
                         :label="item.name" :checked="getWebAppOpenModeIndex(settingStore.webAppOpenMode) === index"
                         @checked-list-item="selectWebAppOpenMode(index)">

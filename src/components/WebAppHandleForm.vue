@@ -123,9 +123,9 @@ onMounted(() => {
             <div class="web-app-handler" v-show="showHandler">
                 <div class="web-app-handler-header">
                     <div class="web-app-handler-title">
-                        <div v-if="props.type === 'edit'">编辑App</div>
-                        <div v-if="props.type === 'add'">添加App</div>
-                        <div v-if="props.type === 'delete'">删除App</div>
+                        <div v-if="props.type === 'edit'">编辑APP</div>
+                        <div v-if="props.type === 'add'">添加APP</div>
+                        <div v-if="props.type === 'delete'">删除APP</div>
                     </div>
                     <ButtonWrap :type="'icon'" @click="emit('close')">
                         <CloseIcon></CloseIcon>
@@ -145,13 +145,13 @@ onMounted(() => {
                         <CardContainer :card-name="'名称'">
                             <div class="web-app-handler-input-container">
                                 <input ref="webAppNameInputRef" class="web-app-handler-input" type="text"
-                                    placeholder="请输入App名称" />
+                                    placeholder="请输入APP名称" />
                             </div>
                         </CardContainer>
-                        <CardContainer :card-name="'网址'" :card-des="'App网址应以http://或https://开头。'">
+                        <CardContainer :card-name="'网址'" :card-des="'APP网址应以http://或https://开头。'">
                             <div class="web-app-handler-input-container">
                                 <input ref="webAppUrlInputRef" class="web-app-handler-input" type="text"
-                                    placeholder="请输入App网址" @input="handleWebAppUrlInputChange" />
+                                    placeholder="请输入APP网址" @input="handleWebAppUrlInputChange" />
                             </div>
                         </CardContainer>
                         <CardContainer :card-name="'图标'">

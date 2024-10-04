@@ -193,7 +193,7 @@ function closeWebAppHandler() {
 
 function handleGetWebAppIcon(state) {
     if (state === 'URLInvalid') {
-        messageBoxStore.openMessageBox('warn', '提示', '您输入的App网址异常，无法自动获取图标，请重新输入或者选择自定义图标。',
+        messageBoxStore.openMessageBox('warn', '提示', '您输入的APP网址异常，无法自动获取图标，请重新输入或者选择自定义图标。',
             {
                 okBtnText: '确定',
             }
@@ -221,21 +221,21 @@ function handleGetWebAppIcon(state) {
 
 function checkWebAppValid(webApp) {
     if (webApp.name === '') {
-        messageBoxStore.openMessageBox('warn', '提示', '请输入App名称。',
+        messageBoxStore.openMessageBox('warn', '提示', '请输入APP名称。',
             {
                 okBtnText: '确定',
             }
         );
         return false;
     } else if (webApp.url === '') {
-        messageBoxStore.openMessageBox('warn', '提示', '请输入App网址。',
+        messageBoxStore.openMessageBox('warn', '提示', '请输入APP网址。',
             {
                 okBtnText: '确定',
             }
         );
         return false;
     } else if (webApp.iconSource === 'none') {
-        messageBoxStore.openMessageBox('warn', '提示', '请设置App图标。',
+        messageBoxStore.openMessageBox('warn', '提示', '请设置APP图标。',
             {
                 okBtnText: '确定',
             }

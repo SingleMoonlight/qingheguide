@@ -66,12 +66,12 @@ export const flippingEffectList = [
 ]
 
 export const webAppMenuList = [
-    { iconName: 'editApp', name: '编辑App' },
-    { iconName: 'deleteApp', name: '删除App' },
+    { iconName: 'editApp', name: '编辑APP' },
+    { iconName: 'deleteApp', name: '删除APP' },
 ]
 
 export const webAppGroupMenuList = [
-    { iconName: 'addApp', name: '添加App' },
+    { iconName: 'addApp', name: '添加APP' },
     { iconName: 'addGroup', name: '添加分组' },
     { iconName: 'editGroup', name: '编辑分组' },
     { iconName: 'deleteGroup', name: '删除分组' },
@@ -93,11 +93,11 @@ export const updateHistory = [
         time: '2024-10-3',
         version: 'V3.0.5',
         item: [
-            { type: 'fix', des: '修复按钮图标背景在Safari浏览器中不显示为圆形的问题' },
+            { type: 'fix', des: '修复按钮图标背景在Safari浏览器中显示异常的问题' },
             { type: 'fix', des: '修复默认图标更新时，图标显示异常的问题' },
             { type: 'opt', des: '修改天气数据源，天气数据来自心知天气' },
             { type: 'opt', des: '修改天气自动定位方式，改为通过IP进行定位，提高可用性' },
-            { type: 'opt', des: '优化App图标样式' },
+            { type: 'opt', des: '优化APP图标样式' },
         ]
     },
     {
@@ -137,7 +137,7 @@ export const updateHistory = [
         des: '系统全面重构',
         item: [
             { type: 'fix', des: '修复拼音输入时点击搜索建议，搜索输入框文字错误的问题' },
-            { type: 'fix', des: '修复App图标拖动时显示异常的问题' },
+            { type: 'fix', des: '修复APP图标拖动时显示异常的问题' },
             { type: 'opt', des: '优化UI，修改部分页面动画、样式' },
             { type: 'opt', des: '修改按键逻辑，首页按空格键自动聚焦搜索框，按Esc键取消聚焦搜索。在搜索建议或历史页面，按方向键上下切换搜索建议或历史，按Tab键切换搜索引擎' },
             { type: 'opt', des: '修改天气组件，支持自动定位和自定义地点' },
@@ -146,7 +146,7 @@ export const updateHistory = [
             { type: 'opt', des: '取消自定义背景的文件大小限制' },
             { type: 'del', des: '移除智能推荐处理功能' },
             { type: 'del', des: '移除部分不常用的搜索引擎' },
-            { type: 'del', des: '移除部分不常用的App图标' },
+            { type: 'del', des: '移除部分不常用的APP图标' },
             { type: 'del', des: '移除Docker栏功能' },
         ]
     },
