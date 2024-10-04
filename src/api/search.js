@@ -2,7 +2,7 @@ import { jsonpRequest } from './jsonp.js'
 
 let suggestResult = []
 
-export const getSearchSuggest = async (keyword) => {  
+export function getSearchSuggest(keyword) {
     return new Promise((resolve, reject) => {
         let getSearchSuggestUrl = 'https://www.baidu.com/sugrec?prod=pc&wd=' + keyword;
         let callbackName = 'jsonpCallback_getSearchSuggest';
