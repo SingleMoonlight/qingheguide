@@ -90,6 +90,13 @@ export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
 // 同步修改package.json的version
 export const updateHistory = [
     {
+        time: '2024-10-19',
+        version: 'V3.0.6',
+        item: [
+            { type: 'fix', des: '修复移动端天气卡片显示异常的问题' },
+        ]
+    },
+    {
         time: '2024-10-3',
         version: 'V3.0.5',
         item: [

@@ -131,7 +131,7 @@ function openWeatherCard() {
 }
 
 .weather-future-list-day {
-    width: 28px;
+    width: 30px;
 }
 
 .weather-future-list-icon {
@@ -143,7 +143,7 @@ function openWeatherCard() {
 }
 
 .weather-future-list-text {
-    width: 28px;
+    width: 30px;
     white-space: nowrap;
     overflow: hidden;
     text-align: right;
