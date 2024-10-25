@@ -1,0 +1,10 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <g>
+  <title>Layer 1</title>
+  <g fill-rule="evenodd" fill="none" id="svg_1">
+   <rect height="128" width="128" fill="#FFFFFF" id="矩形" y="0" x="0"/>
+   <path fill="#000000" id="形状" d="m52,60l0,17.6l24,0l0,-17.6l20,0l0,36l-64,0l0,-36l20,0zm24,-28l0,18.4l-24,0l0,-18.4l24,0z"/>
+  </g>
+ </g>
+
+</svg>
