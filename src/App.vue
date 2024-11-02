@@ -41,6 +41,11 @@ function closeNavigatePage() {
   backgroundScale.value = 1;
 }
 
+function openSearchFromNavigation() {
+  pageStore.pageForward('HomePage');
+  flagStore.$state.searchIsClose = false;
+}
+
 function openSearch() {
   backgroundScale.value = 1.1;
   setBgBlurMask(10);
@@ -151,7 +156,7 @@ watch(() => flagStore.$state.settingIsPatched, (newValue) => {
       @open-navigate="openNavigatePage">
     </HomePage>
     <NavigatePage v-else-if="pageStore.pageName === 'NavigatePage'" @close-navigate="closeNavigatePage"
-      @open-setting="openSettingPage" @open-about="openAboutPage">
+      @open-setting="openSettingPage" @open-about="openAboutPage" @open-search="openSearchFromNavigation">
     </NavigatePage>
     <SettingPage v-else-if="pageStore.pageName === 'SettingPage'" @close-setting="closeSettingPage">
     </SettingPage>

@@ -24,9 +24,9 @@ import {
 import { generateUID } from '@/utils/common'
 import { setWebAppIconImg, deleteWebAppIconImg } from '@/utils/indexedDB'
 import { getWeatherInfo } from '@/api/weather'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
-const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout'])
+const emit = defineEmits(['closeNavigate', 'openSetting', 'openAbout', 'openSearch'])
 const paginationContainerRef = ref()
 const showOtherMenu = ref(false)
 const showWebAppGroup = ref(true)
@@ -433,14 +433,26 @@ function selectWebAppGroupMenuItem(index) {
     }
 }
 
+function keyHandler(e) {
+    if (e.code === 'Space') {  
+        emit('openSearch');
+    } else if (e.code === 'Escape') {
+        emit('closeNavigate');
+    }
+}
+
 onMounted(() => {
     if (settingStore.$state.showWeather) {
         getWeatherInfo(weatherStore);
     }
 
     updateWebAppGroup();
+    window.addEventListener('keydown', keyHandler);
 })
 
+onUnmounted(() => {
+    window.removeEventListener('keydown', keyHandler);
+})
 </script>
 
 <template>
