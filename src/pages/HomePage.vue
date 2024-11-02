@@ -17,6 +17,7 @@ const settingStore = useSettingStore()
 const searchHistoryStore = useSearchHistoryStore()
 const flagStore = useFlagStore()
 const suggest = ref([])
+let searchValue = ''
 
 function closeSearch(e) {
     if (e.currentTarget !== e.target) {
@@ -30,9 +31,16 @@ function handleSearchBarInputUpdate(value) {
     // 注释掉可以解决拼音输入时无法选择建议的问题
     // suggest.value.splice(0, suggest.value.length);
 
+    searchValue = value;
     getSearchSuggest(value).then(res => {
-        suggest.value = [...res];
-        printLog(LOG_INFO, res);
+        // 等到输入与请求结果一致时再更新建议列表
+        if (searchValue === res.query) {
+            suggest.value = [...res.result];
+            printLog(LOG_INFO, res);
+        } else {
+            printLog(LOG_INFO, 'Suggest request result is not match with input value.');
+            return;
+        }
     }).catch(err => {
         printLog(LOG_ERROR, err);
     })

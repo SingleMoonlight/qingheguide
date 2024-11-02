@@ -1,6 +1,9 @@
 import { jsonpRequest } from './jsonp.js'
 
-let suggestResult = []
+let suggest = {
+    query: '',
+    result: []
+}
 
 export function getSearchSuggest(keyword) {
     return new Promise((resolve, reject) => {
@@ -8,13 +11,15 @@ export function getSearchSuggest(keyword) {
         let callbackName = 'jsonpCallback_getSearchSuggest';
         jsonpRequest(getSearchSuggestUrl, callbackName)
             .then(data => {
-                suggestResult.splice(0, suggestResult.length);
+                suggest.query = '';
+                suggest.result.splice(0, suggest.result.length);
                 if (data.g !== undefined) {
+                    suggest.query = data.q;
                     data.g.forEach(element => {
-                        suggestResult.push(element.q)
+                        suggest.result.push(element.q)
                     });
                 }
-                resolve(suggestResult)
+                resolve(suggest)
             })
             .catch(error => {
                 reject(error);

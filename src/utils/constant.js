@@ -90,6 +90,14 @@ export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
 // 同步修改package.json的version
 export const updateHistory = [
     {
+        time: '2024-11-3',
+        version: 'V3.0.7',
+        item: [
+            { type: 'fix', des: '修复输入或者删除搜索输入框过快时，搜索建议列表显示异常的问题' },
+            { type: 'opt', des: '添加通过按键从导航页返回主页和搜索页面的方式，Esc按键回到主页，空格按键回到搜索页面' },
+        ]
+    },
+    {
         time: '2024-10-19',
         version: 'V3.0.6',
         item: [
