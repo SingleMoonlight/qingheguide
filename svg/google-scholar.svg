@@ -1,0 +1,23 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <rect height="128" width="128" y="0" x="0" id="path_0"/>
+  </defs>
+  <g>
+    <title>Layer 1</title>
+    <rect id="svg_7" height="128" width="128" y="0" x="0" fill="white"/>
+    <g id="svg_1">
+      <mask fill="white" id="bg-mask">
+        <use xlink:href="#path_0"/>
+      </mask>
+      <g id="svg_3" mask="url(#bg-mask)">
+        <path fill="#FFFFFF" d="m2.5,125.5l123,0l0,-123l-123,0l0,123z" fill-rule="evenodd" id="矩形 1"/>
+        <g>
+          <path fill="#4285F4" d="m64,14.8l-49.2,38.95l49.2,40.057l0,-79.007z" fill-rule="evenodd" id="路径 1"/>
+          <path fill="#356AC3" d="m113.2,53.75l-49.2,-38.95l0,79.007l49.2,-40.057z" fill-rule="evenodd" id="路径 2"/>
+          <path fill="#A0C3FF" d="m49.65008,109.34612c8.897,5.125 19.803,5.125 28.7,0c8.897,-5.125 14.35,-14.596 14.35,-24.846c0,-15.826 -12.874,-28.7 -28.7,-28.7c-15.826,0 -28.7,12.874 -28.7,28.7c0,10.25 5.453,19.721 14.35,24.846z" fill-rule="evenodd" id="路径 3"/>
+          <path fill="#76A7FA" d="m89.9268,72.19992c-4.592,-9.676 -14.473,-16.4 -25.912,-16.4c-11.48,0 -21.361,6.724 -25.953,16.4l51.865,0z" fill-rule="evenodd" id="路径 4"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
