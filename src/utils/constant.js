@@ -84,7 +84,7 @@ export const backupOptionList = [
     { option: '天气地理位置', name: 'weather', value: true },
 ]
 
-export const helpLink = 'https://www.yuque.com/smilingly/share/qinghe-guide'
+export const helpLink = 'https://blog.ifback.com/article/qinghe-guide/'
 
 // 顺序：fix opt add del
 // 同步修改package.json的version
